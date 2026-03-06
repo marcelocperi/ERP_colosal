@@ -1,0 +1,220 @@
+// --- Georef Functions ---
+async function cargarLocalidades(provincia, datalistId) {
+if (!provincia) return;
+try {
+const response = await fetch(`{% url 'core:api_get_localidades' %}?provincia=${encodeURIComponent(provincia)}`);
+const localidades = await response.json();
+const datalist = document.getElementById(datalistId);
+if (datalist) {
+datalist.innerHTML = '';
+localidades.forEach(loc => {
+const opt = document.createElement('option');
+opt.value = loc.nombre;
+datalist.appendChild(opt);
+});
+}
+} catch (e) { console.error("Error cargando localidades:", e); }
+}
+
+async function cargarCalles(provincia, localidad, nombreParcial, datalistId) {
+if (!provincia || !localidad || !nombreParcial || nombreParcial.length < 3) return; try { const response=await fetch(`{%
+    url 'core:api_get_calles'
+    %}?provincia=${encodeURIComponent(provincia)}&localidad=${encodeURIComponent(localidad)}&nombre=${encodeURIComponent(nombreParcial)}`);
+    const calles=await response.json(); const datalist=document.getElementById(datalistId); if (datalist) {
+    datalist.innerHTML='' ; calles.forEach(c=> {
+    const opt = document.createElement('option');
+    opt.value = c.nombre;
+    datalist.appendChild(opt);
+    });
+    }
+    } catch (e) { console.error("Error cargando calles:", e); }
+    }
+
+    async function cargarCodigosPostales(provincia, localidad, targetId, datalistId) {
+    if (!provincia || !localidad) return;
+    try {
+    const response = await fetch(`{% url 'core:api_get_cp'
+    %}?provincia=${encodeURIComponent(provincia)}&localidad=${encodeURIComponent(localidad)}`);
+    const data = await response.json();
+    const datalist = document.getElementById(datalistId);
+    const input = document.getElementById(targetId);
+
+    if (datalist) {
+    datalist.innerHTML = '';
+    data.cps.forEach(cp => {
+    const opt = document.createElement('option');
+    opt.value = cp;
+    datalist.appendChild(opt);
+    });
+    }
+
+    // Si hay un solo CP, auto-completar
+    if (data.cps.length === 1 && input) {
+    input.value = data.cps[0];
+    }
+    } catch (e) { console.error("Error cargando CPs:", e); }
+    }
+
+    // --- Organizational Data ---
+    async function cargarAreas() {
+    try {
+    const response = await fetch(`{% url 'core:api_get_areas' %}`);
+    const areas = await response.json();
+    const selects = document.querySelectorAll('.select-area');
+    selects.forEach(sel => {
+    const currentVal = sel.value;
+    sel.innerHTML = '<option value="">Seleccione Área...</option>';
+    areas.forEach(a => {
+    const opt = document.createElement('option');
+    opt.value = a.id;
+    opt.textContent = a.nombre;
+    if (a.id == currentVal) opt.selected = true;
+    sel.appendChild(opt);
+    });
+    });
+    } catch (e) { console.error(e); }
+    }
+
+    async function onAreaChange(areaId, targetPuestoId) {
+    if (!areaId) return;
+    try {
+    const response = await fetch(`{% url 'core:api_get_puestos' %}?area_id=${areaId}`);
+    const puestos = await response.json();
+    const selectPuesto = document.getElementById(targetPuestoId);
+    if (selectPuesto) {
+    selectPuesto.innerHTML = '<option value="">Seleccione Función...</option>';
+    puestos.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.nombre;
+    opt.textContent = p.nombre;
+    selectPuesto.appendChild(opt);
+    });
+    }
+    } catch (e) { console.error(e); }
+    }
+
+    // --- Modal Transitions & Helpers ---
+    function nuevaDireccion() {
+    const form = document.getElementById('formDireccion');
+    if (form) form.reset();
+    document.getElementById('direccion_id').value = "";
+    document.getElementById('modalDireccionTitle').innerText = "Agregar Sede/Depósito";
+    toggleModal('modalDireccion');
+    }
+
+    function editarDireccion(btn) {
+    try {
+    const item = JSON.parse(btn.dataset.item);
+    document.getElementById('direccion_id').value = item.id;
+    document.getElementById('dir_etiqueta').value = item.etiqueta;
+    document.getElementById('dir_calle').value = item.calle;
+    document.getElementById('dir_numero').value = item.numero;
+    document.getElementById('dir_piso').value = item.piso || "";
+    document.getElementById('dir_depto').value = item.depto || "";
+    document.getElementById('dir_provincia').value = item.provincia;
+    document.getElementById('dir_localidad').value = item.localidad;
+    document.getElementById('dir_cp').value = item.cp;
+    document.getElementById('chk_fiscal').checked = item.es_fiscal;
+    document.getElementById('chk_entrega').checked = item.es_entrega;
+
+    document.getElementById('modalDireccionTitle').innerText = "Editar Sede: " + item.etiqueta;
+    toggleModal('modalDireccion');
+    } catch (e) { console.error(e); }
+    }
+
+    function nuevoContacto() {
+    const form = document.getElementById('formContacto');
+    if (form) form.reset();
+    document.getElementById('contacto_id').value = "";
+    document.getElementById('modalContactoTitle').innerText = "Agregar Persona de Contacto";
+    toggleModal('modalContacto');
+    }
+
+    function editarContacto(btn) {
+    try {
+    const item = JSON.parse(btn.dataset.item);
+    document.getElementById('contacto_id').value = item.id;
+    document.getElementById('cont_nombre').value = item.nombre;
+    document.getElementById('cont_email').value = item.email || "";
+    document.getElementById('cont_tel').value = item.telefono || "";
+    document.getElementById('cont_area').value = item.area_id || "";
+    document.getElementById('cont_tipo').value = item.tipo_contacto || "";
+    document.getElementById('cont_dir').value = item.direccion_id || "";
+    document.getElementById('chk_receptor').checked = item.es_receptor;
+
+    // Cargar puestos del área antes de setear el valor
+    if (item.area_id) {
+    onAreaChange(item.area_id, 'cont_puesto').then(() => {
+    document.getElementById('cont_puesto').value = item.puesto_nombre || item.puesto || "";
+    });
+    }
+
+    document.getElementById('modalContactoTitle').innerText = "Editar Contacto: " + item.nombre;
+    toggleModal('modalContacto');
+    } catch (e) { console.error(e); }
+    }
+
+    function nuevoFiscal() {
+    const form = document.getElementById('formFiscal');
+    if (form) form.reset();
+    document.getElementById('fiscal_id').value = "";
+    document.getElementById('modalFiscalTitle').innerText = "Agregar Configuración Impositiva";
+    toggleModal('modalFiscal');
+    }
+
+    function editarFiscal(btn) {
+    try {
+    const item = JSON.parse(btn.dataset.item);
+    document.getElementById('fiscal_id').value = item.id;
+    document.getElementById('fisc_impuesto').value = item.impuesto_id;
+    document.getElementById('fisc_jurisdiccion').value = item.provincia_id || "";
+    document.getElementById('fisc_condicion').value = item.condicion_id;
+    document.getElementById('fisc_nro').value = item.numero_inscripcion || "";
+    document.getElementById('fisc_ali').value = item.alicuota || 0;
+
+    document.getElementById('modalFiscalTitle').innerText = "Editar Impuesto: " + item.impuesto;
+    toggleModal('modalFiscal');
+    } catch (e) { console.error(e); }
+    }
+
+    // --- Initialization ---
+    document.addEventListener('DOMContentLoaded', () => {
+    cargarAreas();
+
+    // Event Listeners for Dynamic Cascades
+    const provSelect = document.getElementById('dir_provincia');
+    const locInput = document.getElementById('dir_localidad');
+    const calleInput = document.getElementById('dir_calle');
+
+    if (provSelect) {
+    provSelect.addEventListener('change', function() {
+    cargarLocalidades(this.value, 'listaLocalidades');
+    });
+    }
+
+    if (locInput) {
+    locInput.addEventListener('change', function() {
+    const prov = document.getElementById('dir_provincia').value;
+    cargarCodigosPostales(prov, this.value, 'dir_cp', 'listaCPs');
+    });
+    }
+
+    if (calleInput) {
+    calleInput.addEventListener('input', function() {
+    const prov = document.getElementById('dir_provincia').value;
+    const loc = document.getElementById('dir_localidad').value;
+    cargarCalles(prov, loc, this.value, 'listaCalles');
+    });
+    }
+
+    // Modal Coeficiente Año Actual auto-fill
+    const modCoef = document.getElementById('modalCoeficiente');
+    if (modCoef) {
+    modCoef.addEventListener('show', () => {
+    const anioInput = document.getElementById('coef_anio');
+    if (anioInput && !anioInput.value) {
+    anioInput.value = new Date().getFullYear();
+    }
+    });
+    }
+    });

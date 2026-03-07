@@ -45,7 +45,7 @@
                                 <div class="fw-bold">{{ d.cuenta_codigo }}</div>
                                 <div class="small text-muted">{{ d.cuenta_nombre }}</div>
                             </td>
-                            <td>{{ d.glosa or '-' }}</td>
+                            <td>{{ d.glosa|default:'-' }}</td>
                             <td class="text-end text-primary">{% if d.debe > 0 %}{{ d.debe | format_currency }}{% else %}-{% endif %}</td>
                             <td class="text-end text-danger">{% if d.haber > 0 %}{{ d.haber | format_currency }}{% else %}-{% endif %}</td>
                         </tr>

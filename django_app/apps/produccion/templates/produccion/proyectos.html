@@ -83,7 +83,8 @@
                         </div>
                         <div class="text-end border-start ps-4">
                             <small class="text-muted d-block">Presupuesto</small>
-                            <span class="fw-bold text-success">${{ p.presupuesto_estimado|floatformat:2|intcomma }}</span>
+                            <span class="fw-bold text-success">${{ p.presupuesto_estimado|floatformat:2|intcomma
+                                }}</span>
                         </div>
                     </div>
                 </div>
@@ -100,7 +101,7 @@
                 </div>
             </div>
         </div>
-        {% else %}
+        {% empty %}
         <div class="col-12 text-center py-5">
             <div class="opacity-25 mb-4">
                 <i class="fas fa-vial fa-5x"></i>

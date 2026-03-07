@@ -45,11 +45,19 @@ Se han revisado todas las consultas en `core/routes.py` para cumplir con la dire
 - [X] Implementar Emisión de Facturas y Notas de Crédito (Lógica Billing + AFIP).
 - [X] Generación de Códigos QR y Barras de AFIP.
 - [X] Layouts de Impresión (Factura, Remito) con coordenadas dinámicas.
+- [X] **Módulo de Stock:** Migrado maestro de artículos, depósitos, familias y dashboard.
+- [X] **Módulo de Compras:** Migrados proveedores, OC, requerimientos y dashboard.
+- [X] **Módulo de Fondos/Tesorería:** Migrados cajas, bancos, medios y condiciones de pago.
+- [X] **Módulo de Contabilidad:** Plan de cuentas, asientos, libro mayor, libros de IVA, balances, exportación AFIP.
+- [X] **Módulo de Cobranzas:** Cuentas corrientes, recibos, órdenes de cobro, conciliación.
+- [X] **Módulo de Producción:** Proyectos, órdenes de producción, overhead, costos industriales.
+- [X] **Módulo de Precios (Pricing):** Listas de precio, reglas de cálculo, propuestas de coste y markup.
+- [X] **Módulo de Auditoría y Seguridad:** Dashboard de seguridad, matriz de permisos (SoD), logs transaccionales (placeholder), verificación de integridad (placeholder AI auditor).
+- [X] **Módulo de Utilitarios:** Gestor de Crons, historial de ejecución, ejecución forzada por threading.
+- [X] **Módulo de Sistema/Configuración:** Usuarios, roles, permisos, datos fiscales de empresa, áreas y puestos — ya migrado en fases anteriores.
 
-### Pendiente ⏳
+### Pendiente ⏳  _(Sólo mejoras técnicas — no más módulos de negocio)_
 - [ ] **Generación de PDFs en Servidor:** Implementar visualización/descarga de PDF real (.pdf) usando `xhtml2pdf` o `reportlab`.
 - [ ] **Certificados de AFIP Reales:** Configurar conexión zeep para producción/homologación real una vez estabilizada la app.
-- [ ] **Módulo de Stock:** Migrar ingresos, egresos, ajustes y consultas de stock.
-- [ ] **Módulo de Compras:** Migrar carga de facturas de proveedores y órdenes de compra.
-- [ ] **Tesorería y Finanzas:** Migrar gestión de cobros (Recibos), pagos y cajas.
-- [ ] **Dashboard Principal:** Migrar estadísticas y gráficos de ventas/compras.
+- [ ] **Permissions — Sistema Real:** Implementar `has_permission` real en todos los módulos (actualmente dummy en Producción).
+- [ ] ~~**Módulo de Biblioteca:**~~ _Migración cancelada por decisión de negocio._

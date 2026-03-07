@@ -71,7 +71,7 @@
             "modules": [
                 {
                     "name": "Dashboard Contable",
-                    "route": "ventas.dashboard",
+                    "route": "contabilidad.dashboard",
                     "icon": "fas fa-chart-pie",
                     "permission": "view_contabilidad"
                 },
@@ -150,7 +150,7 @@
             "modules": [
                 {
                     "name": "Dashboard",
-                    "route": "ventas.dashboard",
+                    "route": "compras.dashboard",
                     "icon": "fas fa-tachometer-alt",
                     "permission": "view_compras"
                 },
@@ -340,7 +340,7 @@
                 },
                 {
                     "name": "Dashboard Finanzas",
-                    "route": "ventas.dashboard",
+                    "route": "cobranzas.dashboard",
                     "icon": "fas fa-coins",
                     "permission": "view_cobranzas"
                 },
@@ -377,31 +377,31 @@
             "modules": [
                 {
                     "name": "Dashboard Inventario",
-                    "route": "ventas.dashboard",
+                    "route": "stock:dashboard",
                     "icon": "fas fa-tachometer-alt",
                     "permission": "view_articulos"
                 },
                 {
                     "name": "Importación Masiva",
-                    "route": "stock.articulos_importar",
+                    "route": "stock:articulos_importar",
                     "icon": "fas fa-file-import",
                     "permission": "books_import"
                 },
                 {
                     "name": "Movimientos Stock",
-                    "route": "stock.movimientos_historial",
+                    "route": "stock:movimientos_historial",
                     "icon": "fas fa-exchange-alt",
                     "permission": "view_movimientos"
                 },
                 {
                     "name": "Transferencias",
-                    "route": "stock.transferencias_lista",
+                    "route": "stock:transferencias",
                     "icon": "fas fa-truck-moving",
                     "permission": "create_transferencia"
                 },
                 {
                     "name": "Depósitos",
-                    "route": "stock.depositos_lista",
+                    "route": "stock:depositos",
                     "icon": "fas fa-warehouse",
                     "permission": "admin_depositos"
                 },
@@ -438,19 +438,19 @@
             "modules": [
                 {
                     "name": "Mi Empresa (Fiscal)",
-                    "route": "core.admin_empresa_fiscal",
+                    "route": "configuracion:empresa_fiscal",
                     "icon": "fas fa-building",
-                    "permission": "admin_empresa"
+                    "permission": "admin_users"
                 },
                 {
                     "name": "Usuarios y Seguridad",
-                    "route": "core.admin_users",
+                    "route": "configuracion:usuarios",
                     "icon": "fas fa-users-gear",
                     "permission": "admin_users"
                 },
                 {
                     "name": "Roles y Permisos",
-                    "route": "core.admin_roles",
+                    "route": "configuracion:roles",
                     "icon": "fas fa-user-shield",
                     "permission": "admin_roles"
                 },

@@ -46,7 +46,8 @@
                     </span>
                 </div>
                 <div class="card-body">
-                    <p class="text-muted small mb-3" style="min-height: 40px;">{{ tp.descripcion|default:"Sin descripción" }}
+                    <p class="text-muted small mb-3" style="min-height: 40px;">{{ tp.descripcion|default:"Sin
+                        descripción" }}
                     </p>
 
                     <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-3 mb-3">
@@ -57,7 +58,8 @@
                         </div>
                         <div class="text-center border-start ps-3">
                             <i class="fas fa-dollar-sign text-muted mb-1 d-block"></i>
-                            <span class="fw-bold fs-5 text-success">${{ tp.suma_estimada|floatformat:2|intcomma }}</span>
+                            <span class="fw-bold fs-5 text-success">${{ tp.suma_estimada|floatformat:2|intcomma
+                                }}</span>
                             <small class="d-block text-muted" style="font-size: 0.7rem;">Costo Estimado</small>
                         </div>
                     </div>
@@ -69,7 +71,7 @@
                 </div>
             </div>
         </div>
-        {% else %}
+        {% empty %}
         <div class="col-12 text-center py-5">
             <i class="fas fa-folder-open fa-3x text-muted mb-3 opacity-50"></i>
             <h5 class="text-muted fw-bold">No hay plantillas de costos definidas</h5>

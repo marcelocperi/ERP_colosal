@@ -34,8 +34,8 @@
                         PRINCIPAL</span>
                     {% endif %}
                 </td>
-                <td><span style="color:#fbbf24;">{{ b.marca }}</span> <small class="text-muted">{{ b.modelo or '' }}</small></td>
-                <td style="text-align:center; color:#94a3b8; font-family:monospace;">{{ b.numero_serie or '—' }}</td>
+                <td><span style="color:#fbbf24;">{{ b.marca }}</span> <small class="text-muted">{{ b.modelo|default:'' }}</small></td>
+                <td style="text-align:center; color:#94a3b8; font-family:monospace;">{{ b.numero_serie|default:'—' }}</td>
                 <td style="text-align:center;">
                     {% if b.tipo_conexion == 'IP_RED' %}
                     <span class="badge" style="background:rgba(245,158,11,0.15); color:#fbbf24;">🌐 Red
@@ -50,7 +50,7 @@
                     {% endif %}
                 </td>
                 <td style="font-size:0.8rem; color:#94a3b8;">
-                    {% if b.ip_red %}{{ b.ip_red }}:{{ b.puerto_red or 9100 }}{% else %}Conexión Local{% endif %}
+                    {% if b.ip_red %}{{ b.ip_red }}:{{ b.puerto_red|default:9100 }}{% else %}Conexión Local{% endif %}
                 </td>
                 <td style="text-align:center;">
                     {% if b.activo %}
@@ -61,9 +61,9 @@
                 </td>
                 <td style="text-align:right; display:flex; gap:0.5rem; justify-content:end;">
                     <button class="btn-secondary btn-edit-balanza" data-id="{{ b.id }}" data-nombre="{{ b.nombre }}"
-                        data-marca="{{ b.marca }}" data-modelo="{{ b.modelo or '' }}"
-                        data-serie="{{ b.numero_serie or '' }}" data-tipo="{{ b.tipo_conexion or 'IP_RED' }}"
-                        data-ip="{{ b.ip_red or '' }}" data-puerto="{{ b.puerto_red or 9100 }}"
+                        data-marca="{{ b.marca }}" data-modelo="{{ b.modelo|default:'' }}"
+                        data-serie="{{ b.numero_serie or '' }}" data-tipo="{{ b.tipo_conexion|default:'IP_RED' }}"
+                        data-ip="{{ b.ip_red|default:'' }}" data-puerto="{{ b.puerto_red|default:9100 }}"
                         data-pred="{% if b.es_predeterminada %}1{% else %}0{% endif %}" data-act="{% if b.activo %}1{% else %}0{% endif %}"
                         style="padding:0.4rem 0.8rem; font-size:0.8rem;">
                         <i class="fas fa-edit"></i>

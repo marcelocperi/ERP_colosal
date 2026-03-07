@@ -87,9 +87,9 @@
                                         class="fas fa-truck"></i> Remito Local</span>
                                 {% else %}
                                 <span class="badge badge-pill badge-secondary" style="font-size: 0.75rem;"><i
-                                        class="fas fa-list"></i> Lista {{ p.lista_nombre or p.lista_id }}</span>
+                                        class="fas fa-list"></i> Lista {{ p.lista_nombre|default:p.lista_id }}</span>
                                 {% endif %}
-                                <br><small class="text-muted">ID Doc: #{{ p.documento_origen_id or 'N/A' }}</small>
+                                <br><small class="text-muted">ID Doc: #{{ p.documento_origen_id|default:'N/A' }}</small>
                             </td>
                             <td>
                                 <div style="display: flex; flex-direction: column;">
@@ -98,7 +98,7 @@
                                 </div>
                             </td>
                             <td>
-                                <span class="badge badge-light" style="font-weight: 500;">{{ p.metodo_nombre or 'Automático/CUI' }}</span>
+                                <span class="badge badge-light" style="font-weight: 500;">{{ p.metodo_nombre|default:'Automático/CUI' }}</span>
                             </td>
                             <td class="text-right"
                                 style="font-family: 'Courier New', Courier, monospace; font-weight: 600;">

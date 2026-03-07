@@ -23,7 +23,7 @@
                     </span>
                 </div>
                 <div class="text-muted small mb-3">
-                    <p class="mb-1"><i class="fas fa-id-card me-2"></i>CUIT: {{ l.cuit or 'N/A' }}</p>
+                    <p class="mb-1"><i class="fas fa-id-card me-2"></i>CUIT: {{ l.cuit|default:'N/A' }}</p>
                     <p class="mb-1"><i class="fas fa-map-marker-alt me-2"></i>{{ l.direccion }}</p>
                     <p class="mb-1"><i class="fas fa-city me-2"></i>{{ l.localidad }}, {{ l.provincia }}</p>
                 </div>

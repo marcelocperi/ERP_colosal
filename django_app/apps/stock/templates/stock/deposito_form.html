@@ -8,7 +8,7 @@
 
 <div class="card" style="max-width: 800px; padding: 2.5rem; margin: 0 auto; border-radius: 20px;">
     <form
-        action="{% url 'stock:deposito_editar' deposito.id) if deposito else url_for('stock.deposito_nuevo' %}"
+        action="{% if deposito %}{% url 'stock:deposito_editar' deposito.id %}{% else %}{% url 'stock:deposito_nuevo' %}{% endif %}"
         method="POST">
         <input type="hidden" name="sid" value="{{ sid }}">
         <div class="row">

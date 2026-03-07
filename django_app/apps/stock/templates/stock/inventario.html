@@ -40,7 +40,7 @@
                     </div>
                     <div class="progress flex-grow-1 mx-3" style="height: 6px; background: rgba(255,255,255,0.05);">
                         <div class="progress-bar bg-{% if inv.estado == 'CERRADO' %}success{% else %}warning{% endif %}"
-                            style="width: {{ inv.progreso or 0 }}%"></div>
+                            style="width: {{ inv.progreso|default:0 }}%"></div>
                     </div>
                 </div>
 

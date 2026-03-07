@@ -95,7 +95,8 @@
                         </div>
                         <div class="text-end small border-start ps-3">
                             <span class="text-muted d-block">Vence</span>
-                            <span class="fw-bold">{{ d.fecha_vencimiento|date:'%d/%m/%Y' if d.fecha_vencimiento else 'N/A' }}</span>
+                            <span class="fw-bold">{% if d.fecha_vencimiento %}{{ d.fecha_vencimiento|date:'d/m/Y' }}{%
+                                else %}N/A{% endif %}</span>
                         </div>
                     </div>
 
@@ -111,7 +112,7 @@
                 </div>
             </div>
         </div>
-        {% else %}
+        {% empty %}
         <div class="col-12 text-center py-5">
             <div class="opacity-25 mb-3">
                 <i class="fas fa-file-contract fa-4x"></i>

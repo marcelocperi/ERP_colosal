@@ -71,7 +71,7 @@
                             <tr>
                                 <td>{{ p.modulo }}</td>
                                 <td class="text-center">{{ p.cantidad }}</td>
-                                <td class="text-end text-primary font-weight-bold">${{ p.total or 0 }}</td>
+                                <td class="text-end text-primary font-weight-bold">${{ p.total|default:0 }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>

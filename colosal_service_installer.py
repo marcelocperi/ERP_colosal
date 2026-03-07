@@ -20,7 +20,7 @@ if not os.path.exists(os.path.join(VENV_DIR, "Scripts", "python.exe")):
 
 # Determina automáticamente el ejecutable correcto del entorno virtual
 PYTHON_EXE = os.path.join(VENV_DIR, "Scripts", "python.exe")
-SCRIPT_PATH = os.path.join(PROJECT_DIR, "run_production.py")
+SCRIPT_PATH = os.path.join(PROJECT_DIR, "run_django.py")
 
 def ensure_dlls():
     """Copia las DLLs necesarias al venv para que pythonservice.exe funcione (Evita Error 1053)"""

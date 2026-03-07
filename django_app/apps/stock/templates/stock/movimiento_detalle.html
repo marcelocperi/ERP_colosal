@@ -24,7 +24,7 @@
                 <div>
                     <span style="display: block; font-size: 0.7rem; color: #64748b; font-weight: 700;">FECHA Y
                         HORA</span>
-                    <span>{{ mov.fecha|date:'%d/%m/%Y %H:%M:%S' if mov.fecha else '-' }}</span>
+                    <span>{% if mov.fecha %}{{ mov.fecha|date:'%d/%m/%Y %H:%M:%S' }}{% else %}-{% endif %}</span>
                 </div>
                 <div>
                     <span style="display: block; font-size: 0.7rem; color: #64748b; font-weight: 700;">MOTIVO</span>
@@ -60,18 +60,21 @@
                     style="background: rgba(255,255,255,0.02); padding: 1rem; border-radius: 8px; border-left: 3px solid #ef4444;">
                     <span style="display: block; font-size: 0.7rem; color: #64748b; font-weight: 700;">EGRESO /
                         ORIGEN</span>
-                    <span style="font-weight: 600;">{% if mov.origen %}mov.origen{% else %}N/A (Externo){% endif %}</span>
+                    <span style="font-weight: 600;">{% if mov.origen %}mov.origen{% else %}N/A (Externo){% endif
+                        %}</span>
                 </div>
                 <div
                     style="background: rgba(255,255,255,0.02); padding: 1rem; border-radius: 8px; border-left: 3px solid #10b981;">
                     <span style="display: block; font-size: 0.7rem; color: #64748b; font-weight: 700;">INGRESO /
                         DESTINO</span>
-                    <span style="font-weight: 600;">{% if mov.destino %}mov.destino{% else %}N/A (Externo){% endif %}</span>
+                    <span style="font-weight: 600;">{% if mov.destino %}mov.destino{% else %}N/A (Externo){% endif
+                        %}</span>
                 </div>
                 <div>
                     <span
                         style="display: block; font-size: 0.7rem; color: #64748b; font-weight: 700;">OBSERVACIONES</span>
-                    <p style="margin: 0.5rem 0; font-style: italic; color: #94a3b8;">{{ mov.observaciones or 'Sin observaciones adicionales' }}</p>
+                    <p style="margin: 0.5rem 0; font-style: italic; color: #94a3b8;">{{ mov.observaciones|default:'Sin
+                        observaciones adicionales' }}</p>
                 </div>
             </div>
         </div>

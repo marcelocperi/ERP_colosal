@@ -204,15 +204,18 @@
 
         {% with modo=data.printer.tipo_conexion|default:"BROWSER_DIALOG" %}
         {% if modo == 'IP_RED' %}
-        <span class="mode-badge" style="background:rgba(245,158,11,0.2); color:#fbbf24;">🌐 Red TCP — {{ data.printer.ip_red }}:{{ data.printer.puerto_red or 9100 }}</span>
+        <span class="mode-badge" style="background:rgba(245,158,11,0.2); color:#fbbf24;">🌐 Red TCP — {{
+            data.printer.ip_red }}:{{ data.printer.puerto_red|default:9100 }}</span>
         <button class="btn-print-action" style="background:#f59e0b; color:black;" onclick="printViaNetwork()">Enviar a
             Impresora de Red</button>
         {% elif modo == 'QZ_TRAY_USB' %}
-        <span class="mode-badge" style="background:rgba(139,92,246,0.2); color:#a78bfa;">🔌 QZ Tray USB — {{ data.printer.nombre_sistema_qz or '(no configurado)' }}</span>
+        <span class="mode-badge" style="background:rgba(139,92,246,0.2); color:#a78bfa;">🔌 QZ Tray USB — {{
+            data.printer.nombre_sistema_qz|default:'(no configurado)' }}</span>
         <button class="btn-print-action" style="background:#8b5cf6; color:white;" onclick="printViaQZ()">Imprimir vía QZ
             Tray</button>
         {% elif modo == 'QZ_TRAY_NET' %}
-        <span class="mode-badge" style="background:rgba(139,92,246,0.2); color:#a78bfa;">🔌 QZ Tray Red — {{ data.printer.ip_red }}:{{ data.printer.puerto_red or 9100 }}</span>
+        <span class="mode-badge" style="background:rgba(139,92,246,0.2); color:#a78bfa;">🔌 QZ Tray Red — {{
+            data.printer.ip_red }}:{{ data.printer.puerto_red|default:9100 }}</span>
         <button class="btn-print-action" style="background:#8b5cf6; color:white;" onclick="printViaQZ()">Imprimir vía QZ
             Tray</button>
         {% else %}
@@ -236,7 +239,7 @@
 
         <!-- Datos de Seguridad (Si existen) -->
         {% if data.seguridad %}
-        <div class="technical-name">{{ data.seguridad.nombre_tecnico or '' }}</div>
+        <div class="technical-name">{{ data.seguridad.nombre_tecnico|default:'' }}</div>
         <div class="safety-row">
             <div class="pictograms-box">
                 {% for picto in data.seguridad.pictogramas_json %}
@@ -261,10 +264,10 @@
         // ─── Config global ───────────────────────────────────────────────────────
         const ARTICULO_ID = {{ articulo.id }};
         const BARCODE_VAL = "{{ articulo.isbn|default:articulo.id }}";
-        const MODO = "{{ data.printer.tipo_conexion or 'BROWSER_DIALOG' }}";
-        const QZ_PRINTER_NAME = "{{ data.printer.nombre_sistema_qz or '' }}";
-        const PRINTER_IP = "{{ data.printer.ip_red or '' }}";
-        const PRINTER_PORT = parseInt("{{ data.printer.puerto_red or 9100 }}");
+        const MODO = "{{ data.printer.tipo_conexion|default:'BROWSER_DIALOG' }}";
+        const QZ_PRINTER_NAME = "{{ data.printer.nombre_sistema_qz|default:'' }}";
+        const PRINTER_IP = "{{ data.printer.ip_red|default:'' }}";
+        const PRINTER_PORT = parseInt("{{ data.printer.puerto_red|default:9100 }}");
         const LABEL_W = parseFloat("{{ data.printer.ancho_mm }}");
         const LABEL_H = parseFloat("{{ data.printer.alto_mm }}");
 

@@ -9,7 +9,7 @@
             <form class="d-flex gap-2" method="GET">
                 <select name="mes" class="form-select bg-dark text-light border-secondary">
                     {% for m_num, m_nom in meses_nombre.items %}
-                    <option value="{{ m_num }}" {{ 'selected' if m_num==mes }}>{{ m_nom }}</option>
+                    <option value="{{ m_num }}" {% if m_num == mes %}selected{% endif %}>{{ m_nom }}</option>
                     {% endfor %}
                 </select>
                 <input type="number" name="anio" value="{{ anio }}"
@@ -22,10 +22,10 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-dark">
                     <li><a class="dropdown-item"
-                            href="{{ url 'contabilidad:exportar_afip' 'COMPRAS' anio~'%02d'|format(mes, tipo='CBTE') }}">Generar
+                            href="{% url 'contabilidad:exportar_afip' 'COMPRAS' anio mes 'CBTE' %}">Generar
                             TXT Compras (CBTE)</a></li>
                     <li><a class="dropdown-item"
-                            href="{{ url 'contabilidad:exportar_afip' 'COMPRAS' anio~'%02d'|format(mes, tipo='ALICUOTAS') }}">Generar
+                            href="{% url 'contabilidad:exportar_afip' 'COMPRAS' anio mes 'ALICUOTAS' %}">Generar
                             TXT Alícuotas Compras</a></li>
                 </ul>
             </div>
@@ -68,9 +68,9 @@
                             <td>{{ row.cuit }}</td>
                             <td>{{ row.proveedor }}</td>
                             <td>{{ row.condicion }}</td>
-                            <td class="text-end">$ {{ "%.2f"|format(row.neto) }}</td>
-                            <td class="text-end">$ {{ "%.2f"|format(row.iva) }}</td>
-                            <td class="text-end pe-3 fw-bold">$ {{ "%.2f"|format(row.total) }}</td>
+                            <td class="text-end">$ {{ row.neto|floatformat:2 }}</td>
+                            <td class="text-end">$ {{ row.iva|floatformat:2 }}</td>
+                            <td class="text-end pe-3 fw-bold">$ {{ row.total|floatformat:2 }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -78,9 +78,9 @@
                         style="font-size: 1rem;">
                         <tr>
                             <td colspan="6" class="text-end pe-3 text-uppercase">Totales del Período:</td>
-                            <td class="text-end text-info">$ {{ "%.2f"|format(totales.neto) }}</td>
-                            <td class="text-end text-info">$ {{ "%.2f"|format(totales.iva) }}</td>
-                            <td class="text-end pe-3 text-success">$ {{ "%.2f"|format(totales.total) }}</td>
+                            <td class="text-end text-info">$ {{ totales.neto|floatformat:2 }}</td>
+                            <td class="text-end text-info">$ {{ totales.iva|floatformat:2 }}</td>
+                            <td class="text-end pe-3 text-success">$ {{ totales.total|floatformat:2 }}</td>
                         </tr>
                     </tfoot>
                 </table>

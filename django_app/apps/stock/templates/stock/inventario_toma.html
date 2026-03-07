@@ -25,7 +25,7 @@
                 </div>
             </div>
             <div class="col-md-6 text-end text-muted small">
-                PROGRESO: <span class="text-white fw-bold">{{ inv.progreso or 0 }}%</span> |
+                PROGRESO: <span class="text-white fw-bold">{{ inv.progreso|default:0 }}%</span> |
                 DIFERENCIAS: <span class="text-danger fw-bold" id="total_diffs">0</span>
             </div>
         </div>

@@ -33,7 +33,7 @@
                         style="background: rgba(99,102,241,0.1); color: var(--primary); font-size: 0.7rem;">PRINCIPAL</span>
                     {% endif %}
                 </td>
-                <td>{{ d.direccion or 'Sin dirección registrada' }}</td>
+                <td>{{ d.direccion|default:'Sin dirección registrada' }}</td>
                 <td style="text-align: center;">
                     <span class="badge {% if d.tipo == 'INTERNO' %}bg-info{% else %}bg-warning text-dark{% endif %}"
                         style="font-size: 0.7rem;">

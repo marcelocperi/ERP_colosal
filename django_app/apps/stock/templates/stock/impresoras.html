@@ -35,7 +35,8 @@
             / Red)</p>
         <p style="font-size:0.8rem; color:#94a3b8; margin:0;">Agente local instalado en la PC de depósito. Habla con
             <b>impresoras USB o de red</b> sin diálogos. Ideal para operativas de alto volumen. Requiere instalar <a
-                href="https://qz.io" target="_blank" style="color:#a78bfa;">QZ Tray</a> en cada terminal.</p>
+                href="https://qz.io" target="_blank" style="color:#a78bfa;">QZ Tray</a> en cada terminal.
+        </p>
     </div>
 </div>
 
@@ -62,7 +63,8 @@
                         PREDETERMINADA</span>
                     {% endif %}
                 </td>
-                <td><span style="color:#fbbf24;">{{ p.marca }}</span> <small class="text-muted">{{ p.modelo or '' }}</small></td>
+                <td><span style="color:#fbbf24;">{{ p.marca }}</span> <small class="text-muted">{{ p.modelo|default:''
+                        }}</small></td>
                 <td style="text-align:center;">
                     <span class="badge bg-secondary">{{ p.ancho_mm }}×{{ p.alto_mm }} mm</span>
                 </td>
@@ -78,8 +80,9 @@
                     {% endif %}
                 </td>
                 <td style="font-size:0.8rem; color:#94a3b8;">
-                    {% if p.ip_red %}{{ p.ip_red }}:{{ p.puerto_red or 9100 }}{% endif %}
-                    {% if p.nombre_sistema_qz %}<code style="font-size:0.75rem;">{{ p.nombre_sistema_qz }}</code>{% endif %}
+                    {% if p.ip_red %}{{ p.ip_red }}:{{ p.puerto_red|default:9100 }}{% endif %}
+                    {% if p.nombre_sistema_qz %}<code style="font-size:0.75rem;">{{ p.nombre_sistema_qz }}</code>{%
+                    endif %}
                     {% if not p.ip_red and not p.nombre_sistema_qz %}<span style="opacity:0.4;">—</span>{% endif %}
                 </td>
                 <td style="text-align:center;">
@@ -91,11 +94,11 @@
                 </td>
                 <td style="text-align:right; display:flex; gap:0.5rem; justify-content:end;">
                     <button class="btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.8rem;"
-                        onclick="editPrinter('{{ p.id }}','{{ p.nombre }}','{{ p.marca }}','{{ p.modelo or '' }}','{{ p.ancho_mm }}','{{ p.alto_mm }}','{{ p.tipo_conexion or 'BROWSER_DIALOG' }}','{{ p.ip_red or '' }}','{{ p.puerto_red or 9100 }}','{{ p.nombre_sistema_qz or '' }}','{{ p.es_predeterminada }}','{{ p.activo }}')">
+                        onclick="editPrinter('{{ p.id }}','{{ p.nombre }}','{{ p.marca }}','{{ p.modelo|default:'' }}','{{ p.ancho_mm }}','{{ p.alto_mm }}','{{ p.tipo_conexion|default:'BROWSER_DIALOG' }}','{{ p.ip_red|default:'' }}','{{ p.puerto_red|default:9100 }}','{{ p.nombre_sistema_qz|default:'' }}','{{ p.es_predeterminada }}','{{ p.activo }}')">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <form action="{% url 'stock:impresora_eliminar' p.id %}" method="POST"
-                        style="display:inline;" onsubmit="return confirm('¿Eliminar este perfil?');">
+                    <form action="{% url 'stock:impresora_eliminar' p.id %}" method="POST" style="display:inline;"
+                        onsubmit="return confirm('¿Eliminar este perfil?');">
                         <button type="submit" class="btn-secondary"
                             style="padding:0.4rem 0.8rem; font-size:0.8rem; color:#ef4444;">
                             <i class="fas fa-trash"></i>

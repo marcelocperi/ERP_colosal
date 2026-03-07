@@ -25,7 +25,7 @@
                 style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: rgba(255,255,255,0.02); border-radius: 8px; margin-bottom: 0.5rem; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.2s;">
                 <div>
                     <div style="font-weight: 700; font-size: 1.1rem; color: #fff;">{{ lista.nombre }}</div>
-                    <div style="font-size: 0.85rem; color: #94a3b8;">{{ lista.descripcion or 'Sin descripción' }}</div>
+                    <div style="font-size: 0.85rem; color: #94a3b8;">{{ lista.descripcion|default:'Sin descripción' }}</div>
                     <span class="badge"
                         style="background: rgba(99,102,241,0.1); color: var(--primary); font-size: 0.7rem; margin-top: 5px;">{{ lista.moneda }}</span>
                     {% if lista.pending_count > 0 %}

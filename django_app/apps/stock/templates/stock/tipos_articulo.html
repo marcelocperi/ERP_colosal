@@ -33,7 +33,7 @@
                         style="background: rgba(99,102,241,0.1); color: var(--primary); font-size: 0.7rem;">SISTEMA</span>
                     {% endif %}
                 </td>
-                <td>{{ t.descripcion or '-' }}</td>
+                <td>{{ t.descripcion|default:'-' }}</td>
                 <td style="text-align: center;">
                     {% if t.modo_captura == 'NATIVE' %}
                     <span class="badge" style="background: rgba(255,255,255,0.05); color: #94a3b8;"><i
@@ -62,9 +62,9 @@
                 </td>
                 <td style="text-align: right;">
                     <button class="btn btn-sm" data-id="{{ t.id }}" data-nombre="{{ t.nombre }}"
-                        data-descripcion="{{ t.descripcion or '' }}" data-servicio="{{ t.servicio_activo_id }}"
-                        data-schema='{{ t.custom_fields_schema or "" }}'
-                        data-naturaleza="{{ t.naturaleza or 'PRODUCTO' }}" onclick="editTipoFromBtn(this)"
+                        data-descripcion="{{ t.descripcion|default:'' }}" data-servicio="{{ t.servicio_activo_id }}"
+                        data-schema='{{ t.custom_fields_schema|default:"" }}'
+                        data-naturaleza="{{ t.naturaleza|default:'PRODUCTO' }}" onclick="editTipoFromBtn(this)"
                         style="background: rgba(255,255,255,0.05);">
                         <i class="fas fa-cog"></i> Configurar
                     </button>

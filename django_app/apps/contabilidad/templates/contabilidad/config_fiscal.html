@@ -30,7 +30,7 @@
                         class="alert alert-{% if status.success %}success{% else %}danger{% endif %} bg-dark border-{% if status.success %}success{% else %}danger{% endif %} mb-4">
                         <h6 class="alert-heading fw-bold">Estado de la Integración:</h6>
                         <p class="mb-0 small">
-                            {{ status.mensaje or status.error }}
+                            {{ status.mensaje|default:status.error }}
                             {% if status.expiracion %}
                             <br><strong>Vence el:</strong> {{ status.expiracion }}
                             {% endif %}
@@ -42,14 +42,16 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label text-muted small uppercase fw-bold">CUIT de la Empresa</label>
                                 <input type="text" name="cuit" class="form-control bg-dark text-light border-secondary"
-                                    value="{{ enterprise.cuit or '' }}" placeholder="20123456789" required>
+                                    value="{{ enterprise.cuit|default:'' }}" placeholder="20123456789" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label text-muted small uppercase fw-bold">Entorno de Trabajo</label>
                                 <select name="afip_entorno" class="form-select bg-dark text-light border-secondary">
-                                    <option value="testing" {{ 'selected' if enterprise.afip_entorno=='testing' }}>
+                                    <option value="testing" {% if enterprise.afip_entorno=='testing' %}selected{% endif
+                                        %}>
                                         Testing (Homologación)</option>
-                                    <option value="produccion" {{ 'selected' if enterprise.afip_entorno=='produccion' }}>Producción (Real)</option>
+                                    <option value="produccion" {% if enterprise.afip_entorno=='produccion' %}selected{%
+                                        endif %}>Producción (Real)</option>
                                 </select>
                             </div>
                         </div>
@@ -60,7 +62,7 @@
                                 pegue el contenido aquí.</p>
                             <textarea name="afip_crt"
                                 class="form-control bg-dark text-info border-secondary font-monospace" rows="6"
-                                placeholder="-----BEGIN CERTIFICATE----- ...">{{ enterprise.afip_crt or '' }}</textarea>
+                                placeholder="-----BEGIN CERTIFICATE----- ...">{{ enterprise.afip_crt|default:'' }}</textarea>
                         </div>
 
                         <div class="mb-3">
@@ -69,7 +71,7 @@
                                 bajo estricta seguridad.</p>
                             <textarea name="afip_key"
                                 class="form-control bg-dark text-warning border-secondary font-monospace" rows="4"
-                                placeholder="-----BEGIN PRIVATE KEY----- ...">{{ enterprise.afip_key or '' }}</textarea>
+                                placeholder="-----BEGIN PRIVATE KEY----- ...">{{ enterprise.afip_key|default:'' }}</textarea>
                         </div>
 
                         <div class="d-grid mt-4">

@@ -1,62 +1,102 @@
 # Colosal ERP - Cross-platform Requirements
-# Esta configuración detecta automáticamente si estás en Windows o Linux
-# e instala el servidor de producción adecuado (Waitress o Gunicorn).
+# Archivo de dependencias actualizado automáticamente
 
-# ── Core Framework ─────────────────────────────────────────────────────
-flask>=3.0.0
-flask-login>=0.6.3
-werkzeug>=3.0.0
-python-dotenv>=1.0.0
-itsdangerous>=2.0.0
-jinja2>=3.1.0
-click>=8.0.0
+# ── Django Core Framework ──────────────────────────────────────────────
+Django==6.0.3
+django-environ==0.13.0
+asgiref==3.11.1
+sqlparse==0.5.5
+python-dotenv==1.2.2
 
 # ── Database ───────────────────────────────────────────────────────────
-SQLAlchemy>=2.0.0
-PyMySQL>=1.1.0
-mariadb>=1.1.0
+PyMySQL==1.1.2
+mariadb==1.1.14
+SQLAlchemy==2.0.48
 
 # ── HTTP / APIs ────────────────────────────────────────────────────────
-requests>=2.32.0
-httpx>=0.28.0
-urllib3>=2.0.0
-certifi>=2024.0.0
+requests==2.32.5
+requests-file==3.0.1
+requests-toolbelt==1.0.0
+httpx==0.28.1
+urllib3==2.6.3
+certifi==2026.2.25
+httpcore==1.0.9
+idna==3.11
 
 # ── AFIP & SOAP ────────────────────────────────────────────────────────
-zeep>=4.3.0
-cryptography>=44.0.0
-lxml>=5.3.0
-pyOpenSSL>=24.0.0
+zeep==4.3.2
+cryptography==46.0.5
+lxml==6.0.2
+pyOpenSSL==25.3.0
 
-# ── Firma Digital (pyHanko — firma de PDFs) ───────────────────────────
-pyHanko>=0.26.0
-pyhanko-certvalidator>=0.26.0
+# ── Seguridad & Criptografía (Compatibilidad Login) ───────────────────
+Werkzeug==3.1.6
+pyHanko==0.34.0
+pyhanko-certvalidator==0.30.0
+oscrypto==1.3.0
+asn1crypto==1.5.1
 
 # ── Scraping & Datos ──────────────────────────────────────────────────
-beautifulsoup4>=4.13.0
-html5lib>=1.1
-openpyxl>=3.1.0
-PyYAML>=6.0.0
+beautifulsoup4==4.14.3
+html5lib==1.1
+openpyxl==3.1.5
+PyYAML==6.0.3
+soupsieve==2.8.3
 
 # ── PDF & Imágenes ─────────────────────────────────────────────────────
-xhtml2pdf>=0.2.0
-Pillow>=10.0.0
-reportlab>=4.0.0
-PyPDF2>=3.0.0
-pdfplumber>=0.11.0
-pdfminer.six>=20221105
-PyMuPDF>=1.24.0
-svglib>=1.5.0
+xhtml2pdf==0.2.17
+pillow==12.1.1
+reportlab==4.4.10
+pypdf==6.7.5
+PyPDF2==3.0.1
+pypdfium2==5.5.0
+pdfplumber==0.11.9
+pdfminer.six==20251230
+PyMuPDF==1.27.1
+svglib==1.6.0
+pycairo==1.29.0
+python-barcode==0.16.1
+qrcode==8.2
 
 # ── Fechas & Zonas Horarias ───────────────────────────────────────────
-pytz>=2024.0
-tzdata>=2024.0
-tzlocal>=5.0
+pytz==2026.1.post1
+tzdata==2025.3
+tzlocal==5.3.1
+isodate==0.7.2
+
+# ── Utils & Support (Sub-dependencias) ─────────────────────────────────
+aiofiles==25.1.0
+aiomysql==0.3.2
+anyio==4.12.1
+arabic-reshaper==3.0.0
+attrs==25.4.0
+cffi==2.0.0
+charset-normalizer==3.4.5
+click==8.3.1
+colorama==0.4.6
+cssselect2==0.9.0
+et_xmlfile==2.0.0
+freetype-py==2.5.1
+greenlet==3.3.2
+h11==0.16.0
+h2==4.3.0
+hpack==4.1.0
+hyperframe==6.1.0
+itsdangerous==2.2.0
+Jinja2==3.1.6
+MarkupSafe==3.0.3
+packaging==26.0
+platformdirs==4.9.4
+priority==2.0.0
+pycparser==3.0
+python-bidi==0.6.7
+rlPyCairo==0.4.0
+six==1.17.0
+tinycss2==1.5.1
+typing_extensions==4.15.0
+uritools==6.0.1
+webencodings==0.5.1
+wsproto==1.3.2
 
 # ── Windows Production Server ─────────────────────────────────────────
-waitress==3.0.2; sys_platform == 'win32'
-pypiwin32==223; sys_platform == 'win32'
 pywin32==311; sys_platform == 'win32'
-
-# ── Linux Production Server ───────────────────────────────────────────
-gunicorn==23.0.0; sys_platform != 'win32'

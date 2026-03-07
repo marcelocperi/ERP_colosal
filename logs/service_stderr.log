@@ -1280,3 +1280,1473 @@ C:\Users\marce\Documents\GitHub\bibliotecaweb\multiMCP\services\../../multiMCP\s
 2026-03-06 10:04:49,098 - core.routes - INFO - LOGIN: Fetching enterprises. Show Master: False, Found: 1
 2026-03-06 10:04:55,921 - core.routes - INFO - LOGIN: Fetching enterprises. Show Master: False, Found: 1
 2026-03-06 10:09:33,790 - core.routes - INFO - LOGIN: Fetching enterprises. Show Master: False, Found: 1
+C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py:98: RuntimeWarning: Accessing the database during app initialization is discouraged. To fix this warning, avoid executing queries in AppConfig.ready() or when your app modules are imported.
+  warnings.warn(self.APPS_NOT_READY_WARNING_MSG, category=RuntimeWarning)
+INFO 2026-03-07 01:03:52,331 apps 1132 7832 \u2705 Infraestructura Django Core inicializada y DB conectada.
+INFO 2026-03-07 01:03:52,365 run_django 1132 7832 Iniciando Servidor Waitress (Django) en 0.0.0.0:80...
+INFO 2026-03-07 01:03:52,372 wasyncore 1132 7832 Serving on http://0.0.0.0:80
+INFO 2026-03-07 01:04:08,176 middleware 1132 13992 Path: / | SID: None | Logged: False
+INFO 2026-03-07 01:04:09,034 middleware 1132 8628 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:04:09,313 middleware 1132 8004 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:04:09,362 log 1132 8004 Not Found: /static/css/style.css
+INFO 2026-03-07 01:04:09,371 middleware 1132 10732 Path: /static/img/logo.png | SID: None | Logged: False
+Not Found: /static/img/logo.png
+WARNING 2026-03-07 01:04:09,377 log 1132 10732 Not Found: /static/img/logo.png
+INFO 2026-03-07 01:04:16,187 middleware 1132 2888 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:04:16,443 middleware 1132 6656 SuperAdmin Bypass for superadmin
+INFO 2026-03-07 01:04:16,443 middleware 1132 6656 Permissions for superadmin: ['dashboard_view', 'books_view', 'books_add', 'books_edit', 'books_import', 'patrons_view', 'patrons_manage', 'loans_view', 'loans_manage', 'stock_view', 'stock_manage_motives', 'stock_adjust', 'admin_users', 'admin_roles', 'erp_ventas_view', 'erp_compras_view', 'erp_fondos_view', 'erp_contabilidad_view', 'sysadmin', 'compras.dashboard', 'compras.ver_reportes', 'compras.gestionar_oc', 'compras.proveedores', 'fondos.dashboard', 'fondos.autorizar_pagos', 'fondos.gestionar_cajas', 'fondos.reportes', 'admin_comprobantes', 'admin_cuentas', 'admin_depositos', 'admin_empresa', 'admin_logistica', 'admin_medios_pago', 'admin_plan_cuentas', 'admin_tipos_articulo', 'auditar_inventario', 'conciliar_banco', 'create_orden_compra', 'create_pago', 'create_presupuesto', 'create_recibo', 'create_remito', 'create_transferencia', 'facturar_compras', 'facturar_ventas', 'receive_stock', 'view_articulos', 'view_balance', 'view_clientes', 'view_cobranzas', 'view_compras', 'view_estados_cuenta', 'view_movimientos', 'view_pagos', 'view_pedidos', 'view_proveedores', 'view_reportes', 'view_trazabilidad', 'admin.roles', 'admin.users', 'books.add', 'books.import', 'compras.aprobar_solicitud', 'compras.gestion_proveedores', 'loans.manage', 'stock.view', 'stock.edit', 'reports.view', 'admin_contabilidad', 'all', 'view_contabilidad', 'view_prestamos', 'view_risk_dashboard', 'view_error_log', 'manage_mitigation_rules', 'view_mitigation_history', 'view_ventas', 'admin_impuestos', 'gestionar_cm05', 'view_permission_audit', 'cost_accounting', 'view_precios', 'industrial_safety', 'safety_bypass', 'produccion.dashboard', 'compras.gestionar_reposicion', 'compras.facturar_compras', 'compras.solicitar_cotizacion', 'produccion.view', 'produccion.admin', 'compras.aprobar_po', 'tesoreria', 'aprobar_cta_cte']
+INFO 2026-03-07 01:04:16,443 middleware 1132 6656 Path: /ventas/dashboard/ | SID: 61648106 | Logged: True
+INFO 2026-03-07 01:04:16,528 middleware 1132 3840 Path: /static/css/style.css | SID: None | Logged: False
+INFO 2026-03-07 01:04:16,533 middleware 1132 4608 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:04:16,544 log 1132 3840 Not Found: /static/css/style.css
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:04:16,553 log 1132 4608 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:04:16,556 middleware 1132 7436 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:04:16,571 log 1132 7436 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:04:16,574 middleware 1132 1856 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:04:16,594 middleware 1132 12004 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:04:16,790 middleware 1132 17008 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:04:16,806 middleware 1132 13992 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:05:21,044 middleware 1132 8628 Path: /ventas/dashboard/ | SID: 61648106 | Logged: True
+INFO 2026-03-07 01:05:21,152 middleware 1132 10732 Path: /static/css/utilities.css | SID: None | Logged: False
+INFO 2026-03-07 01:05:21,154 middleware 1132 2888 Path: /static/css/premium_ux.css | SID: None | Logged: False
+INFO 2026-03-07 01:05:21,155 middleware 1132 6656 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:05:21,167 log 1132 2888 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:05:21,182 middleware 1132 8004 Path: /static/css/style.css | SID: None | Logged: False
+WARNING 2026-03-07 01:05:21,179 log 1132 10732 Not Found: /static/css/utilities.css
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:05:21,229 log 1132 8004 Not Found: /static/css/style.css
+INFO 2026-03-07 01:05:21,256 middleware 1132 3840 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:05:21,339 middleware 1132 4608 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:05:21,356 middleware 1132 7436 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:05:45,933 middleware 1132 1856 Path: / | SID: None | Logged: False
+INFO 2026-03-07 01:05:45,954 middleware 1132 12004 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:05:46,006 middleware 1132 17008 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:05:46,016 log 1132 17008 Not Found: /static/css/style.css
+INFO 2026-03-07 01:05:46,017 middleware 1132 13992 Path: /static/img/logo.png | SID: None | Logged: False
+Not Found: /static/img/logo.png
+WARNING 2026-03-07 01:05:46,027 log 1132 13992 Not Found: /static/img/logo.png
+INFO 2026-03-07 01:05:48,998 middleware 1132 8628 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:05:49,065 middleware 1132 2888 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:05:49,073 log 1132 2888 Not Found: /static/css/style.css
+INFO 2026-03-07 01:05:49,078 middleware 1132 6656 Path: /static/img/logo.png | SID: None | Logged: False
+Not Found: /static/img/logo.png
+WARNING 2026-03-07 01:05:49,083 log 1132 6656 Not Found: /static/img/logo.png
+INFO 2026-03-07 01:05:49,849 middleware 1132 10732 Path: /favicon.ico | SID: None | Logged: False
+Not Found: /favicon.ico
+WARNING 2026-03-07 01:05:49,860 log 1132 10732 Not Found: /favicon.ico
+INFO 2026-03-07 01:05:54,706 middleware 1132 8004 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:05:55,178 middleware 1132 3840 Path: /ventas/dashboard/ | SID: 718b33e5 | Logged: True
+INFO 2026-03-07 01:05:56,249 middleware 1132 4608 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:05:56,257 log 1132 4608 Not Found: /static/css/style.css
+INFO 2026-03-07 01:05:56,259 middleware 1132 7436 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:05:56,264 log 1132 7436 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:05:56,267 middleware 1132 1856 Path: /static/css/premium_ux.css | SID: None | Logged: False
+INFO 2026-03-07 01:05:56,268 middleware 1132 12004 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:05:56,273 log 1132 1856 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:05:56,340 middleware 1132 17008 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:05:56,351 middleware 1132 2888 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:05:56,359 log 1132 2888 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:05:56,360 middleware 1132 8628 Path: /static/css/premium_ux.css | SID: None | Logged: False
+INFO 2026-03-07 01:05:56,360 middleware 1132 13992 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:05:56,373 log 1132 8628 Not Found: /static/css/premium_ux.css
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:05:56,373 log 1132 13992 Not Found: /static/css/style.css
+INFO 2026-03-07 01:05:57,668 middleware 1132 6656 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:05:57,676 middleware 1132 10732 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:09:48,286 middleware 1132 8004 Path: / | SID: None | Logged: False
+INFO 2026-03-07 01:09:48,328 middleware 1132 3840 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:09:48,390 middleware 1132 4608 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:09:48,407 log 1132 4608 Not Found: /static/css/style.css
+INFO 2026-03-07 01:09:48,411 middleware 1132 7436 Path: /static/img/logo.png | SID: None | Logged: False
+Not Found: /static/img/logo.png
+WARNING 2026-03-07 01:09:48,423 log 1132 7436 Not Found: /static/img/logo.png
+INFO 2026-03-07 01:09:53,764 middleware 1132 12004 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:09:54,135 middleware 1132 1856 SuperAdmin Bypass for superadmin
+INFO 2026-03-07 01:09:54,135 middleware 1132 1856 Permissions for superadmin: ['dashboard_view', 'books_view', 'books_add', 'books_edit', 'books_import', 'patrons_view', 'patrons_manage', 'loans_view', 'loans_manage', 'stock_view', 'stock_manage_motives', 'stock_adjust', 'admin_users', 'admin_roles', 'erp_ventas_view', 'erp_compras_view', 'erp_fondos_view', 'erp_contabilidad_view', 'sysadmin', 'compras.dashboard', 'compras.ver_reportes', 'compras.gestionar_oc', 'compras.proveedores', 'fondos.dashboard', 'fondos.autorizar_pagos', 'fondos.gestionar_cajas', 'fondos.reportes', 'admin_comprobantes', 'admin_cuentas', 'admin_depositos', 'admin_empresa', 'admin_logistica', 'admin_medios_pago', 'admin_plan_cuentas', 'admin_tipos_articulo', 'auditar_inventario', 'conciliar_banco', 'create_orden_compra', 'create_pago', 'create_presupuesto', 'create_recibo', 'create_remito', 'create_transferencia', 'facturar_compras', 'facturar_ventas', 'receive_stock', 'view_articulos', 'view_balance', 'view_clientes', 'view_cobranzas', 'view_compras', 'view_estados_cuenta', 'view_movimientos', 'view_pagos', 'view_pedidos', 'view_proveedores', 'view_reportes', 'view_trazabilidad', 'admin.roles', 'admin.users', 'books.add', 'books.import', 'compras.aprobar_solicitud', 'compras.gestion_proveedores', 'loans.manage', 'stock.view', 'stock.edit', 'reports.view', 'admin_contabilidad', 'all', 'view_contabilidad', 'view_prestamos', 'view_risk_dashboard', 'view_error_log', 'manage_mitigation_rules', 'view_mitigation_history', 'view_ventas', 'admin_impuestos', 'gestionar_cm05', 'view_permission_audit', 'cost_accounting', 'view_precios', 'industrial_safety', 'safety_bypass', 'produccion.dashboard', 'compras.gestionar_reposicion', 'compras.facturar_compras', 'compras.solicitar_cotizacion', 'produccion.view', 'produccion.admin', 'compras.aprobar_po', 'tesoreria', 'aprobar_cta_cte']
+INFO 2026-03-07 01:09:54,135 middleware 1132 1856 Path: /ventas/dashboard/ | SID: 83625e91 | Logged: True
+INFO 2026-03-07 01:09:55,002 middleware 1132 17008 Path: /static/css/style.css | SID: None | Logged: False
+INFO 2026-03-07 01:09:55,003 middleware 1132 2888 Path: /static/css/utilities.css | SID: None | Logged: False
+INFO 2026-03-07 01:09:55,005 middleware 1132 13992 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:09:55,012 log 1132 2888 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:09:55,014 middleware 1132 8628 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:09:55,021 log 1132 17008 Not Found: /static/css/style.css
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:09:55,029 log 1132 13992 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:09:55,039 middleware 1132 6656 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:09:55,116 middleware 1132 10732 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:09:55,129 middleware 1132 8004 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:10:01,843 middleware 1132 3840 Path: / | SID: 83625e91 | Logged: True
+INFO 2026-03-07 01:10:01,860 middleware 1132 4608 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:10:01,902 middleware 1132 7436 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:10:01,911 log 1132 7436 Not Found: /static/css/style.css
+INFO 2026-03-07 01:10:01,915 middleware 1132 12004 Path: /static/img/logo.png | SID: None | Logged: False
+Not Found: /static/img/logo.png
+WARNING 2026-03-07 01:10:01,922 log 1132 12004 Not Found: /static/img/logo.png
+INFO 2026-03-07 01:10:07,477 middleware 1132 1856 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:10:07,849 middleware 1132 2888 Path: /ventas/dashboard/ | SID: d3a65b85 | Logged: True
+INFO 2026-03-07 01:10:07,903 middleware 1132 8628 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:10:07,914 log 1132 8628 Not Found: /static/css/style.css
+INFO 2026-03-07 01:10:07,922 middleware 1132 17008 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:10:07,928 log 1132 17008 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:10:07,930 middleware 1132 13992 Path: /static/css/premium_ux.css | SID: None | Logged: False
+INFO 2026-03-07 01:10:07,931 middleware 1132 6656 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:10:07,937 log 1132 13992 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:10:07,976 middleware 1132 10732 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:10:08,026 middleware 1132 8004 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:10:08,053 middleware 1132 3840 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:13:19,005 middleware 1132 4608 Path: /ventas/dashboard/ | SID: d3a65b85 | Logged: True
+INFO 2026-03-07 01:13:19,073 middleware 1132 7436 Path: /static/css/style.css | SID: None | Logged: False
+INFO 2026-03-07 01:13:19,074 middleware 1132 12004 Path: /static/css/utilities.css | SID: None | Logged: False
+INFO 2026-03-07 01:13:19,076 middleware 1132 1856 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:13:19,082 log 1132 7436 Not Found: /static/css/style.css
+INFO 2026-03-07 01:13:19,082 middleware 1132 2888 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:13:19,089 log 1132 12004 Not Found: /static/css/utilities.css
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:13:19,096 log 1132 2888 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:13:19,102 middleware 1132 12004 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:13:19,181 middleware 1132 17008 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:13:19,189 middleware 1132 6656 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:13:23,100 middleware 1132 13992 Path: / | SID: None | Logged: False
+INFO 2026-03-07 01:13:23,150 middleware 1132 10732 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:13:23,307 middleware 1132 8004 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:13:23,315 log 1132 8004 Not Found: /static/css/style.css
+INFO 2026-03-07 01:13:23,353 middleware 1132 3840 Path: /static/img/logo.png | SID: None | Logged: False
+Not Found: /static/img/logo.png
+WARNING 2026-03-07 01:13:23,359 log 1132 3840 Not Found: /static/img/logo.png
+INFO 2026-03-07 01:13:26,561 middleware 1132 4608 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:13:26,604 middleware 1132 1856 Path: /static/css/style.css | SID: None | Logged: False
+INFO 2026-03-07 01:13:26,605 middleware 1132 7436 Path: /static/img/logo.png | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:13:26,615 log 1132 1856 Not Found: /static/css/style.css
+Not Found: /static/img/logo.png
+WARNING 2026-03-07 01:13:26,623 log 1132 7436 Not Found: /static/img/logo.png
+INFO 2026-03-07 01:13:31,485 middleware 1132 8628 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:13:31,813 middleware 1132 2888 Path: /ventas/dashboard/ | SID: 29505ace | Logged: True
+INFO 2026-03-07 01:13:31,969 middleware 1132 17008 Path: /static/css/utilities.css | SID: None | Logged: False
+INFO 2026-03-07 01:13:31,971 middleware 1132 12004 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:13:31,979 log 1132 12004 Not Found: /static/css/style.css
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:13:31,984 log 1132 17008 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:13:31,989 middleware 1132 13992 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:13:31,990 middleware 1132 6656 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:13:31,997 log 1132 6656 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:13:32,002 middleware 1132 10732 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:13:32,502 middleware 1132 8004 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:13:32,519 middleware 1132 3840 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:15:45,557 middleware 1132 4608 Path: / | SID: None | Logged: False
+INFO 2026-03-07 01:15:45,570 middleware 1132 7436 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:15:45,616 middleware 1132 1856 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:15:45,630 log 1132 1856 Not Found: /static/css/style.css
+INFO 2026-03-07 01:15:45,650 middleware 1132 8628 Path: /static/img/logo.png | SID: None | Logged: False
+Not Found: /static/img/logo.png
+WARNING 2026-03-07 01:15:45,667 log 1132 8628 Not Found: /static/img/logo.png
+INFO 2026-03-07 01:15:48,149 middleware 1132 2888 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:15:48,201 middleware 1132 17008 Path: /static/css/style.css | SID: None | Logged: False
+INFO 2026-03-07 01:15:48,203 middleware 1132 12004 Path: /static/img/logo.png | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:15:48,218 log 1132 17008 Not Found: /static/css/style.css
+Not Found: /static/img/logo.png
+WARNING 2026-03-07 01:15:48,228 log 1132 12004 Not Found: /static/img/logo.png
+INFO 2026-03-07 01:15:57,162 middleware 1132 13992 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:15:57,494 middleware 1132 6656 SuperAdmin Bypass for superadmin
+INFO 2026-03-07 01:15:57,494 middleware 1132 6656 Permissions for superadmin: ['dashboard_view', 'books_view', 'books_add', 'books_edit', 'books_import', 'patrons_view', 'patrons_manage', 'loans_view', 'loans_manage', 'stock_view', 'stock_manage_motives', 'stock_adjust', 'admin_users', 'admin_roles', 'erp_ventas_view', 'erp_compras_view', 'erp_fondos_view', 'erp_contabilidad_view', 'sysadmin', 'compras.dashboard', 'compras.ver_reportes', 'compras.gestionar_oc', 'compras.proveedores', 'fondos.dashboard', 'fondos.autorizar_pagos', 'fondos.gestionar_cajas', 'fondos.reportes', 'admin_comprobantes', 'admin_cuentas', 'admin_depositos', 'admin_empresa', 'admin_logistica', 'admin_medios_pago', 'admin_plan_cuentas', 'admin_tipos_articulo', 'auditar_inventario', 'conciliar_banco', 'create_orden_compra', 'create_pago', 'create_presupuesto', 'create_recibo', 'create_remito', 'create_transferencia', 'facturar_compras', 'facturar_ventas', 'receive_stock', 'view_articulos', 'view_balance', 'view_clientes', 'view_cobranzas', 'view_compras', 'view_estados_cuenta', 'view_movimientos', 'view_pagos', 'view_pedidos', 'view_proveedores', 'view_reportes', 'view_trazabilidad', 'admin.roles', 'admin.users', 'books.add', 'books.import', 'compras.aprobar_solicitud', 'compras.gestion_proveedores', 'loans.manage', 'stock.view', 'stock.edit', 'reports.view', 'admin_contabilidad', 'all', 'view_contabilidad', 'view_prestamos', 'view_risk_dashboard', 'view_error_log', 'manage_mitigation_rules', 'view_mitigation_history', 'view_ventas', 'admin_impuestos', 'gestionar_cm05', 'view_permission_audit', 'cost_accounting', 'view_precios', 'industrial_safety', 'safety_bypass', 'produccion.dashboard', 'compras.gestionar_reposicion', 'compras.facturar_compras', 'compras.solicitar_cotizacion', 'produccion.view', 'produccion.admin', 'compras.aprobar_po', 'tesoreria', 'aprobar_cta_cte']
+INFO 2026-03-07 01:15:57,494 middleware 1132 6656 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:15:57,709 middleware 1132 10732 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:15:57,722 log 1132 10732 Not Found: /static/css/style.css
+INFO 2026-03-07 01:15:57,728 middleware 1132 8004 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:15:57,736 log 1132 8004 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:15:57,738 middleware 1132 4608 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:15:57,739 middleware 1132 3840 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:15:57,745 log 1132 3840 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:15:57,751 middleware 1132 7436 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:15:58,543 middleware 1132 1856 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:15:58,553 middleware 1132 8628 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:16:08,300 middleware 1132 2888 Path: /compras/reposicion/ | SID: 2a6e4525 | Logged: True
+Internal Server Error: /compras/reposicion/
+Traceback (most recent call last):
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1247, "Reference 'stock_actual' not supported (reference to group function)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\core\decorators.py", line 55, in wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\core\decorators.py", line 70, in wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\compras\views.py", line 254, in reposicion_dashboard
+    cursor.execute(f"""
+    ~~~~~~~~~~~~~~^^^^^
+        SELECT stk_articulos.id, stk_articulos.codigo, stk_articulos.nombre,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<21 lines>...
+        ORDER BY erp_terceros.nombre, (stk_articulos.punto_pedido - stock_actual) DESC
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    """, tuple(params))
+    ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+django.db.utils.OperationalError: (1247, "Reference 'stock_actual' not supported (reference to group function)")
+ERROR 2026-03-07 01:16:08,504 log 1132 2888 Internal Server Error: /compras/reposicion/
+Traceback (most recent call last):
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1247, "Reference 'stock_actual' not supported (reference to group function)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\core\decorators.py", line 55, in wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\core\decorators.py", line 70, in wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\compras\views.py", line 254, in reposicion_dashboard
+    cursor.execute(f"""
+    ~~~~~~~~~~~~~~^^^^^
+        SELECT stk_articulos.id, stk_articulos.codigo, stk_articulos.nombre,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<21 lines>...
+        ORDER BY erp_terceros.nombre, (stk_articulos.punto_pedido - stock_actual) DESC
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    """, tuple(params))
+    ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+django.db.utils.OperationalError: (1247, "Reference 'stock_actual' not supported (reference to group function)")
+INFO 2026-03-07 01:17:25,895 middleware 1132 17008 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:17:25,905 middleware 1132 12004 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:30,468 middleware 1132 13992 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:17:30,526 middleware 1132 6656 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:17:30,538 log 1132 6656 Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:30,545 middleware 1132 10732 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:30,552 log 1132 10732 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:17:30,557 middleware 1132 8004 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:17:30,564 log 1132 8004 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:17:30,566 middleware 1132 4608 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:17:30,588 middleware 1132 3840 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:30,755 middleware 1132 7436 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:17:30,826 middleware 1132 1856 Path: /static/css/style.css | SID: None | Logged: False
+INFO 2026-03-07 01:17:30,827 middleware 1132 2888 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:17:30,842 log 1132 2888 Not Found: /static/css/premium_ux.css
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:17:30,851 log 1132 1856 Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:30,855 middleware 1132 8628 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:30,865 log 1132 8628 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:17:30,868 middleware 1132 17008 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:17:30,886 middleware 1132 12004 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:30,928 middleware 1132 13992 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:17:30,995 middleware 1132 10732 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:17:31,005 log 1132 10732 Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:31,010 middleware 1132 6656 Path: /static/css/utilities.css | SID: None | Logged: False
+INFO 2026-03-07 01:17:31,010 middleware 1132 8004 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:31,017 log 1132 6656 Not Found: /static/css/utilities.css
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:17:31,027 log 1132 8004 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:17:31,030 middleware 1132 4608 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:17:31,041 middleware 1132 3840 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:31,101 middleware 1132 7436 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:17:31,169 middleware 1132 1856 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:17:31,180 log 1132 1856 Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:31,183 middleware 1132 2888 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:31,194 log 1132 2888 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:17:31,196 middleware 1132 8628 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:17:31,205 log 1132 8628 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:17:31,213 middleware 1132 17008 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:17:31,233 middleware 1132 12004 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:31,268 middleware 1132 13992 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:17:31,331 middleware 1132 10732 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:17:31,348 log 1132 10732 Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:31,357 middleware 1132 6656 Path: /static/css/utilities.css | SID: None | Logged: False
+INFO 2026-03-07 01:17:31,358 middleware 1132 8004 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:31,366 log 1132 6656 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:17:31,366 middleware 1132 4608 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:17:31,380 log 1132 8004 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:17:31,390 middleware 1132 3840 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:31,420 middleware 1132 7436 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:17:31,482 middleware 1132 1856 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:17:31,493 log 1132 1856 Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:31,500 middleware 1132 8628 Path: /static/css/premium_ux.css | SID: None | Logged: False
+INFO 2026-03-07 01:17:31,501 middleware 1132 2888 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:17:31,508 log 1132 8628 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:17:31,511 middleware 1132 17008 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:31,518 log 1132 2888 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:17:31,532 middleware 1132 12004 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:31,568 middleware 1132 13992 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:17:31,629 middleware 1132 10732 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:17:31,639 log 1132 10732 Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:31,640 middleware 1132 6656 Path: /static/css/utilities.css | SID: None | Logged: False
+INFO 2026-03-07 01:17:31,640 middleware 1132 4608 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:31,651 log 1132 6656 Not Found: /static/css/utilities.css
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:17:31,657 log 1132 4608 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:17:31,663 middleware 1132 8004 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:17:31,679 middleware 1132 3840 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:31,712 middleware 1132 7436 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:17:31,772 middleware 1132 1856 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:17:31,787 log 1132 1856 Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:31,795 middleware 1132 8628 Path: /static/css/premium_ux.css | SID: None | Logged: False
+INFO 2026-03-07 01:17:31,796 middleware 1132 17008 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:17:31,804 log 1132 8628 Not Found: /static/css/premium_ux.css
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:31,814 log 1132 17008 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:17:31,815 middleware 1132 2888 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:17:31,823 middleware 1132 12004 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:31,865 middleware 1132 13992 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:17:31,927 middleware 1132 4608 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:31,937 log 1132 4608 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:17:31,939 middleware 1132 6656 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:17:31,949 log 1132 6656 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:17:31,953 middleware 1132 10732 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:17:31,962 log 1132 10732 Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:31,963 middleware 1132 8004 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:17:31,971 middleware 1132 3840 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:32,023 middleware 1132 7436 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:17:32,074 middleware 1132 1856 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:17:32,086 log 1132 1856 Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:32,093 middleware 1132 8628 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:32,099 log 1132 8628 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:17:32,100 middleware 1132 17008 Path: /static/css/premium_ux.css | SID: None | Logged: False
+INFO 2026-03-07 01:17:32,102 middleware 1132 2888 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:17:32,106 log 1132 17008 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:17:32,116 middleware 1132 12004 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:32,186 middleware 1132 13992 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:17:32,244 middleware 1132 4608 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:17:32,253 log 1132 4608 Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:32,258 middleware 1132 6656 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:32,268 log 1132 6656 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:17:32,271 middleware 1132 8004 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:17:32,278 log 1132 8004 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:17:32,279 middleware 1132 10732 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:17:32,287 middleware 1132 3840 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:32,348 middleware 1132 7436 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:17:32,404 middleware 1132 1856 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:17:32,416 log 1132 1856 Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:32,422 middleware 1132 2888 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:17:32,431 middleware 1132 8628 Path: /static/css/utilities.css | SID: None | Logged: False
+WARNING 2026-03-07 01:17:32,431 log 1132 2888 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:17:32,433 middleware 1132 17008 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:32,443 log 1132 8628 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:17:32,453 middleware 1132 12004 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:32,514 middleware 1132 13992 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:17:32,574 middleware 1132 4608 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:17:32,587 log 1132 4608 Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:32,598 middleware 1132 6656 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:32,606 log 1132 6656 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:17:32,608 middleware 1132 10732 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:17:32,608 middleware 1132 8004 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:17:32,619 log 1132 8004 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:17:32,624 middleware 1132 3840 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:32,664 middleware 1132 7436 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:17:32,733 middleware 1132 1856 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:17:32,744 log 1132 1856 Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:32,747 middleware 1132 17008 Path: /static/css/utilities.css | SID: None | Logged: False
+INFO 2026-03-07 01:17:32,749 middleware 1132 2888 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:32,757 log 1132 17008 Not Found: /static/css/utilities.css
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:17:32,767 log 1132 2888 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:17:32,769 middleware 1132 8628 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:17:32,779 middleware 1132 12004 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:32,833 middleware 1132 13992 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:17:32,872 middleware 1132 4608 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:17:32,885 log 1132 4608 Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:32,894 middleware 1132 10732 Path: /static/css/premium_ux.css | SID: None | Logged: False
+INFO 2026-03-07 01:17:32,895 middleware 1132 6656 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:17:32,904 log 1132 10732 Not Found: /static/css/premium_ux.css
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:32,912 log 1132 6656 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:17:32,914 middleware 1132 8004 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:17:32,923 middleware 1132 3840 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:32,995 middleware 1132 7436 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:17:33,056 middleware 1132 1856 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:17:33,066 log 1132 1856 Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:33,068 middleware 1132 2888 Path: /static/css/premium_ux.css | SID: None | Logged: False
+INFO 2026-03-07 01:17:33,069 middleware 1132 17008 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:17:33,078 log 1132 2888 Not Found: /static/css/premium_ux.css
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:33,089 log 1132 17008 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:17:33,092 middleware 1132 8628 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:17:33,105 middleware 1132 12004 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:33,155 middleware 1132 13992 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:17:33,222 middleware 1132 4608 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:17:33,234 log 1132 4608 Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:33,244 middleware 1132 10732 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:33,251 log 1132 10732 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:17:33,252 middleware 1132 6656 Path: /static/css/premium_ux.css | SID: None | Logged: False
+INFO 2026-03-07 01:17:33,253 middleware 1132 8004 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:17:33,263 log 1132 6656 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:17:33,272 middleware 1132 3840 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:33,321 middleware 1132 7436 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:17:33,437 middleware 1132 1856 Path: /static/css/style.css | SID: None | Logged: False
+INFO 2026-03-07 01:17:33,440 middleware 1132 2888 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:17:33,446 log 1132 1856 Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:33,448 middleware 1132 17008 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:33,454 log 1132 2888 Not Found: /static/css/utilities.css
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:17:33,463 log 1132 17008 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:17:33,466 middleware 1132 8628 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:17:33,483 middleware 1132 13992 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:33,485 middleware 1132 12004 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:17:33,551 middleware 1132 4608 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:17:33,564 log 1132 4608 Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:33,569 middleware 1132 8004 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:17:33,577 log 1132 8004 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:17:33,579 middleware 1132 6656 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:17:33,579 middleware 1132 10732 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:33,588 log 1132 10732 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:17:33,592 middleware 1132 6656 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:33,673 middleware 1132 7436 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:17:33,755 middleware 1132 2888 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:33,766 log 1132 2888 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:17:33,769 middleware 1132 17008 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:17:33,776 log 1132 17008 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:17:33,780 middleware 1132 1856 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:17:33,786 log 1132 1856 Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:33,787 middleware 1132 8628 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:17:33,795 middleware 1132 13992 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:33,825 middleware 1132 12004 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:17:33,935 middleware 1132 4608 Path: /static/css/style.css | SID: None | Logged: False
+INFO 2026-03-07 01:17:33,935 middleware 1132 3840 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:33,942 middleware 1132 8004 Path: /static/css/utilities.css | SID: None | Logged: False
+WARNING 2026-03-07 01:17:33,942 log 1132 4608 Not Found: /static/css/style.css
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:17:33,950 log 1132 3840 Not Found: /static/css/premium_ux.css
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:33,957 log 1132 8004 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:17:33,960 middleware 1132 10732 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:17:33,976 middleware 1132 6656 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:34,000 middleware 1132 7436 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:17:34,050 middleware 1132 2888 Path: /static/css/style.css | SID: None | Logged: False
+INFO 2026-03-07 01:17:34,052 middleware 1132 17008 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:34,058 log 1132 17008 Not Found: /static/css/utilities.css
+Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:34,066 middleware 1132 1856 Path: /static/css/premium_ux.css | SID: None | Logged: False
+WARNING 2026-03-07 01:17:34,066 log 1132 2888 Not Found: /static/css/style.css
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:17:34,077 log 1132 1856 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:17:34,081 middleware 1132 8628 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:17:34,089 middleware 1132 13992 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:34,126 middleware 1132 12004 Path: /ventas/dashboard/ | SID: 2a6e4525 | Logged: True
+INFO 2026-03-07 01:17:34,192 middleware 1132 4608 Path: /static/css/style.css | SID: None | Logged: False
+INFO 2026-03-07 01:17:34,194 middleware 1132 10732 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:17:34,204 log 1132 4608 Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:34,205 middleware 1132 8004 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:34,214 log 1132 10732 Not Found: /static/css/utilities.css
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:17:34,221 log 1132 8004 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:17:34,228 middleware 1132 3840 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:17:34,237 middleware 1132 6656 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:35,478 middleware 1132 7436 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:17:35,489 middleware 1132 17008 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:46,345 middleware 1132 2888 Path: / | SID: None | Logged: False
+INFO 2026-03-07 01:17:46,365 middleware 1132 1856 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:46,426 middleware 1132 8628 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:17:46,446 log 1132 8628 Not Found: /static/css/style.css
+INFO 2026-03-07 01:17:46,452 middleware 1132 13992 Path: /static/img/logo.png | SID: None | Logged: False
+Not Found: /static/img/logo.png
+WARNING 2026-03-07 01:17:46,465 log 1132 13992 Not Found: /static/img/logo.png
+INFO 2026-03-07 01:17:46,666 middleware 1132 12004 Path: /favicon.ico | SID: None | Logged: False
+Not Found: /favicon.ico
+WARNING 2026-03-07 01:17:46,686 log 1132 12004 Not Found: /favicon.ico
+INFO 2026-03-07 01:17:52,570 middleware 1132 4608 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:52,901 middleware 1132 10732 Path: /ventas/dashboard/ | SID: abd01f0d | Logged: True
+INFO 2026-03-07 01:17:52,975 middleware 1132 8004 Path: /static/css/style.css | SID: None | Logged: False
+INFO 2026-03-07 01:17:53,003 middleware 1132 6656 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:17:53,010 log 1132 8004 Not Found: /static/css/style.css
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:17:53,025 log 1132 6656 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:17:53,034 middleware 1132 3840 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:17:53,051 log 1132 3840 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:17:53,053 middleware 1132 7436 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:17:53,071 middleware 1132 17008 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:17:53,262 middleware 1132 2888 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:17:53,278 middleware 1132 1856 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:18:07,490 middleware 1132 8628 Path: /ventas/clientes/ | SID: abd01f0d | Logged: True
+INFO 2026-03-07 01:18:07,570 middleware 1132 13992 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:18:07,582 log 1132 13992 Not Found: /static/css/style.css
+INFO 2026-03-07 01:18:07,591 middleware 1132 12004 Path: /static/css/utilities.css | SID: None | Logged: False
+INFO 2026-03-07 01:18:07,593 middleware 1132 4608 Path: /static/css/premium_ux.css | SID: None | Logged: False
+INFO 2026-03-07 01:18:07,596 middleware 1132 10732 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:18:07,602 log 1132 12004 Not Found: /static/css/utilities.css
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:18:07,607 log 1132 4608 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:18:07,617 middleware 1132 8004 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:18:07,884 middleware 1132 6656 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:18:07,898 middleware 1132 3840 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:18:13,539 middleware 1132 7436 Path: /ventas/clientes/perfil/3/ | SID: abd01f0d | Logged: True
+INFO 2026-03-07 01:18:13,747 middleware 1132 17008 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:18:13,756 log 1132 17008 Not Found: /static/css/style.css
+INFO 2026-03-07 01:18:13,764 middleware 1132 2888 Path: /static/css/utilities.css | SID: None | Logged: False
+INFO 2026-03-07 01:18:13,765 middleware 1132 1856 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:18:13,781 log 1132 1856 Not Found: /static/css/premium_ux.css
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:18:13,782 log 1132 2888 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:18:13,785 middleware 1132 8628 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:18:13,795 middleware 1132 13992 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:18:13,903 middleware 1132 10732 Path: /api/erp/areas/ | SID: None | Logged: False
+INFO 2026-03-07 01:18:13,937 middleware 1132 4608 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:18:13,938 middleware 1132 12004 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:18:13,958 middleware 1132 8004 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:18:56,270 middleware 1132 6656 Path: /ventas/clientes/perfil/3/ | SID: abd01f0d | Logged: True
+INFO 2026-03-07 01:18:56,419 middleware 1132 3840 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:18:56,440 log 1132 3840 Not Found: /static/css/style.css
+INFO 2026-03-07 01:18:56,446 middleware 1132 7436 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:18:56,453 log 1132 7436 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:18:56,454 middleware 1132 17008 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:18:56,467 log 1132 17008 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:18:56,469 middleware 1132 1856 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:18:56,481 middleware 1132 2888 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:18:56,869 middleware 1132 8628 Path: /api/erp/areas/ | SID: None | Logged: False
+INFO 2026-03-07 01:18:56,898 middleware 1132 13992 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:18:57,208 middleware 1132 10732 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:18:57,221 middleware 1132 4608 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:18:58,561 middleware 1132 12004 Path: /ventas/clientes/perfil/3/ | SID: abd01f0d | Logged: True
+INFO 2026-03-07 01:18:58,654 middleware 1132 8004 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:18:58,669 log 1132 8004 Not Found: /static/css/style.css
+INFO 2026-03-07 01:18:58,674 middleware 1132 6656 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+WARNING 2026-03-07 01:18:58,679 log 1132 6656 Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:18:58,681 middleware 1132 3840 Path: /static/css/premium_ux.css | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:18:58,688 log 1132 3840 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:18:58,690 middleware 1132 7436 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:18:58,698 middleware 1132 17008 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:18:58,915 middleware 1132 1856 Path: /api/erp/areas/ | SID: None | Logged: False
+INFO 2026-03-07 01:18:58,931 middleware 1132 2888 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:18:59,196 middleware 1132 8628 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:18:59,206 middleware 1132 13992 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:19:20,774 middleware 1132 10732 Path: /produccion/proyectos/ | SID: abd01f0d | Logged: True
+Internal Server Error: /produccion/proyectos/
+Traceback (most recent call last):
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\defaulttags.py", line 1067, in find_library
+    return parser.libraries[name]
+           ~~~~~~~~~~~~~~~~^^^^^^
+KeyError: 'humanize'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\core\decorators.py", line 55, in wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\produccion\views.py", line 153, in proyectos
+    return render(request, 'produccion/proyectos.html', {'proyectos': proyectos})
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loader_tags.py", line 307, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\defaulttags.py", line 1129, in load
+    lib = find_library(parser, name)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\defaulttags.py", line 1069, in find_library
+    raise TemplateSyntaxError(
+    ...<5 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\produccion\templates\produccion\proyectos.html, 'humanize' is not a registered tag library. Must be one of:
+admin_list
+admin_modify
+admin_urls
+auth
+cache
+core_tags
+i18n
+l10n
+log
+static
+tz
+ERROR 2026-03-07 01:19:20,858 log 1132 10732 Internal Server Error: /produccion/proyectos/
+Traceback (most recent call last):
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\defaulttags.py", line 1067, in find_library
+    return parser.libraries[name]
+           ~~~~~~~~~~~~~~~~^^^^^^
+KeyError: 'humanize'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\core\decorators.py", line 55, in wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\produccion\views.py", line 153, in proyectos
+    return render(request, 'produccion/proyectos.html', {'proyectos': proyectos})
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loader_tags.py", line 307, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\defaulttags.py", line 1129, in load
+    lib = find_library(parser, name)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\defaulttags.py", line 1069, in find_library
+    raise TemplateSyntaxError(
+    ...<5 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\produccion\templates\produccion\proyectos.html, 'humanize' is not a registered tag library. Must be one of:
+admin_list
+admin_modify
+admin_urls
+auth
+cache
+core_tags
+i18n
+l10n
+log
+static
+tz
+INFO 2026-03-07 01:19:21,051 middleware 1132 4608 Path: /favicon.ico | SID: None | Logged: False
+Not Found: /favicon.ico
+WARNING 2026-03-07 01:19:21,062 log 1132 4608 Not Found: /favicon.ico
+INFO 2026-03-07 01:19:22,893 middleware 1132 12004 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:19:22,901 middleware 1132 8004 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:19:26,399 middleware 1132 6656 Path: /produccion/documentos/ | SID: abd01f0d | Logged: True
+Internal Server Error: /produccion/documentos/
+Traceback (most recent call last):
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\core\decorators.py", line 55, in wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\produccion\views.py", line 135, in documentos
+    return render(request, 'produccion/documentos.html', {'documentos': documentos})
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loader_tags.py", line 307, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loader_tags.py", line 235, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\defaulttags.py", line 894, in do_for
+    nodelist_loop = parser.parse(
+        (
+    ...<2 lines>...
+        )
+    )
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 556, in parse
+    raise self.error(token, e)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 554, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 676, in compile_filter
+    return FilterExpression(token, self)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 776, in __init__
+    raise TemplateSyntaxError(
+    ...<2 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\produccion\templates\produccion\documentos.html, Could not parse the remainder: ' if d.fecha_vencimiento else 'N/A'' from 'd.fecha_vencimiento|date:'%d/%m/%Y' if d.fecha_vencimiento else 'N/A''
+ERROR 2026-03-07 01:19:26,580 log 1132 6656 Internal Server Error: /produccion/documentos/
+Traceback (most recent call last):
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\core\decorators.py", line 55, in wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\produccion\views.py", line 135, in documentos
+    return render(request, 'produccion/documentos.html', {'documentos': documentos})
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loader_tags.py", line 307, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loader_tags.py", line 235, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\defaulttags.py", line 894, in do_for
+    nodelist_loop = parser.parse(
+        (
+    ...<2 lines>...
+        )
+    )
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 556, in parse
+    raise self.error(token, e)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 554, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 676, in compile_filter
+    return FilterExpression(token, self)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 776, in __init__
+    raise TemplateSyntaxError(
+    ...<2 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\produccion\templates\produccion\documentos.html, Could not parse the remainder: ' if d.fecha_vencimiento else 'N/A'' from 'd.fecha_vencimiento|date:'%d/%m/%Y' if d.fecha_vencimiento else 'N/A''
+INFO 2026-03-07 01:19:28,579 middleware 1132 3840 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:19:28,589 middleware 1132 7436 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:19:40,830 middleware 1132 17008 Path: /compras/reposicion/ | SID: abd01f0d | Logged: True
+Internal Server Error: /compras/reposicion/
+Traceback (most recent call last):
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1247, "Reference 'stock_actual' not supported (reference to group function)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\core\decorators.py", line 55, in wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\core\decorators.py", line 70, in wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\compras\views.py", line 254, in reposicion_dashboard
+    cursor.execute(f"""
+    ^^^^^^^^^^^^^^^^^^^
+    ...<23 lines>...
+                 cmp_articulos_proveedores.lead_time_dias, cmp_articulos_proveedores.es_habitual
+                 ^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+django.db.utils.OperationalError: (1247, "Reference 'stock_actual' not supported (reference to group function)")
+ERROR 2026-03-07 01:19:40,947 log 1132 17008 Internal Server Error: /compras/reposicion/
+Traceback (most recent call last):
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1247, "Reference 'stock_actual' not supported (reference to group function)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\core\decorators.py", line 55, in wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\core\decorators.py", line 70, in wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\compras\views.py", line 254, in reposicion_dashboard
+    cursor.execute(f"""
+    ^^^^^^^^^^^^^^^^^^^
+    ...<23 lines>...
+                 cmp_articulos_proveedores.lead_time_dias, cmp_articulos_proveedores.es_habitual
+                 ^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+django.db.utils.OperationalError: (1247, "Reference 'stock_actual' not supported (reference to group function)")
+INFO 2026-03-07 01:22:36,684 middleware 1132 1856 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:22:36,695 middleware 1132 2888 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:22:38,318 middleware 1132 8628 SuperAdmin Bypass for superadmin
+INFO 2026-03-07 01:22:38,319 middleware 1132 8628 Permissions for superadmin: ['dashboard_view', 'books_view', 'books_add', 'books_edit', 'books_import', 'patrons_view', 'patrons_manage', 'loans_view', 'loans_manage', 'stock_view', 'stock_manage_motives', 'stock_adjust', 'admin_users', 'admin_roles', 'erp_ventas_view', 'erp_compras_view', 'erp_fondos_view', 'erp_contabilidad_view', 'sysadmin', 'compras.dashboard', 'compras.ver_reportes', 'compras.gestionar_oc', 'compras.proveedores', 'fondos.dashboard', 'fondos.autorizar_pagos', 'fondos.gestionar_cajas', 'fondos.reportes', 'admin_comprobantes', 'admin_cuentas', 'admin_depositos', 'admin_empresa', 'admin_logistica', 'admin_medios_pago', 'admin_plan_cuentas', 'admin_tipos_articulo', 'auditar_inventario', 'conciliar_banco', 'create_orden_compra', 'create_pago', 'create_presupuesto', 'create_recibo', 'create_remito', 'create_transferencia', 'facturar_compras', 'facturar_ventas', 'receive_stock', 'view_articulos', 'view_balance', 'view_clientes', 'view_cobranzas', 'view_compras', 'view_estados_cuenta', 'view_movimientos', 'view_pagos', 'view_pedidos', 'view_proveedores', 'view_reportes', 'view_trazabilidad', 'admin.roles', 'admin.users', 'books.add', 'books.import', 'compras.aprobar_solicitud', 'compras.gestion_proveedores', 'loans.manage', 'stock.view', 'stock.edit', 'reports.view', 'admin_contabilidad', 'all', 'view_contabilidad', 'view_prestamos', 'view_risk_dashboard', 'view_error_log', 'manage_mitigation_rules', 'view_mitigation_history', 'view_ventas', 'admin_impuestos', 'gestionar_cm05', 'view_permission_audit', 'cost_accounting', 'view_precios', 'industrial_safety', 'safety_bypass', 'produccion.dashboard', 'compras.gestionar_reposicion', 'compras.facturar_compras', 'compras.solicitar_cotizacion', 'produccion.view', 'produccion.admin', 'compras.aprobar_po', 'tesoreria', 'aprobar_cta_cte']
+INFO 2026-03-07 01:22:38,319 middleware 1132 8628 Path: /ventas/clientes/perfil/3/ | SID: abd01f0d | Logged: True
+INFO 2026-03-07 01:22:38,406 middleware 1132 10732 Path: /static/css/utilities.css | SID: None | Logged: False
+Not Found: /static/css/utilities.css
+INFO 2026-03-07 01:22:38,411 middleware 1132 13992 Path: /static/css/style.css | SID: None | Logged: False
+WARNING 2026-03-07 01:22:38,410 log 1132 10732 Not Found: /static/css/utilities.css
+Not Found: /static/css/style.css
+WARNING 2026-03-07 01:22:38,418 log 1132 13992 Not Found: /static/css/style.css
+INFO 2026-03-07 01:22:38,420 middleware 1132 4608 Path: /static/css/premium_ux.css | SID: None | Logged: False
+INFO 2026-03-07 01:22:38,421 middleware 1132 12004 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-07 01:22:38,428 log 1132 4608 Not Found: /static/css/premium_ux.css
+INFO 2026-03-07 01:22:38,451 middleware 1132 8004 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:22:38,537 middleware 1132 6656 Path: /api/erp/areas/ | SID: None | Logged: False
+INFO 2026-03-07 01:22:38,562 middleware 1132 3840 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:22:38,563 middleware 1132 7436 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:22:38,584 middleware 1132 17008 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:22:46,671 middleware 1132 1856 Path: /compras/reposicion/ | SID: abd01f0d | Logged: True
+Internal Server Error: /compras/reposicion/
+Traceback (most recent call last):
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1247, "Reference 'stock_actual' not supported (reference to group function)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\core\decorators.py", line 55, in wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\core\decorators.py", line 70, in wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\compras\views.py", line 254, in reposicion_dashboard
+    cursor.execute(f"""
+    ^^^^^^^^^^^^^^^^^^^
+    ...<23 lines>...
+                 cmp_articulos_proveedores.lead_time_dias, cmp_articulos_proveedores.es_habitual
+                 ^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+django.db.utils.OperationalError: (1247, "Reference 'stock_actual' not supported (reference to group function)")
+ERROR 2026-03-07 01:22:46,765 log 1132 1856 Internal Server Error: /compras/reposicion/
+Traceback (most recent call last):
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1247, "Reference 'stock_actual' not supported (reference to group function)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\core\decorators.py", line 55, in wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\core\decorators.py", line 70, in wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\compras\views.py", line 254, in reposicion_dashboard
+    cursor.execute(f"""
+    ^^^^^^^^^^^^^^^^^^^
+    ...<23 lines>...
+                 cmp_articulos_proveedores.lead_time_dias, cmp_articulos_proveedores.es_habitual
+                 ^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\db\backends\mysql\base.py", line 78, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+django.db.utils.OperationalError: (1247, "Reference 'stock_actual' not supported (reference to group function)")
+INFO 2026-03-07 01:24:39,151 middleware 1132 2888 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:24:39,163 middleware 1132 8628 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-07 01:24:40,015 middleware 1132 10732 Path: /sysadmin/enterprises/logo/raw/4 | SID: None | Logged: False
+INFO 2026-03-07 01:24:40,026 middleware 1132 13992 Path: /login.html | SID: None | Logged: False

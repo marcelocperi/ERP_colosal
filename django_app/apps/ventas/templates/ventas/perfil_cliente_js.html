@@ -17,9 +17,7 @@ datalist.appendChild(opt);
 }
 
 async function cargarCalles(provincia, localidad, nombreParcial, datalistId) {
-if (!provincia || !localidad || !nombreParcial || nombreParcial.length < 3) return; try { const response=await fetch(`{%
-    url 'core:api_get_calles'
-    %}?provincia=${encodeURIComponent(provincia)}&localidad=${encodeURIComponent(localidad)}&nombre=${encodeURIComponent(nombreParcial)}`);
+if (!provincia || !localidad || !nombreParcial || nombreParcial.length < 3) return; try { const response=await fetch(`{% url 'core:api_get_calles' %}?provincia=${encodeURIComponent(provincia)}&localidad=${encodeURIComponent(localidad)}&nombre=${encodeURIComponent(nombreParcial)}`);
     const calles=await response.json(); const datalist=document.getElementById(datalistId); if (datalist) {
     datalist.innerHTML='' ; calles.forEach(c=> {
     const opt = document.createElement('option');
@@ -33,8 +31,7 @@ if (!provincia || !localidad || !nombreParcial || nombreParcial.length < 3) retu
     async function cargarCodigosPostales(provincia, localidad, targetId, datalistId) {
     if (!provincia || !localidad) return;
     try {
-    const response = await fetch(`{% url 'core:api_get_cp'
-    %}?provincia=${encodeURIComponent(provincia)}&localidad=${encodeURIComponent(localidad)}`);
+    const response = await fetch(`{% url 'core:api_get_cp' %}?provincia=${encodeURIComponent(provincia)}&localidad=${encodeURIComponent(localidad)}`);
     const data = await response.json();
     const datalist = document.getElementById(datalistId);
     const input = document.getElementById(targetId);

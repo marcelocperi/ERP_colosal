@@ -157,8 +157,7 @@
                                         <p><strong>Teléfono Principal:</strong> {{ cliente.telefono|default:"N/D" }}</p>
                                         <hr>
                                         <p class="mb-0"><strong>Observaciones:</strong><br>
-                                            <span class="text-muted small">{{ cliente.observaciones|default:"Sin
-                                                observaciones" }}</span>
+                                            <span class="text-muted small">{{ cliente.observaciones|default:"Sin observaciones" }}</span>
                                         </p>
                                     </div>
                                 </div>
@@ -180,8 +179,7 @@
                                                 (Simple)</label>
                                             <div class="p-2 rounded bg-light border d-flex align-items-center">
                                                 <i class="fas fa-check-circle text-success me-2"></i>
-                                                <span class="fw-bold">{{ pago_info.condicion_nombre|default:"SIN
-                                                    ASIGNAR" }}</span>
+                                                <span class="fw-bold">{{ pago_info.condicion_nombre|default:"SIN ASIGNAR" }}</span>
                                             </div>
                                         </div>
 
@@ -209,12 +207,10 @@
                                                 <span class="badge bg-warning text-dark">PENDIENTE</span>
                                             </div>
                                             <div class="mt-1 small">
-                                                Solicitado: <span class="fw-bold">{{
-                                                    pago_info.condicion_pendiente_nombre }}</span>
+                                                Solicitado: <span class="fw-bold">{{ pago_info.condicion_pendiente_nombre }}</span>
                                             </div>
 
-                                            {% if 'gerente_ventas' in permissions or 'admin' in permissions or 'all' in
-                                            permissions %}
+                                            {% if 'gerente_ventas' in permissions or 'admin' in permissions or 'all' in permissions %}
                                             <div class="mt-2 d-grid gap-2">
                                                 <form action="{% url 'ventas:aprobar_condicion_pago' cliente.id %}"
                                                     method="POST">
@@ -238,10 +234,8 @@
 
                                         {% if pago_info.aprobador_nombre %}
                                         <div class="mt-3 extra-small text-muted">
-                                            <i class="fas fa-user-shield me-1"></i> Aprobado por: {{
-                                            pago_info.aprobador_nombre }}<br>
-                                            <i class="fas fa-calendar-alt me-1"></i> Fecha: {{
-                                            pago_info.fecha_aprobacion_pago }}
+                                            <i class="fas fa-user-shield me-1"></i> Aprobado por: {{ pago_info.aprobador_nombre }}<br>
+                                            <i class="fas fa-calendar-alt me-1"></i> Fecha: {{ pago_info.fecha_aprobacion_pago }}
                                         </div>
                                         {% endif %}
                                     </div>
@@ -267,8 +261,7 @@
                                             <div class="text-end">
                                                 <div class="small text-muted text-uppercase fw-bold">Monto autorizado
                                                 </div>
-                                                <div class="fw-bold text-success fs-5">${{
-                                                    cliente.monto_cta_cte|default:0|floatformat:2 }}</div>
+                                                <div class="fw-bold text-success fs-5">${{ cliente.monto_cta_cte|default:0|floatformat:2 }}</div>
                                             </div>
                                         </div>
                                         {% else %}
@@ -286,8 +279,7 @@
                                                 <strong><i class="fas fa-clock me-1"></i> Pendiente Tesorería</strong>
                                                 <span class="badge bg-warning text-dark">PENDIENTE</span>
                                             </div>
-                                            {% if 'tesoreria' in permissions or 'admin' in permissions or 'all' in
-                                            permissions %}
+                                            {% if 'tesoreria' in permissions or 'admin' in permissions or 'all' in permissions %}
                                             <form action="{% url 'ventas:aprobar_cta_cte' cliente.id %}" method="POST"
                                                 class="mt-2">
                                                 {% csrf_token %}
@@ -331,14 +323,11 @@
                                     {% for d in direcciones %}
                                     <tr id="dir-{{ d.id }}">
                                         <td><strong>{{ d.etiqueta }}</strong></td>
-                                        <td>{{ d.calle }} {{ d.numero }} {{ d.piso|default:"" }} {{ d.depto|default:""
-                                            }}</td>
+                                        <td>{{ d.calle }} {{ d.numero }} {{ d.piso|default:"" }} {{ d.depto|default:"" }}</td>
                                         <td>{{ d.localidad }} ({{ d.provincia }})</td>
                                         <td>
-                                            {% if d.es_fiscal %}<span class="badge bg-warning text-dark">Fiscal</span>{%
-                                            endif %}
-                                            {% if d.es_entrega %}<span class="badge bg-info text-dark">Entrega</span>{%
-                                            endif %}
+                                            {% if d.es_fiscal %}<span class="badge bg-warning text-dark">Fiscal</span>{% endif %}
+                                            {% if d.es_entrega %}<span class="badge bg-info text-dark">Entrega</span>{% endif %}
                                         </td>
                                         <td>
                                             <div class="btn-group">
@@ -392,8 +381,7 @@
                                         <td><span class="badge bg-light text-dark border">{{ c.tipo_contacto }}</span>
                                             {% if c.direccion_nombre %}
                                             <span class="badge bg-secondary"><i
-                                                    class="fas fa-map-marker-alt me-1"></i>{{ c.direccion_nombre
-                                                }}</span>
+                                                    class="fas fa-map-marker-alt me-1"></i>{{ c.direccion_nombre }}</span>
                                             {% endif %}
                                             {% if c.es_receptor %}
                                             <span class="badge bg-info text-dark"><i
@@ -499,8 +487,7 @@
                                         {% csrf_token %}
                                         <div class="form-check form-switch form-switch-lg d-inline-block">
                                             <input class="form-check-input" type="checkbox" id="flexSwitchConvenio"
-                                                name="es_convenio" onchange="this.form.submit()" {% if
-                                                cliente.es_convenio_multilateral %}checked{% endif %}>
+                                                name="es_convenio" onchange="this.form.submit()" {% if cliente.es_convenio_multilateral %}checked{% endif %}>
                                             <label class="form-check-label fw-bold mx-2" for="flexSwitchConvenio">Es
                                                 Convenio Multilateral</label>
                                         </div>
@@ -562,8 +549,7 @@
                                                         <td class="align-middle fw-bold">{{ coef.jurisdiccion_code }} -
                                                             {{ coef.provincia_nombre }}</td>
                                                         <td class="align-middle">{{ coef.periodo_anio }}</td>
-                                                        <td class="align-middle text-primary fw-bold">{{
-                                                            coef.coeficiente|floatformat:4 }}</td>
+                                                        <td class="align-middle text-primary fw-bold">{{ coef.coeficiente|floatformat:4 }}</td>
                                                         <td class="text-end">
                                                             <form
                                                                 action="{% url 'ventas:eliminar_detalle' 'erp_terceros_cm05' coef.id cliente.id %}"
@@ -636,8 +622,7 @@
                             {% if cuenta_corriente %}
                             <div class="bg-light border rounded py-2 px-3 shadow-sm">
                                 <span class="text-muted small me-2">Saldo Actual:</span>
-                                <strong class="fs-5">${{ cuenta_corriente|last|get_item:"saldo"|floatformat:2
-                                    }}</strong>
+                                <strong class="fs-5">${{ cuenta_corriente|last|get_item:"saldo"|floatformat:2 }}</strong>
                             </div>
                             {% endif %}
                         </div>
@@ -717,7 +702,7 @@
                         <label class="form-label"><i class="fas fa-file-invoice me-1"></i> Condición Fiscal</label>
                         <select name="condicion_fiscal_id" class="form-select">
                             {% for cf in condiciones_fiscales %}
-                            <option value="{{ cf.id }}" {% if cliente.condicion_fiscal_id==cf.id %}selected{% endif %}>
+                            <option value="{{ cf.id }}" {% if cliente.condicion_fiscal_id == cf.id %}selected{% endif %}>
                                 {{ cf.nombre }}</option>
                             {% endfor %}
                         </select>
@@ -726,8 +711,7 @@
                         <label class="form-label"><i class="fas fa-money-check-alt me-1"></i> Condición de Pago</label>
                         <select name="condicion_pago_id" class="form-select">
                             {% for cp in condiciones_pago %}
-                            <option value="{{ cp.id }}" {% if cliente.condicion_pago_id==cp.id %}selected{% endif %}>{{
-                                cp.nombre }}</option>
+                            <option value="{{ cp.id }}" {% if cliente.condicion_pago_id == cp.id %}selected{% endif %}>{{ cp.nombre }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -930,8 +914,7 @@
                 <div class="mb-3">
                     <label class="form-label">Impuesto</label>
                     <select name="impuesto_id" id="fisc_impuesto" class="form-select">
-                        {% for imp in impuestos_lista %}<option value="{{ imp.id }}">{{ imp.nombre }}</option>{% endfor
-                        %}
+                        {% for imp in impuestos_lista %}<option value="{{ imp.id }}">{{ imp.nombre }}</option>{% endfor %}
                     </select>
                 </div>
                 <div class="mb-3">
@@ -1009,8 +992,7 @@
                 <div class="list-group">
                     {% for c in condiciones %}
                     <label class="list-group-item list-group-item-action">
-                        <input class="form-check-input me-1" type="radio" name="condicion_id" value="{{ c.id }}" {% if
-                            c.id==pago_info.condicion_pago_id %}checked{% endif %}>
+                        <input class="form-check-input me-1" type="radio" name="condicion_id" value="{{ c.id }}" {% if c.id == pago_info.condicion_pago_id %}checked{% endif %}>
                         {{ c.nombre }} ({{ c.dias_vencimiento }} días)
                     </label>
                     {% endfor %}

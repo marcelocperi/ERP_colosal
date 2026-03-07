@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h3 mb-1 text-gray-800"><i class="fas fa-user-shield me-2 text-primary"></i>Logs de Seguridad</h1>
+            <p class="text-muted small">Registro histórico de accesos y acciones críticas.</p>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Eventos Recientes</h6>
+            <div class="btn-group">
+                <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-filter me-1"></i> Filtrar</button>
+                <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-download me-1"></i> Exportar</button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" style="font-size: 0.85rem;">
+                    <thead class="bg-light text-muted text-uppercase" style="font-size: 0.75rem;">
+                        <tr>
+                            <th class="ps-4">Fecha/Hora</th>
+                            <th>Usuario</th>
+                            <th>Evento</th>
+                            <th>IP / Origen</th>
+                            <th>Detalles</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs %}
+                        <tr>
+                            <td
+                                class="ps-4 border-start border-4 {% if log.nivel == 'ERROR' or log.nivel == 'CRITICAL' %}border-danger{% elif log.nivel == 'WARNING' %}border-warning{% else %}border-info{% endif %}">
+                                <div class="fw-bold">{{ log.created_at|date:"d/m/Y H:i" }}</div>
+                                <div class="text-muted tiny">{{ log.created_at|timesince }} ago</div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-2"
+                                        style="width: 24px; height: 24px;">
+                                        <i class="fas fa-user tiny"></i>
+                                    </div>
+                                    <span>{{ log.username }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span
+                                    class="badge {% if 'LOGIN' in log.event %}bg-label-success{% elif 'LOGOUT' in log.event %}bg-label-secondary{% else %}bg-label-info{% endif %} px-2">
+                                    {{ log.event }}
+                                </span>
+                            </td>
+                            <td><code>{{ log.ip_address }}</code></td>
+                            <td class="text-muted"
+                                style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                {{ log.details }}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center py-5">
+                                <i class="fas fa-shield-alt fa-3x text-light mb-3"></i>
+                                <p class="text-muted">No hay registros de seguridad en el periodo seleccionado.</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-label-success {
+        background-color: #e8fadf;
+        color: #71dd37;
+    }
+
+    .bg-label-secondary {
+        background-color: #ebeef0;
+        color: #8592a3;
+    }
+
+    .bg-label-info {
+        background-color: #e0f2f1;
+        color: #00897b;
+    }
+
+    .tiny {
+        font-size: 0.65rem;
+    }
+</style>
+{% endblock %}

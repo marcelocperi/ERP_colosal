@@ -17,38 +17,60 @@ class MultiTabSessionMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        # 1. Extraer SID
+        # 1. Extraer SID de cualquier origen
         sid = request.GET.get('sid') or request.POST.get('sid') or request.headers.get('X-SID')
         
-        # 2. Inicializar atributos en request
+        # 2. Inicializar atributos
         request.sid = sid
         request.user_data = None
         request.enterprise = None
         request.permissions = []
 
-        # 3. Intentar cargar contexto si hay sesión
+        # 3. Lógica de recuperación de sesión
         if hasattr(request, 'session'):
             if 's' not in request.session:
                 request.session['s'] = {}
 
-            if sid and sid in request.session['s']:
-                ctx = request.session['s'][sid]
-                uid = ctx.get('user_id')
-                eid = ctx.get('enterprise_id')
-                if uid is not None and eid is not None:
-                    self._load_full_context(request, uid, eid)
-            elif not sid and 'user_id' in request.session and 'enterprise_id' in request.session:
-                # Caso pestaña huérfana
-                new_sid = secrets.token_hex(4)
-                request.sid = new_sid
-                request.session['s'][new_sid] = {
-                    'user_id': request.session['user_id'],
-                    'enterprise_id': request.session['enterprise_id']
-                }
-                request.session.modified = True
-                self._load_full_context(request, request.session['user_id'], request.session['enterprise_id'])
+            # Fallback: Si no hay sid pero hay exactamente UNA sesión activa, usar esa
+            if not sid:
+                active_sids = list(request.session['s'].keys())
+                if len(active_sids) == 1:
+                    sid = active_sids[0]
+                    request.sid = sid
+
+            # Prioridad 1: SID explícito en la URL o Header (o el fallback)
+            if sid:
+                if sid in request.session['s']:
+                    ctx = request.session['s'][sid]
+                    uid = ctx.get('user_id')
+                    eid = ctx.get('enterprise_id')
+                    if uid is not None and eid is not None:
+                        if self._load_full_context(request, uid, eid):
+                             # Éxito
+                             pass
+                        else:
+                            request.login_reason = 'db_not_found' # Usuario/Enterprise no existe en BD
+                    else:
+                        request.login_reason = 'invalid_ctx' # Contexto de sesión corrupto
+                else:
+                    request.login_reason = 'sid_expired' # SID no está en la sesión (Timeout)
+            else:
+                if request.session['s']:
+                    request.login_reason = 'missing_sid' # Hay sesiones, pero no se especificó cual (Bug de lógica en link)
+                else:
+                    request.login_reason = 'no_active_sessions' # No hay ninguna sesión activa (Timeout/First login)
+
+        # 4. Debug provisional (puedes borrarlo luego)
+        logger.info(f"Path: {request.path} | SID: {request.sid} | Logged: {bool(request.user_data)}")
 
         response = self.get_response(request)
+        
+        # 5. Inyectar Cookie de Handshake si se generó un SID nuevo
+        handshake = getattr(request, '_new_sid_handshake', None)
+        if handshake:
+            sid_val, token_val = handshake
+            response.set_cookie(f'bind_{sid_val}', token_val, max_age=30, httponly=False, samesite='Lax')
+            
         return response
 
     def _load_full_context(self, request, user_id, ent_id):
@@ -63,7 +85,7 @@ class MultiTabSessionMiddleware:
                     request.user_data = dict(cached_user)
                     request.permissions = list(cached_perms)
                     request.enterprise = dict(cached_ent)
-                    return
+                    return True
 
         # 2. Database Layer
         try:
@@ -78,7 +100,7 @@ class MultiTabSessionMiddleware:
                 user_row = dictfetchone(cursor)
                 
                 if not user_row:
-                    return
+                    return False
 
                 role_clean = (user_row['role_name'] or 'Sin Rol').strip()
                 request.user_data = {
@@ -109,13 +131,62 @@ class MultiTabSessionMiddleware:
                 if user_lower == 'superadmin' or role_lower == 'adminsys':
                     if 'all' not in request.permissions: request.permissions.append('all')
                     if 'sysadmin' not in request.permissions: request.permissions.append('sysadmin')
-                
-                if user_lower == 'admin' or role_lower in ['admin', 'administrador'] or user_id == 1:
+                    logger.info(f"SuperAdmin Bypass for {user_lower}")
+                elif user_lower == 'admin' or role_lower in ['admin', 'administrador'] or user_id == 1:
                     if 'all' not in request.permissions: request.permissions.append('all')
+                    logger.info(f"Admin Bypass for {user_lower}")
+
+                logger.info(f"Permissions for {user_lower}: {request.permissions}")
 
                 # Guardar en Caché
                 with PERMISSION_LOCK:
-                    PERMISSION_CACHE[cache_key] = (now_ts, dict(request.user_data), list(request.permissions), dict(request.enterprise))
-
+                    PERMISSION_CACHE[cache_key] = (now_ts, request.user_data, request.permissions, request.enterprise)
+                
+                return True
         except Exception as e:
-            logger.error(f"Error loading session context: {e}")
+            logger.error(f"Error loading full context: {e}")
+            return False
+
+class LoginEnforcerMiddleware:
+    """
+    Middleware que asegura que nadie pueda acceder a ninguna URL 
+    sin estar logueado, excepto a la página de login y archivos estáticos.
+    """
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        # 1. Permitir archivos estáticos y media
+        static_url = getattr(settings, 'STATIC_URL', '/static/')
+        if not static_url.startswith('/'):
+            static_url = '/' + static_url
+            
+        if request.path.startswith(static_url) or '/static/' in request.path:
+            return self.get_response(request)
+
+        # 2. Rutas exentas de login (exactas)
+        exempt_paths = [
+            '/login.html',
+            '/logout/',
+            '/favicon.ico',
+        ]
+        
+        # 3. Verificar si el usuario está logueado (cargado por MultiTabSessionMiddleware)
+        if request.path not in exempt_paths:
+            if not getattr(request, 'user_data', None):
+                # Si no está logueado, redirigir a login.html
+                # Intentamos usar reverse para flexibilidad, pero con fallback a string literal
+                try:
+                    from django.urls import reverse
+                    target_url = reverse('core:login')
+                except:
+                    target_url = '/login.html'
+                    
+                reason = getattr(request, 'login_reason', 'unknown')
+                logger.warning(f"Redirecting to login. Path: {request.path} | Reason: {reason} | SID: {request.sid}")
+                
+                from django.shortcuts import redirect
+                # Pasamos la razón como query param para que el usuario pueda verla si quiere debuggear
+                return redirect(f"{target_url}?reason={reason}")
+
+        return self.get_response(request)

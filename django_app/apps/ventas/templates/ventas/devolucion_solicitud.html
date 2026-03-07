@@ -1,6 +1,7 @@
 {% extends "base.html" %}
+{% load core_tags %}
 {% block content %}
-<input type="hidden" id="factura_id_val" value="{{factura.id}}">
+<input type="hidden" id="factura_id_val" value="{{ factura.id }}">
 <div class="container-fluid mt-4">
     <div class="row">
         <div class="col-md-11 mx-auto">
@@ -8,7 +9,7 @@
                 <div class="card-header bg-gradient-primary text-white p-4">
                     <h3 class="mb-0"><i class="fas fa-undo-alt me-2"></i>Solicitud de Devolución</h3>
                     <p class="mb-0 opacity-75 small uppercase">Referencia Venta: Factura
-                        #factura.punto_venta|stringformat:'04d'-factura.numero|stringformat:'08d'</p>
+                        #{{ factura.punto_venta|stringformat:"04d" }}-{{ factura.numero|stringformat:"08d" }}</p>
                 </div>
                 <div class="card-body p-4">
                     <form id="devolucionForm">
@@ -24,9 +25,7 @@
                             <select class="form-select bg-dark text-light border-info" id="deposito_id">
                                 <option value="">Seleccione depósito...</option>
                                 {% for d in depositos %}
-                                <option value="{{ d.id }}" {% if d.id==deposito_sugerido %}selected{% endif %}>{{
-                                    d.nombre
-                                    }}</option>
+                                <option value="{{ d.id }}" {% if d.id == deposito_sugerido %}selected{% endif %}>{{ d.nombre }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -96,8 +95,7 @@
                                         {% for pago in pagos_originales %}
                                         <tr class="border-secondary align-middle">
                                             <td class="ps-3 py-2">{{ pago.medio_nombre }}</td>
-                                            <td class="text-end pe-3 py-2 fw-bold text-muted">$ {{
-                                                pago.importe|floatformat:2 }}</td>
+                                            <td class="text-end pe-3 py-2 fw-bold text-muted">$ {{ pago.importe|floatformat:2 }}</td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -421,7 +419,7 @@
 
                 const csrfMeta = document.querySelector('meta[name="csrf-token"]');
                 const csrf = csrfMeta ? csrfMeta.content : '';
-                const sidParam = window.SID ? window.SID : (new URLSearchParams(window.location.search)).get('sid');
+                const sidParam = window.SID ? window.SID : (new URLSearchParams(window.location.search)).sid;
                 const url = "{% url 'ventas:devolucion_solicitar' %}" + (sidParam ? "?sid=" + sidParam : "");
 
                 btnSubmit.disabled = true;

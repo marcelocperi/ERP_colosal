@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="header-action mb-4 d-flex justify-content-between align-items-center">
+    <h1 class="h3"><i class="fas fa-users-cog me-2"></i>Gestión de Usuarios</h1>
+    <button class="btn btn-primary" onclick="openNewUserModal()">
+        <i class="fas fa-user-plus me-1"></i> Nuevo Usuario
+    </button>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Usuario</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                        <th>Fecha Creación</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in system_users %}
+                    <tr>
+                        <td>#{{ user.id }}</td>
+                        <td class="fw-bold text-primary">{{ user.username }}</td>
+                        <td>{{ user.email|default:"-" }}</td>
+                        <td>
+                            {% if user.role_name %}
+                            <span class="badge rounded-pill bg-info text-dark">
+                                {{ user.role_name }}
+                            </span>
+                            {% else %}
+                            <span class="badge rounded-pill bg-light text-dark border">
+                                Sin Rol
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="text-muted small">{{ user.created_at }}</td>
+                        <td>
+                            <div class="d-flex justify-content-center gap-2">
+                                <button class="btn btn-sm btn-outline-primary btn-edit-sysuser" data-id="{{ user.id }}"
+                                    data-username="{{ user.username }}" data-email="{{ user.email|default:"" }}"
+                                    data-role="{{ user.role_id|default:"" }}"
+                                    data-must-change="{{ user.must_change_password }}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+
+                                <form action="{% url 'configuracion:usuario_reset_attempts' user.id %}" method="POST"
+                                    class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-warning"
+                                        title="Resetear intentos">
+                                        <i class="fas fa-undo"></i>
+                                    </button>
+                                </form>
+
+                                <form action="{% url 'configuracion:usuario_reset_password' user.id %}" method="POST"
+                                    class="d-inline" onsubmit="return confirm('¿Restablecer contraseña a temporal?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Reset clave">
+                                        <i class="fas fa-key"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">No hay usuarios registrados.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Crear/Editar Usuario -->
+<div class="modal fade" id="userSystemModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title" id="modalTitle">Nuevo Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="userSystemForm" method="POST" action="{% url 'configuracion:usuario_crear' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre de Usuario</label>
+                        <input type="text" name="username" id="sys-username" class="form-control" required
+                            placeholder="ej: jdoe">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" id="sys-email" class="form-control"
+                            placeholder="usuario@empresa.com">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" id="pwdLabel">Contraseña</label>
+                        <input type="password" name="password" id="sys-password" class="form-control"
+                            placeholder="••••••••">
+                        <div id="pwdHelp" class="form-text text-muted" style="display:none;">
+                            Dejar en blanco para conservar la actual.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Rol asignado</label>
+                        <select name="role_id" id="sys-role-id" class="form-select" required>
+                            <option value="">-- Seleccionar Rol --</option>
+                            {% for role in roles %}
+                            <option value="{{ role.id }}">{{ role.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input type="checkbox" name="must_change_password" id="sys-must-change"
+                            class="form-check-input">
+                        <label class="form-check-label" for="sys-must-change">
+                            Forzar cambio de clave al ingresar
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" id="btnSubmit">Guardar Usuario</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const userModal = new bootstrap.Modal(document.getElementById('userSystemModal'));
+
+    function openNewUserModal() {
+        document.getElementById('modalTitle').innerText = 'Nuevo Usuario';
+        const form = document.getElementById('userSystemForm');
+        form.reset();
+        form.action = "{% url 'configuracion:usuario_crear' %}";
+        document.getElementById('pwdLabel').innerText = 'Contraseña';
+        document.getElementById('sys-password').required = true;
+        document.getElementById('pwdHelp').style.display = 'none';
+        userModal.show();
+    }
+
+    document.querySelectorAll('.btn-edit-sysuser').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const id = this.dataset.id;
+            const user = this.dataset.username;
+            const email = this.dataset.email;
+            const role = this.dataset.role;
+            const mustChange = this.dataset.mustChange === '1';
+
+            document.getElementById('modalTitle').innerText = 'Editar Usuario: ' + user;
+            const form = document.getElementById('userSystemForm');
+            form.action = `/configuracion/usuarios/editar/${id}/`;
+
+            document.getElementById('sys-username').value = user;
+            document.getElementById('sys-email').value = email;
+            document.getElementById('sys-role-id').value = role;
+            document.getElementById('sys-must-change').checked = mustChange;
+
+            document.getElementById('pwdLabel').innerText = 'Cambiar Password (opcional)';
+            document.getElementById('sys-password').required = false;
+            document.getElementById('pwdHelp').style.display = 'block';
+
+            userModal.show();
+        });
+    });
+</script>
+{% endblock %}

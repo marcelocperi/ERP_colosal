@@ -14,14 +14,6 @@ def login_view(request):
     Controlador de Login migrado de Quart.
     Mantiene la lógica de SID y selección de empresa.
     """
-    if getattr(request, 'user_data', None):
-        # Si ya está logueado en esta pestaña, al dashboard (usamos ventas por ahora)
-        sid = getattr(request, 'sid', '')
-        url = reverse('ventas:dashboard')
-        if sid:
-            url += f'?sid={sid}'
-        return redirect(url)
-
     # 1. Cargar lista de empresas activas
     show_master = request.GET.get('master') == '1'
     enterprises = []
@@ -78,9 +70,18 @@ def login_view(request):
                     request.session['enterprise_id'] = enterprise_id
                     request.session.modified = True
 
-                    # Redirigir inyectando el SID en la URL para el handshake de la pestaña
+                    # MECANISMO DE AFINIDAD DE PESTAÑA (Handshake) - Fase 1.3
+                    bind_token = secrets.token_hex(16)
+                    request.session['s'][new_sid]['bind_token'] = bind_token
+                    request.session.modified = True
+
+                    # Redirigir inyectando el SID en la URL
                     target_url = f"/ventas/dashboard/?sid={new_sid}"
-                    return redirect(target_url)
+                    response = redirect(target_url)
+                    
+                    # Seteamos una cookie temporal de "vínculo" que dura 30 segundos (JS la consumirá)
+                    response.set_cookie(f'bind_{new_sid}', bind_token, max_age=30, httponly=False, samesite='Lax')
+                    return response
                 else:
                     messages.error(request, "Usuario o contraseña incorrectos.")
                     
@@ -153,11 +154,19 @@ def api_get_areas(request):
         return JsonResponse(dictfetchall(cursor), safe=False)
 
 def home_redirect(request):
-    """Redirige "/" al dashboard apropiado o al login."""
-    if getattr(request, 'user_data', None):
-        sid = getattr(request, 'sid', '')
-        url = reverse('ventas:dashboard')
-        if sid:
-            url += f'?sid={sid}'
-        return redirect(url)
+    """Redirige "/" al login.html siguiendo el requerimiento del usuario."""
     return redirect('core:login')
+
+from django.http import HttpResponse
+
+def get_logo_raw(request, logo_id):
+    """Sirve el logo desde la base de datos (BLOB)."""
+    with get_db_cursor(dictionary=True) as cursor:
+        cursor.execute("SELECT logo_data, mime_type FROM sys_enterprise_logos WHERE id = %s", (logo_id,))
+        row = dictfetchone(cursor)
+        if not row:
+            return HttpResponse("Logo no encontrado", status=404)
+        
+        response = HttpResponse(row['logo_data'], content_type=row['mime_type'])
+        response['Cache-Control'] = 'public, max-age=86400'
+        return response

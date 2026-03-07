@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1 text-gray-800"><i class="fas fa-list-ol me-2 text-primary"></i>Numeración de Comprobantes
+            </h1>
+            <p class="text-muted small">Configure el próximo número correlativo para sus documentos.</p>
+        </div>
+        <button class="btn btn-outline-primary shadow-sm"
+            onclick="new bootstrap.Modal(document.getElementById('newNumModal')).show()">
+            <i class="fas fa-plus me-1"></i> Nueva Configuración
+        </button>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4">Tipo Entidad</th>
+                            <th>Código / Documento</th>
+                            <th>Pto Venta</th>
+                            <th>Último Número Generado</th>
+                            <th class="text-end pe-4">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for num in numeracion_list %}
+                        <tr>
+                            <td class="ps-4">
+                                <span class="badge bg-secondary-subtle text-secondary border px-3">{{ num.entidad_tipo
+                                    }}</span>
+                            </td>
+                            <td><span class="fw-bold">{{ num.entidad_codigo }}</span></td>
+                            <td><span class="text-muted">{{ num.punto_venta|stringformat:"04d" }}</span></td>
+                            <td>
+                                <div class="h5 mb-0 fw-bold text-primary">{{ num.ultimo_numero }}</div>
+                            </td>
+                            <td class="text-end pe-4">
+                                <button class="btn btn-sm btn-info text-white px-3"
+                                    onclick="editNum({{ num|tojson|safe }})">
+                                    <i class="fas fa-history me-1"></i> Corregir
+                                </button>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center py-5">
+                                <i class="fas fa-list-ol fa-4x text-light mb-3"></i>
+                                <p class="text-muted">No hay configuraciones registradas.</p>
+                                <button class="btn btn-primary"
+                                    onclick="new bootstrap.Modal(document.getElementById('newNumModal')).show()">Configurar
+                                    Primero</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-info mt-4 d-flex align-items-center border-0 shadow-sm" role="alert">
+        <i class="fas fa-info-circle fa-2x me-3"></i>
+        <div>
+            <div class="fw-bold">Nota sobre Numeración Correlativa</div>
+            <div class="small">El sistema siempre calculará el máximo entre el <strong>Último Número</strong>
+                configurado aquí y el número más alto existente en la base de datos de comprobantes.</div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nueva Configuración -->
+<div class="modal fade" id="newNumModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold">Nueva Numeración</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{% url 'configuracion:numeracion_guardar' %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Tipo de Entidad</label>
+                        <select name="entidad_tipo" class="form-select">
+                            <option value="COMPROBANTE">Comprobante (Factura, etc)</option>
+                            <option value="RECURSO">Recurso Interno</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Documento / Código</label>
+                        <select name="entidad_codigo" class="form-select" required>
+                            {% for doc in tipos_comprobante %}
+                            <option value="{{ doc.codigo }}">{{ doc.nombre }} ({{ doc.codigo }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label class="form-label small fw-bold">Punto de Venta</label>
+                            <input type="number" name="punto_venta" class="form-control" value="1" min="1">
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label small fw-bold">Último Número</label>
+                            <input type="number" name="ultimo_numero" class="form-control" value="0" min="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-0">
+                    <button type="button" class="btn btn-secondary btn-sm px-3"
+                        data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary btn-sm px-4">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar/Corregir -->
+<div class="modal fade" id="editNumModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title fw-bold">Corregir Numeración</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{% url 'configuracion:numeracion_guardar' %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <p class="small text-danger mb-3 fw-bold"><i class="fas fa-exclamation-triangle me-1"></i> Atención:
+                        Cambiar este valor afectará el próximo número correlativo generado.</p>
+                    <input type="hidden" id="edit_entidad_tipo" name="entidad_tipo">
+                    <input type="hidden" id="edit_entidad_codigo" name="entidad_codigo">
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Documento</label>
+                        <input type="text" id="edit_display_name" class="form-control bg-light" readonly>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label class="form-label small fw-bold">Punto de Venta</label>
+                            <input type="number" id="edit_punto_venta" name="punto_venta" class="form-control" readonly>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label small fw-bold">Último Número Actual</label>
+                            <input type="number" id="edit_ultimo_numero" name="ultimo_numero"
+                                class="form-control fw-bold text-primary">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-0">
+                    <button type="button" class="btn btn-secondary btn-sm px-3" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-dark btn-sm px-4">Actualizar Base</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function editNum(num) {
+        document.getElementById('edit_entidad_tipo').value = num.entidad_tipo;
+        document.getElementById('edit_entidad_codigo').value = num.entidad_codigo;
+        document.getElementById('edit_display_name').value = num.entidad_codigo;
+        document.getElementById('edit_punto_venta').value = num.punto_venta;
+        document.getElementById('edit_ultimo_numero').value = num.ultimo_numero;
+
+        new bootstrap.Modal(document.getElementById('editNumModal')).show();
+    }
+</script>
+{% endblock %}

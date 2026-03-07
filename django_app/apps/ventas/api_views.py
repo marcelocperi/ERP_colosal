@@ -8,7 +8,7 @@ from .billing_service import BillingService
 
 @login_required
 def api_cliente_logistica(request, id):
-    enterprise_id = request.user.enterprise_id
+    enterprise_id = request.user_data['enterprise_id']
     with get_db_cursor(dictionary=True) as cursor:
         # Direcciones de entrega
         cursor.execute("""
@@ -34,7 +34,7 @@ def api_cliente_logistica(request, id):
 
 @login_required
 def api_cliente_finanzas(request, id):
-    enterprise_id = request.user.enterprise_id
+    enterprise_id = request.user_data['enterprise_id']
     with get_db_cursor(dictionary=True) as cursor:
         cursor.execute("""
             SELECT erp_terceros.condicion_pago_id, fin_condiciones_pago.nombre as condicion_nombre, 
@@ -57,7 +57,7 @@ def api_cliente_finanzas(request, id):
 
 @login_required
 def api_cliente_saldo(request, id):
-    enterprise_id = request.user.enterprise_id
+    enterprise_id = request.user_data['enterprise_id']
     try:
         with get_db_cursor(dictionary=True) as cursor:
             cursor.execute("""
@@ -113,7 +113,7 @@ def api_cliente_saldo(request, id):
 
 @login_required
 def api_cliente_condiciones(request, id):
-    enterprise_id = request.user.enterprise_id
+    enterprise_id = request.user_data['enterprise_id']
     with get_db_cursor(dictionary=True) as cursor:
         cursor.execute("SELECT condicion_pago_id, condicion_mixta_id FROM erp_terceros WHERE id = %s", (id,))
         res = dictfetchone(cursor)
@@ -148,7 +148,7 @@ def api_cliente_condiciones(request, id):
 def api_articulos_buscar(request):
     naturaleza = request.GET.get('naturaleza', '')
     query = request.GET.get('q', '').strip()
-    enterprise_id = request.user.enterprise_id
+    enterprise_id = request.user_data['enterprise_id']
     
     with get_db_cursor(dictionary=True) as cursor:
         parsed = parse_dynamic_barcode(query, enterprise_id, cursor)
@@ -203,7 +203,7 @@ def api_articulos_buscar(request):
 @login_required
 def api_ventas_fiscal_allowed_docs(request):
     tipo_responsable = request.GET.get('tipo_responsable', '')
-    enterprise_id = request.user.enterprise_id
+    enterprise_id = request.user_data['enterprise_id']
     
     with get_db_cursor(dictionary=True) as cursor:
         cursor.execute("SELECT condicion_iva FROM sys_enterprises WHERE id = %s", (enterprise_id,))

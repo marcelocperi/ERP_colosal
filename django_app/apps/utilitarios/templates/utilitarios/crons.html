@@ -1,0 +1,344 @@
+{% extends 'base.html' %}
+{% block title %}Gestor de Tareas (Cron Manager){% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="text-white mb-0"><i class="fas fa-clock me-2 text-info"></i>Gestor de Tareas (Cron Manager)</h2>
+            <p class="text-muted small">Programación y monitoreo de procesos automáticos del sistema.</p>
+        </div>
+        <button class="btn btn-info shadow-sm"
+            onclick="resetForm(); bootstrap.Modal.getOrCreateInstance(document.getElementById('cronModal')).show();">
+            <i class="fas fa-plus me-2"></i>Nueva Tarea
+        </button>
+    </div>
+
+    <!-- Resumen de Estado -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card bg-dark border-secondary h-100">
+                <div class="card-body text-center py-4">
+                    <h3 class="text-info mb-0">{{ crons|length }}</h3>
+                    <div class="text-muted small fw-bold">Tareas Totales</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-dark border-secondary h-100">
+                <div class="card-body text-center py-4">
+                    <h3 class="text-success mb-0">
+                        {% with activos=0 %}
+                        {% for c in crons %}{% if c.estado == 'activo' %}{% with activos=activos|add:1 %}{% endwith %}{% endif %}{% endfor %}
+                        {% endwith %}
+                        {{ crons|length }}
+                    </h3>
+                    <div class="text-muted small fw-bold">Activas</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista de Crons -->
+    <div class="card bg-dark border-secondary shadow-lg">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-dark table-hover mb-0 align-middle">
+                    <thead class="bg-black bg-opacity-50">
+                        <tr>
+                            <th class="ps-4">Tarea</th>
+                            <th>Frecuencia</th>
+                            <th>Última Ejecución</th>
+                            <th>Próxima</th>
+                            <th>Estado</th>
+                            <th class="text-end pe-4">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if not crons %}
+                        <tr>
+                            <td colspan="6" class="text-center py-5 text-muted small">
+                                <i class="fas fa-ghost fa-3x mb-3 d-block opacity-25"></i>
+                                No hay tareas programadas aún.
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% for cron in crons %}
+                        <tr>
+                            <td class="ps-4">
+                                <div class="fw-bold text-info">{{ cron.nombre }}</div>
+                                <div class="small text-muted">{{ cron.descripcion }}</div>
+                                <code class="extra-small text-success">{{ cron.comando }}</code>
+                            </td>
+                            <td>
+                                <span class="badge bg-secondary opacity-75">{{ cron.frecuencia|capfirst }}</span>
+                            </td>
+                            <td>
+                                <div class="small">{{ cron.ultima_ejecucion|default:'--' }}</div>
+                            </td>
+                            <td>
+                                <div class="small text-warning">{{ cron.proxima_ejecucion|default:'--' }}</div>
+                            </td>
+                            <td>
+                                {% if cron.estado == 'activo' %}
+                                <span
+                                    class="badge bg-success bg-opacity-10 text-success border border-success">Activo</span>
+                                {% elif cron.estado == 'pausado' %}
+                                <span
+                                    class="badge bg-warning bg-opacity-10 text-warning border border-warning">Pausado</span>
+                                {% else %}
+                                <span
+                                    class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary">N/A</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end pe-4">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-success"
+                                        onclick="runCron('{{ cron.id }}', '{{ cron.nombre }}', this)"
+                                        title="Ejecutar ahora">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-info"
+                                        onclick="viewLogs('{{ cron.id }}', '{{ cron.nombre }}')" title="Ver historial">
+                                        <i class="fas fa-history"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-light" data-id='{{ cron.id }}'
+                                        onclick="editCron('{{ cron.id }}')" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger"
+                                        onclick="deleteCron('{{ cron.id }}')" title="Eliminar">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ crons|json_script:'crons-data' }}
+
+<!-- Modal Formulario -->
+<div class="modal fade" id="cronModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content bg-dark text-white border-secondary" action="{% url 'utilitarios:save_cron' %}"
+            method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="id" id="cron_id">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title" id="modalTitle"><i class="fas fa-plus-circle me-2"></i>Nueva Tarea Programada
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <label class="form-label small text-muted">Nombre de la Tarea</label>
+                        <input type="text" name="nombre" id="cron_nombre"
+                            class="form-control bg-black border-secondary text-white" required
+                            placeholder="Ej: Actualización Padrón ARBA">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label small text-muted">Descripción</label>
+                        <textarea name="descripcion" id="cron_descripcion"
+                            class="form-control bg-black border-secondary text-white" rows="2"
+                            placeholder="Explique qué hace este proceso..."></textarea>
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label small text-muted">Comando / Script</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-black border-secondary text-success">
+                                <i class="fas fa-terminal"></i>
+                            </span>
+                            <input type="text" name="comando" id="cron_comando"
+                                class="form-control bg-black border-secondary text-white" required
+                                placeholder="scripts/update_padron.py --juris=902">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small text-muted">Frecuencia</label>
+                        <select name="frecuencia" id="cron_frecuencia"
+                            class="form-select bg-black border-secondary text-white">
+                            <option value="minutos">Minutos</option>
+                            <option value="horaria">Horaria</option>
+                            <option value="diaria" selected>Diaria</option>
+                            <option value="semanal">Semanal</option>
+                            <option value="mensual">Mensual</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card bg-black border-secondary">
+                            <div class="card-body">
+                                <h6 class="card-title small text-info"><i
+                                        class="fas fa-calendar-alt me-2"></i>Planificación</h6>
+                                <div class="row mt-2">
+                                    <div class="col-md-12 mb-3">
+                                        <label class="form-label extra-small text-muted mb-2">Días (para frecuencia
+                                            semanal)</label>
+                                        <div class="d-flex gap-3">
+                                            {% for day_name, day_val in day_choices %}
+                                            <div class="text-center">
+                                                <label class="small text-muted d-block">{{ day_name }}</label>
+                                                <input type="checkbox" class="form-check-input" id="day_{{ day_val }}"
+                                                    name="days[]" value="{{ day_val }}"
+                                                    style="width:1.2rem;height:1.2rem;">
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label extra-small text-muted">Hora (HH:MM)</label>
+                                        <input type="time" name="hour" id="cron_hour"
+                                            class="form-control bg-dark border-secondary text-white">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label extra-small text-muted">Cada N Minutos</label>
+                                        <input type="number" name="minutes" id="cron_minutes" min="1" max="1440"
+                                            class="form-control bg-dark border-secondary text-white"
+                                            placeholder="Ej: 15">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-secondary">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-info">Guardar Cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Logs -->
+<div class="modal fade" id="logsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content bg-dark text-white border-secondary">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title"><i class="fas fa-history me-2 text-info"></i>Historial: <span
+                        id="logTitle"></span></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0" style="max-height:500px;overflow-y:auto;">
+                <table class="table table-dark table-sm mb-0">
+                    <thead class="bg-black sticky-top">
+                        <tr>
+                            <th class="ps-3">Inicio</th>
+                            <th>Fin</th>
+                            <th>Estado</th>
+                            <th>Resultado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logsTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .extra-small {
+        font-size: 0.75rem;
+    }
+
+    .bg-black {
+        background-color: #0c0c0c !important;
+    }
+</style>
+
+<script>
+    const CSRF_TOKEN = '{{ csrf_token }}';
+
+    async function runCron(id, nombre, btn) {
+        if (!confirm('Se ejecutará "' + nombre + '"\n¿Está de acuerdo?')) return;
+        const icon = btn.querySelector('i');
+        if (icon) icon.className = 'fas fa-spinner fa-spin';
+        btn.disabled = true;
+        try {
+            const resp = await fetch('/utilitarios/crons/run/' + id + '/', {
+                method: 'POST',
+                headers: { 'X-CSRFToken': CSRF_TOKEN }
+            });
+            const data = await resp.json();
+            if (data.success) {
+                setTimeout(() => location.reload(), 3000);
+            } else {
+                alert('Error: ' + (data.error || 'desconocido'));
+                if (icon) icon.className = 'fas fa-play';
+                btn.disabled = false;
+            }
+        } catch (err) {
+            alert('Error de conexión al intentar ejecución.');
+            if (icon) icon.className = 'fas fa-play';
+            btn.disabled = false;
+        }
+    }
+
+    function resetForm() {
+        document.getElementById('modalTitle').innerHTML = '<i class="fas fa-plus-circle me-2"></i>Nueva Tarea Programada';
+        document.getElementById('cron_id').value = '';
+        document.getElementById('cron_nombre').value = '';
+        document.getElementById('cron_descripcion').value = '';
+        document.getElementById('cron_comando').value = '';
+        document.getElementById('cron_frecuencia').value = 'diaria';
+        document.querySelectorAll('input[name="days[]"]').forEach(c => c.checked = false);
+        document.getElementById('cron_hour').value = '';
+        document.getElementById('cron_minutes').value = '';
+    }
+
+    const CRONS_DATA = JSON.parse(document.getElementById('crons-data').textContent);
+
+    function editCron(id) {
+        const cron = CRONS_DATA.find(c => String(c.id) === String(id));
+        if (!cron) return;
+        document.getElementById('modalTitle').innerHTML = '<i class="fas fa-edit me-2"></i>Editar Tarea';
+        document.getElementById('cron_id').value = cron.id;
+        document.getElementById('cron_nombre').value = cron.nombre;
+        document.getElementById('cron_descripcion').value = cron.descripcion || '';
+        document.getElementById('cron_comando').value = cron.comando;
+        document.getElementById('cron_frecuencia').value = cron.frecuencia;
+        try {
+            const plan = typeof cron.planificacion === 'string' ? JSON.parse(cron.planificacion) : cron.planificacion;
+            document.querySelectorAll('input[name="days[]"]').forEach(c => c.checked = false);
+            if (plan && plan.days) plan.days.forEach(d => { const el = document.getElementById('day_' + d); if (el) el.checked = true; });
+            if (plan && plan.hour) document.getElementById('cron_hour').value = plan.hour;
+            if (plan && plan.minutes) document.getElementById('cron_minutes').value = plan.minutes;
+        } catch (e) { }
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('cronModal')).show();
+    }
+
+    async function viewLogs(id, nombre) {
+        document.getElementById('logTitle').innerText = nombre;
+        const resp = await fetch('/utilitarios/crons/api/logs/' + id + '/');
+        const logs = await resp.json();
+        let html = '';
+        if (!logs.length) {
+            html = '<tr><td colspan="4" class="text-center py-4 text-muted small">Sin logs registrados.</td></tr>';
+        } else {
+            logs.forEach(l => {
+                const badge = l.status === 'exito'
+                    ? '<span class="badge bg-success">ÉXITO</span>'
+                    : '<span class="badge bg-danger">ERROR</span>';
+                html += `<tr><td class="ps-3 small">${l.fecha_inicio || ''}</td><td class="small">${l.fecha_fin || '---'}</td><td>${badge}</td><td class="small text-muted">${(l.resultado || '').substring(0, 300)}</td></tr>`;
+            });
+        }
+        document.getElementById('logsTableBody').innerHTML = html;
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('logsModal')).show();
+    }
+
+    async function deleteCron(id) {
+        if (!confirm('¿Seguro que desea eliminar esta tarea?')) return;
+        const resp = await fetch('/utilitarios/crons/delete/' + id + '/', {
+            method: 'POST',
+            headers: { 'X-CSRFToken': CSRF_TOKEN }
+        });
+        if (resp.ok) location.reload();
+    }
+</script>
+{% endblock %}

@@ -25,6 +25,7 @@ urlpatterns = [
     path('facturar/', views.facturar, name='facturar'),
     path('procesar-factura/', views.procesar_factura, name='procesar_factura'),
     path('comprobante/ver/<int:id>/', views.ver_comprobante, name='ver_comprobante'),
+    path('comprobante/<int:id>/pdf/', views.descargar_pdf_comprobante, name='comprobante_pdf'),
     path('remito/ver/<int:id>/', views.ver_remito, name='ver_remito'),
     path('nota_credito/<int:factura_id>/', views.nota_credito, name='nota_credito'),
     path('devolucion-solicitar/', views.devolucion_solicitar, name='devolucion_solicitar'),

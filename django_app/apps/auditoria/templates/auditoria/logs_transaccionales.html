@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Logs Transaccionales{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="mb-0 text-white"><i class="fas fa-list-alt text-primary me-2"></i>Logs Transaccionales</h2>
+                <p class="text-white-50">Registro en bruto de actividad del sistema para la empresa.</p>
+            </div>
+            <div>
+                <a href="{% url 'auditoria:dashboard' %}" class="btn btn-outline-light"><i
+                        class="fas fa-arrow-left me-2"></i>Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card bg-dark text-white border-0 shadow-lg">
+        <div class="card-body text-center py-5">
+            <i class="fas fa-cogs fa-4x text-muted mb-3"></i>
+            <h4 class="text-muted">Módulo en Desarrollo</h4>
+            <p class="text-white-50">La visualización de logs transaccionales, auditoría de endpoints y bitácora AFIP
+                directa
+                está bajo construcción para optimizaciones de rendimiento con grandes volúmenes de datos.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

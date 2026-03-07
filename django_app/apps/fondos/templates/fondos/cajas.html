@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title"><i class="fas fa-cash-register"></i> Cajas y Tesorería</h1>
+        <p class="text-muted">Maestro de cuentas de fondos registradas</p>
+    </div>
+</div>
+
+<div class="card" style="padding:0;overflow:hidden;">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>NOMBRE</th>
+                <th>MONEDA</th>
+                <th style="text-align:right;">SALDO</th>
+                <th>ESTADO</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in cajas %}
+            <tr>
+                <td style="font-weight:700;">{{ c.nombre }}</td>
+                <td>{{ c.id_moneda|default:"ARS" }}</td>
+                <td style="text-align:right;">{{ c.saldo|default:"0.00" }}</td>
+                <td>
+                    {% if c.activo %}
+                    <span class="badge" style="background:rgba(16,185,129,.1);color:#10b981;">Activa</span>
+                    {% else %}
+                    <span class="badge" style="background:rgba(255,255,255,.05);color:#64748b;">Inactiva</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" style="text-align:center;padding:4rem;color:#64748b;">No hay cajas configuradas</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

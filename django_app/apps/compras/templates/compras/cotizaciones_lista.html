@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title"><i class="fas fa-file-invoice-dollar"></i> Cotizaciones (RFQ)</h1>
+        <p class="text-muted">Solicitudes de cotización enviadas a proveedores</p>
+    </div>
+    <a href="{% url 'compras:reposicion_dashboard' %}" class="btn-action">
+        <i class="fas fa-plus"></i> Generar desde Reposición
+    </a>
+</div>
+
+<div class="card" style="padding:1rem 1.5rem;margin-bottom:1.5rem;display:flex;gap:1rem;align-items:center;">
+    <form method="GET" style="display:flex;gap:.75rem;flex-wrap:wrap;">
+        <select name="estado"
+            style="padding:.5rem 1rem;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#f8fafc;">
+            <option value="">Todos los estado</option>
+            <option value="ENVIADA" {% if estado_filtro == 'ENVIADA' %}selected{% endif %}>Enviadas</option>
+            <option value="RESPONDIDA" {% if estado_filtro == 'RESPONDIDA' %}selected{% endif %}>Respondidas</option>
+            <option value="CONFIRMADA" {% if estado_filtro == 'CONFIRMADA' %}selected{% endif %}>Confirmadas</option>
+            <option value="RECIBIDA_TOTAL" {% if estado_filtro == 'RECIBIDA_TOTAL' %}selected{% endif %}>Recibidas
+            </option>
+        </select>
+        <button type="submit" class="btn-action" style="padding:.5rem 1rem;"><i class="fas fa-filter"></i>
+            Filtrar</button>
+        <a href="{% url 'compras:cotizaciones' %}" class="btn-secondary" style="padding:.5rem 1rem;"><i
+                class="fas fa-times"></i></a>
+    </form>
+</div>
+
+<div class="card" style="padding:0;overflow:hidden;">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>PROVEEDOR</th>
+                <th>FECHA ENVÍO</th>
+                <th>VENCIMIENTO</th>
+                <th style="text-align:center;">ITEMS</th>
+                <th>ESTADO</th>
+                <th style="text-align:center;">ACCIONES</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in cotizaciones %}
+            <tr>
+                <td><code style="font-size:.8rem;">{{ c.id }}</code></td>
+                <td style="font-weight:700;">{{ c.razon_social }}</td>
+                <td style="color:#94a3b8;">{{ c.fecha_envio|date:"d/m/Y H:i" }}</td>
+                <td style="{% if c.fecha_vencimiento %}color:#f59e0b{% endif %}">
+                    {{ c.fecha_vencimiento|date:"d/m/Y"|default:"-" }}
+                </td>
+                <td style="text-align:center;">
+                    <span class="badge" style="background:rgba(99,102,241,.1);color:var(--primary);">{{ c.items_cnt }}</span>
+                </td>
+                <td>
+                    {% if c.estado == 'ENVIADA' %}
+                    <span class="badge" style="background:rgba(245,158,11,.1);color:#f59e0b;"><i
+                            class="fas fa-paper-plane"></i> Enviada</span>
+                    {% elif c.estado == 'RESPONDIDA' %}
+                    <span class="badge" style="background:rgba(99,102,241,.1);color:var(--primary);"><i
+                            class="fas fa-reply"></i> Respondida</span>
+                    {% elif c.estado == 'CONFIRMADA' %}
+                    <span class="badge" style="background:rgba(16,185,129,.1);color:#10b981;"><i
+                            class="fas fa-check"></i> Confirmada</span>
+                    {% elif c.estado == 'RECIBIDA_TOTAL' %}
+                    <span class="badge" style="background:rgba(16,185,129,.15);color:#10b981;"><i
+                            class="fas fa-check-double"></i> Recibida</span>
+                    {% else %}
+                    <span class="badge" style="background:rgba(255,255,255,.05);color:#64748b;">{{ c.estado }}</span>
+                    {% endif %}
+                </td>
+                <td style="text-align:center;">
+                    <a href="{% url 'compras:cotizacion_detalle' c.id %}" class="btn-secondary"
+                        style="padding:.4rem .8rem;font-size:.8rem;">
+                        <i class="fas fa-eye"></i> Detalle
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" style="text-align:center;padding:4rem;color:#64748b;">No hay cotizaciones registradas
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title"><i class="fas fa-handshake"></i> Condiciones de Pago</h1>
+        <p class="text-muted">Plazos y descuentos aplicables en operaciones</p>
+    </div>
+    <button class="btn-action" data-bs-toggle="modal" data-bs-target="#modalCondicion">
+        <i class="fas fa-plus"></i> Nueva Condición
+    </button>
+</div>
+{% if messages %}{% for msg in messages %}<div class="alert alert-{{ msg.tags }} alert-dismissible fade show">{{ msg }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>{% endfor %}{% endif %}
+<div class="card" style="padding:0;overflow:hidden;">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>NOMBRE</th>
+                <th style="text-align:right;">PLAZO (días)</th>
+                <th style="text-align:right;">DESCUENTO %</th>
+                <th style="text-align:right;">RECARGO %</th>
+                <th>ESTADO</th>
+                <th style="text-align:center;">ACCIONES</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in condiciones %}
+            <tr>
+                <td style="font-weight:700;">{{ c.nombre }}</td>
+                <td style="text-align:right;">{{ c.dias_vencimiento }}</td>
+                <td style="text-align:right;color:#10b981;">{{ c.descuento_pct|default:"0" }}%</td>
+                <td style="text-align:right;color:#f59e0b;">{{ c.recargo_pct|default:"0" }}%</td>
+                <td>{% if c.activo %}<span class="badge"
+                        style="background:rgba(16,185,129,.1);color:#10b981;">Activo</span>{% else %}<span class="badge"
+                        style="background:rgba(255,255,255,.05);color:#64748b;">Inactivo</span>{% endif %}</td>
+                <td style="text-align:center;">
+                    <form method="POST" onsubmit="return confirm('¿Eliminar?');">{% csrf_token %}
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="id" value="{{ c.id }}">
+                        <button type="submit" class="btn-secondary"
+                            style="padding:.4rem .8rem;font-size:.8rem;color:#ef4444;"><i
+                                class="fas fa-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" style="text-align:center;padding:4rem;color:#64748b;">No hay condiciones configuradas
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="modal fade" id="modalCondicion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background:#1e293b;border:1px solid rgba(255,255,255,.1);">
+            <div class="modal-header" style="border-bottom:1px solid rgba(255,255,255,.05);">
+                <h5 class="modal-title">Nueva Condición de Pago</h5><button type="button"
+                    class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST">{% csrf_token %}<input type="hidden" name="action" value="create">
+                <div class="modal-body" style="display:grid;gap:1rem;">
+                    <div><label style="font-size:.8rem;color:#94a3b8;text-transform:uppercase;">Nombre *</label><input
+                            type="text" name="nombre" required class="form-control"
+                            style="background:#0f172a;border:1px solid #334155;color:#f8fafc;border-radius:8px;padding:.75rem;">
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;">
+                        <div><label style="font-size:.75rem;color:#94a3b8;">Plazo (días)</label><input type="number"
+                                name="dias_vencimiento" value="0" class="form-control"
+                                style="background:#0f172a;border:1px solid #334155;color:#f8fafc;border-radius:8px;padding:.75rem;">
+                        </div>
+                        <div><label style="font-size:.75rem;color:#94a3b8;">Descuento %</label><input type="number"
+                                name="descuento_pct" value="0" step="0.01" class="form-control"
+                                style="background:#0f172a;border:1px solid #334155;color:#f8fafc;border-radius:8px;padding:.75rem;">
+                        </div>
+                        <div><label style="font-size:.75rem;color:#94a3b8;">Recargo %</label><input type="number"
+                                name="recargo_pct" value="0" step="0.01" class="form-control"
+                                style="background:#0f172a;border:1px solid #334155;color:#f8fafc;border-radius:8px;padding:.75rem;">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top:1px solid rgba(255,255,255,.05);"><button type="button"
+                        class="btn-secondary" data-bs-dismiss="modal">Cancelar</button><button type="submit"
+                        class="btn-action">Guardar</button></div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

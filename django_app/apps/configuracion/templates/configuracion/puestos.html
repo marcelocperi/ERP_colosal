@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1 text-gray-800"><i class="fas fa-id-badge me-2 text-primary"></i>Puestos y Cargos</h1>
+            <p class="text-muted small">Definición de roles operativos por área.</p>
+        </div>
+        <button class="btn btn-primary shadow-sm"
+            onclick="new bootstrap.Modal(document.getElementById('newPuestoModal')).show()">
+            <i class="fas fa-plus me-1"></i> Nuevo Puesto
+        </button>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4">Puesto / Cargo</th>
+                            <th>Área Asociada</th>
+                            <th>Estado</th>
+                            <th class="text-end pe-4">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for puesto in puestos_list %}
+                        <tr>
+                            <td class="ps-4">
+                                <div class="fw-bold text-dark">{{ puesto.nombre }}</div>
+                                <div class="text-muted small">ID: {{ puesto.id }}</div>
+                            </td>
+                            <td>
+                                <span class="badge bg-light text-primary border border-primary-subtle px-3 py-2">
+                                    <i class="fas fa-layer-group me-1 small"></i> {{ puesto.area_nombre|default:"Sin
+                                    Área" }}
+                                </span>
+                            </td>
+                            <td>
+                                <span
+                                    class="badge {% if puesto.activo %}bg-success{% else %}bg-secondary{% endif %} rounded-pill p-1 px-3"
+                                    style="font-size: 0.7rem;">
+                                    {% if puesto.activo %}Activo{% else %}Inactivo{% endif %}
+                                </span>
+                            </td>
+                            <td class="text-end pe-4">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <button class="btn btn-sm btn-outline-info border-0"
+                                        onclick="editPuesto({{ puesto|tojson|safe }})">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <form action="{% url 'configuracion:puesto_eliminar' puesto.id %}" method="POST"
+                                        onsubmit="return confirm('¿Eliminar este puesto?');" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-outline-danger border-0">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center py-5">
+                                <i class="fas fa-id-badge fa-4x text-light mb-3"></i>
+                                <p class="text-muted">No se han definido puestos aún.</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nuevo Puesto -->
+<div class="modal fade" id="newPuestoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold">Nuevo Puesto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{% url 'configuracion:puesto_crear' %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Nombre del Puesto</label>
+                        <input type="text" name="nombre" class="form-control"
+                            placeholder="Ej: Operario A, Supervisor..." required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Área</label>
+                        <select name="area_id" class="form-select" required>
+                            <option value="">Seleccione un área...</option>
+                            {% for area in areas_list %}
+                            <option value="{{ area.id }}">{{ area.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-0">
+                    <button type="button" class="btn btn-secondary btn-sm px-3"
+                        data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary btn-sm px-4">Crear Puesto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Puesto -->
+<div class="modal fade" id="editPuestoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold">Editar Puesto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="editPuestoForm" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Nombre del Puesto</label>
+                        <input type="text" id="edit_puesto_nombre" name="nombre" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Área</label>
+                        <select id="edit_puesto_area" name="area_id" class="form-select" required>
+                            {% for area in areas_list %}
+                            <option value="{{ area.id }}">{{ area.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-0">
+                    <button type="button" class="btn btn-secondary btn-sm px-3"
+                        data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-info btn-sm px-4 text-white">Actualizar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function editPuesto(puesto) {
+        document.getElementById('edit_puesto_nombre').value = puesto.nombre;
+        document.getElementById('edit_puesto_area').value = puesto.area;
+
+        const form = document.getElementById('editPuestoForm');
+        form.action = "{% url 'configuracion:puesto_editar' 0 %}".replace('0', puesto.id);
+
+        new bootstrap.Modal(document.getElementById('editPuestoModal')).show();
+    }
+</script>
+{% endblock %}

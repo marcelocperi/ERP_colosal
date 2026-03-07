@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title"><i class="fas fa-file-invoice-dollar"></i> Detalle de Cotización #{{ cot.id }}</h1>
+        <p class="text-muted">RFQ para <b>{{ cot.razon_social }}</b> (Proveedor ID: {{ cot.proveedor_id }})</p>
+    </div>
+    <div class="d-flex gap-2">
+        {% if cot.estado == 'RESPONDIDA' %}
+        <a href="{% url 'compras:aprobar_cotizacion' cot.id %}" class="btn-action" style="background:#10b981;">
+            <i class="fas fa-check-circle"></i> Aprobar Ganadora
+        </a>
+        {% endif %}
+        <a href="{% url 'compras:cotizaciones' %}" class="btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver a RFQs
+        </a>
+    </div>
+</div>
+
+<div style="display:grid; grid-template-columns: 2fr 1fr; gap:1.5rem;">
+    <!-- Items -->
+    <div class="card" style="padding:0;overflow:hidden;">
+        <div style="padding:1rem 1.5rem;border-bottom:1px solid rgba(255,255,255,.05);">
+            <h3 style="margin:0;font-size:1rem;"><i class="fas fa-list"></i> Ítems Solicitados</h3>
+        </div>
+        <form method="POST">
+            {% csrf_token %}
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ARTÍCULO</th>
+                        <th style="text-align:right;">SOLICITADO</th>
+                        <th style="text-align:right;">OFR. POR PROV.</th>
+                        <th style="text-align:right;">PRECIO COTIZADO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for it in items %}
+                    <tr>
+                        <td>
+                            <div style="font-weight:700;">{{ it.articulo_nombre }}</div>
+                            <code style="font-size:.7rem;opacity:.7;">{{ it.articulo_codigo }}</code>
+                        </td>
+                        <td style="text-align:right;font-weight:700;">{{ it.cantidad|floatformat:2 }}</td>
+                        <td style="text-align:right;">
+                            <input type="number" step="0.01" name="cant_{{ it.id }}"
+                                value="{{ it.cantidad_ofrecida|default:it.cantidad }}" class="form-control"
+                                style="width:100px;display:inline-block;padding:.3rem .5rem;">
+                        </td>
+                        <td style="text-align:right;">
+                            <input type="number" step="0.01" name="price_{{ it.id }}"
+                                value="{{ it.precio_cotizado|default:0 }}" class="form-control"
+                                style="width:120px;display:inline-block;padding:.3rem .5rem;">
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" style="text-align:center;padding:2rem;">No hay ítems registrados</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div style="padding:1rem 1.5rem;text-align:right;background:rgba(255,255,255,.02);">
+                <button type="submit" class="btn-action">
+                    <i class="fas fa-save"></i> Guardar Precios Actualizados
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Info -->
+    <div style="display:flex;flex-direction:column;gap:1.5rem;">
+        <div class="card" style="padding:1.5rem;">
+            <h3 style="margin:0 0 1rem;font-size:1rem;color:var(--primary);">Estado de Cotización</h3>
+            <div style="margin-bottom:1.5rem;">
+                {% if cot.estado == 'ENVIADA' %}
+                <span class="badge"
+                    style="background:rgba(245,158,11,.1);color:#f59e0b;padding:.5rem 1rem;font-size:.8rem;"><i
+                        class="fas fa-paper-plane"></i> ENVIADA</span>
+                {% elif cot.estado == 'RESPONDIDA' %}
+                <span class="badge"
+                    style="background:rgba(99,102,241,.1);color:var(--primary);padding:.5rem 1rem;font-size:.8rem;"><i
+                        class="fas fa-reply"></i> RESPONDIDA</span>
+                {% elif cot.estado == 'GANADORA' %}
+                <span class="badge"
+                    style="background:rgba(16,185,129,.1);color:#10b981;padding:.5rem 1rem;font-size:.8rem;"><i
+                        class="fas fa-trophy"></i> GANADORA</span>
+                {% else %}
+                <span class="badge"
+                    style="background:rgba(255,255,255,.05);color:#94a3b8;padding:.5rem 1rem;font-size:.8rem;">{{ cot.estado }}</span>
+                {% endif %}
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:.75rem;">
+                <div style="display:flex;justify-content:space-between;font-size:.85rem;">
+                    <span style="color:#64748b;">Fecha Envío</span>
+                    <span style="font-weight:600;">{{ cot.fecha_envio|date:"d/m/Y H:i" }}</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:.85rem;">
+                    <span style="color:#64748b;">Vencimiento</span>
+                    <span style="font-weight:600;color:#f59e0b;">{{ cot.fecha_vencimiento|date:"d/m/Y"|default:"-" }}</span>
+                </div>
+                <hr style="opacity:.1;margin:.5rem 0;">
+                <div style="display:flex;justify-content:space-between;font-size:.85rem;">
+                    <span style="color:#64748b;">Email Prov.</span>
+                    <span style="font-weight:600;">{{ cot.proveedor_email|default:"-" }}</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:.85rem;">
+                    <span style="color:#64748b;">Teléfono Prov.</span>
+                    <span style="font-weight:600;">{{ cot.proveedor_tel|default:"-" }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="padding:1.5rem;background:rgba(99,102,241,.03);border:1px dashed var(--primary);">
+            <div style="font-size:2rem;margin-bottom:.5rem;opacity:.5;"><i class="fas fa-info-circle"></i></div>
+            <p style="font-size:.85rem;margin:0;color:#94a3b8;">
+                Utilice esta pantalla para cargar manualmente los precios si el proveedor los envió por otro medio.
+                Una vez completada, puede marcarla como la opción ganadora.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

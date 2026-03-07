@@ -1,0 +1,63 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block header_title %}Recibos Emitidos{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="mb-0 fw-bold text-dark">Recibos Emitidos</h2>
+        <p class="text-muted mb-0">Listado histórico de cobranzas registradas en el sistema.</p>
+    </div>
+    <div>
+        <a href="{% url 'cobranzas:emitir_recibo' %}" class="btn btn-primary shadow-sm">
+            <i class="fas fa-plus me-2"></i>Emitir Recibo
+        </a>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover nowrap" id="recibosTable" style="width:100%">
+                <thead class="table-light">
+                    <tr>
+                        <th>N° Recibo</th>
+                        <th>Fecha</th>
+                        <th>Cliente</th>
+                        <th>CUIT</th>
+                        <th>Monto</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in recibos %}
+                    <tr>
+                        <td class="fw-bold">{{ r.punto_venta|stringformat:"04d" }}-{{ r.numero|stringformat:"08d" }}
+                        </td>
+                        <td>{{ r.fecha|date:"Y-m-d" }}</td>
+                        <td>{{ r.tercero_nombre }}</td>
+                        <td>{{ r.tercero_cuit }}</td>
+                        <td class="text-end fw-bold text-success">$ {{ r.monto_total|floatformat:2 }}</td>
+                        <td>
+                            <span class="badge bg-success">{{ r.estado }}</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        $('#recibosTable').DataTable({
+            language: { url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json" },
+            order: [[1, 'desc']]
+        });
+    });
+</script>
+{% endblock %}

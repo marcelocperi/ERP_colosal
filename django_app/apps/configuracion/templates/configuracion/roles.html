@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1 text-gray-800"><i class="fas fa-shield-alt me-2 text-primary"></i>Roles y Permisos</h1>
+            <p class="text-muted small">Gestione los niveles de acceso para los usuarios de su empresa.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary"
+                onclick="new bootstrap.Modal(document.getElementById('newRoleModal')).show()">
+                <i class="fas fa-plus me-1"></i> Nuevo Rol
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Sidebar: Lista de Roles -->
+        <div class="col-lg-3">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 bg-light">
+                    <h6 class="m-0 font-weight-bold text-primary">Perfiles Disponibles</h6>
+                </div>
+                <div class="list-group list-group-flush overflow-auto" style="max-height: 70vh;">
+                    {% for role in roles %}
+                    <a href="{% url 'configuracion:roles' %}?role_id={{ role.id }}&sid={{ sid }}"
+                        class="list-group-item list-group-item-action {% if selected_role and role.id == selected_role.id %}active{% endif %} p-3">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1 fw-bold">{{ role.name }}</h6>
+                        </div>
+                        <p class="mb-1 small text-truncate">{{ role.description|default:"Sin descripción" }}</p>
+                    </a>
+                    {% empty %}
+                    <div class="p-4 text-center text-muted">No hay roles creados.</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Main: Panel de Permisos -->
+        <div class="col-lg-9">
+            <div class="card shadow mb-4">
+                {% if selected_role %}
+                <div class="card-header py-3 d-flex justify-content-between align-items-center bg-white">
+                    <h5 class="m-0 text-gray-800">
+                        Configurar: <span class="text-primary fw-bold">{{ selected_role.name }}</span>
+                    </h5>
+                    <form action="{% url 'configuracion:role_eliminar' selected_role.id %}" method="POST"
+                        onsubmit="return confirm('¿Eliminar este rol?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                            <i class="fas fa-trash-alt me-1"></i> Eliminar Rol
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card-body p-4">
+                    <div class="mb-4">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0"><i
+                                    class="fas fa-search text-muted"></i></span>
+                            <input type="text" id="perm-search" class="form-control border-start-0 bg-light"
+                                placeholder="Buscar permisos..." onkeyup="filterPermissions()">
+                        </div>
+                    </div>
+
+                    <form action="{% url 'configuracion:role_actualizar_permisos' selected_role.id %}" method="POST">
+                        {% csrf_token %}
+
+                        {% for category, perms in permissions_by_category.items %}
+                        <div class="perm-category mb-4" data-category="{{ category|lower }}">
+                            <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                                <h6 class="m-0 fw-bold text-dark text-uppercase letter-spacing-1">
+                                    <i class="fas fa-layer-group me-2 text-primary"></i>{{ category }}
+                                </h6>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox"
+                                        onclick="toggleCategory(this, 'cat-{{ forloop.counter }}')">
+                                    <label class="form-check-label small text-muted">Marcar todo</label>
+                                </div>
+                            </div>
+
+                            <div class="row g-3" id="cat-{{ forloop.counter }}">
+                                {% for perm in perms %}
+                                <div class="col-md-6 col-xl-4 perm-item">
+                                    <label class="card h-100 perm-card border-light-subtle shadow-sm p-3 mb-0"
+                                        style="cursor: pointer; transition: 0.2s;">
+                                        <div class="d-flex align-items-start gap-2">
+                                            <input type="checkbox" class="form-check-input flex-shrink-0 mt-1"
+                                                name="permissions" value="{{ perm.id }}" {% if perm.id in
+                                                current_role_permissions %}checked{% endif %}>
+                                            <div class="ms-1 overflow-hidden">
+                                                <div class="fw-bold small text-dark lh-sm mb-1 text-wrap">{{
+                                                    perm.description }}</div>
+                                                <div class="text-muted"
+                                                    style="font-size: 0.75rem; font-family: monospace;">{{ perm.code }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        <div class="sticky-bottom py-3 bg-white border-top mt-4 text-end">
+                            <a href="{% url 'configuracion:roles' %}?sid={{ sid }}"
+                                class="btn btn-secondary px-4 me-2">Cancelar</a>
+                            <button type="submit" class="btn btn-primary px-5 shadow-sm">
+                                <i class="fas fa-save me-2"></i>Guardar Permisos
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                {% else %}
+                <div class="card-body p-5 text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-user-shield fa-5x text-gray-200"></i>
+                    </div>
+                    <h4>Seleccione un Rol</h4>
+                    <p class="text-muted">Elija un perfil del menú de la izquierda para ver y editar sus permisos
+                        asociados.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nuevo Rol -->
+<div class="modal fade" id="newRoleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Crear Nuevo Perfil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{% url 'configuracion:role_crear' %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre del Rol</label>
+                        <input type="text" name="name" class="form-control" required
+                            placeholder="Ej: Facturación, Auditoría...">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Descripción</label>
+                        <textarea name="description" class="form-control" rows="3"
+                            placeholder="Descripción breve de las tareas..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary px-4">Crear Perfil</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .letter-spacing-1 {
+        letter-spacing: 0.05rem;
+    }
+
+    .perm-card:hover {
+        border-color: #4e73df !important;
+        background-color: #f8f9fc;
+    }
+
+    input:checked+span,
+    .perm-card:has(input:checked) {
+        border-color: #4e73df !important;
+        background-color: #eaecf4;
+    }
+</style>
+
+<script>
+    function toggleCategory(source, containerId) {
+        const checkboxes = document.querySelectorAll('#' + containerId + ' input[type="checkbox"]');
+        checkboxes.forEach(cb => {
+            if (cb.closest('.perm-item').style.display !== 'none') {
+                cb.checked = source.checked;
+            }
+        });
+    }
+
+    function filterPermissions() {
+        const query = document.getElementById('perm-search').value.toLowerCase();
+        const items = document.querySelectorAll('.perm-item');
+
+        items.forEach(item => {
+            const text = item.innerText.toLowerCase();
+            if (text.includes(query)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+
+        // Hide empty categories
+        document.querySelectorAll('.perm-category').forEach(cat => {
+            let hasVisible = false;
+            cat.querySelectorAll('.perm-item').forEach(i => {
+                if (i.style.display !== 'none') hasVisible = true;
+            });
+            cat.style.display = hasVisible ? 'block' : 'none';
+        });
+    }
+</script>
+{% endblock %}

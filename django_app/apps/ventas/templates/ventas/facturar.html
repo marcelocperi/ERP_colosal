@@ -29,7 +29,7 @@
                                     {% for c in clientes %}
                                     <option value="{{ c.id }}" data-tipo="{{ c.tipo_responsable }}"
                                         data-cuit="{{ c.cuit }}">
-                                        {{ c.nombre {% endif %} | {{ c.cuit }} ({{ c.tipo_responsable }})
+                                        {{ c.nombre }} | {{ c.cuit }} ({{ c.tipo_responsable }})
                                     </option>
                                     {% endfor %}
                                 </select>
@@ -73,8 +73,7 @@
                                 <select class="form-select bg-dark text-light border-secondary" id="tipo_comprobante"
                                     required>
                                     {% for t in tipos_comprobante %}
-                                    <option value="{{ t.codigo }}">{{ t.descripcion }}{% if t.letra %} ({{ t.letra }}){%
-                                        endif %}</option>
+                                    <option value="{{ t.codigo }}">{{ t.descripcion }}{% if t.letra %} ({{ t.letra }}){% endif %}</option>
                                     {% endfor %}
                                 </select>
                             </div>

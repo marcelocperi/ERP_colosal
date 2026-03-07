@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title"><i class="fas fa-random"></i> Condiciones de Pago Mixtas</h1>
+        <p class="text-muted">Combinaciones de formas de pago y plazos</p>
+    </div>
+    <button class="btn-action" data-bs-toggle="modal" data-bs-target="#modalMixta">
+        <i class="fas fa-plus"></i> Nueva Condición
+    </button>
+</div>
+
+{% if messages %}{% for msg in messages %}<div class="alert alert-{{ msg.tags }} alert-dismissible fade show">{{ msg }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>{% endfor %}{% endif %}
+
+<div class="card" style="padding:0;overflow:hidden;">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>NOMBRE</th>
+                <th>DESCRIPCIÓN</th>
+                <th>COMPOSICIÓN</th>
+                <th>ESTADO</th>
+                <th style="text-align:center;">ACCIONES</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mixta in mixtas %}
+            <tr>
+                <td style="font-weight:700;">{{ mixta.nombre }}</td>
+                <td style="font-size:.85rem;color:#64748b;">{{ mixta.descripcion|default:"-" }}</td>
+                <td>
+                    <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+                        {% for det in mixta.detalles %}
+                        <span class="badge" style="background:rgba(99,102,241,.1);color:var(--primary);">
+                            {{ det.porcentaje }}% {{ det.condicion_nombre }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                </td>
+                <td>
+                    {% if mixta.activo %}<span class="badge"
+                        style="background:rgba(16,185,129,.1);color:#10b981;">Activa</span>{% else %}<span class="badge"
+                        style="background:rgba(255,255,255,.05);color:#64748b;">Inactiva</span>{% endif %}
+                </td>
+                <td style="text-align:center;">
+                    <form method="POST" onsubmit="return confirm('¿Eliminar esta condición?');">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="id" value="{{ mixta.id }}">
+                        <button type="submit" class="btn-secondary"
+                            style="padding:.4rem .8rem;font-size:.8rem;color:#ef4444;"><i
+                                class="fas fa-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="text-align:center;padding:4rem;color:#64748b;">No hay condiciones mixtas
+                    configuradas</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalMixta" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="background:#1e293b;border:1px solid rgba(255,255,255,.1);">
+            <div class="modal-header" style="border-bottom:1px solid rgba(255,255,255,.05);">
+                <h5 class="modal-title">Nueva Condición Mixta</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="create">
+                <div class="modal-body" style="display:grid;gap:1.5rem;">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                        <div>
+                            <label style="font-size:.8rem;color:#94a3b8;text-transform:uppercase;">Nombre *</label>
+                            <input type="text" name="nombre" required class="form-control"
+                                style="background:#0f172a;border:1px solid #334155;color:#f8fafc;border-radius:8px;padding:.75rem;">
+                        </div>
+                        <div>
+                            <label style="font-size:.8rem;color:#94a3b8;text-transform:uppercase;">Descripción</label>
+                            <input type="text" name="descripcion" class="form-control"
+                                style="background:#0f172a;border:1px solid #334155;color:#f8fafc;border-radius:8px;padding:.75rem;">
+                        </div>
+                    </div>
+                    <div>
+                        <h6 style="color:#f8fafc;margin-bottom:.5rem;">Composición</h6>
+                        <table class="table table-dark table-sm" id="tablaDetalles">
+                            <thead>
+                                <tr>
+                                    <th>Condición Base</th>
+                                    <th style="width:120px;">Porcentaje %</th>
+                                    <th style="width:120px;">Descuento %</th>
+                                    <th style="width:120px;">Recargo %</th>
+                                    <th style="width:50px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="fila-detalle">
+                                    <td>
+                                        <select name="condicion_pago_id[]" required class="form-select"
+                                            style="background:#0f172a;border:1px solid #334155;color:#f8fafc;">
+                                            <option value="">Seleccionar...</option>
+                                            {% for cp in condiciones_simples %}<option value="{{ cp.id }}">{{ cp.nombre }} ({{ cp.dias_vencimiento }}d)</option>{% endfor %}
+                                        </select>
+                                    </td>
+                                    <td><input type="number" name="porcentaje[]" required min="1" max="100"
+                                            class="form-control"
+                                            style="background:#0f172a;border:1px solid #334155;color:#f8fafc;"></td>
+                                    <td><input type="number" name="descuento_pct_det[]" value="0" step="1"
+                                            class="form-control"
+                                            style="background:#0f172a;border:1px solid #334155;color:#f8fafc;"></td>
+                                    <td><input type="number" name="recargo_pct_det[]" value="0" step="1"
+                                            class="form-control"
+                                            style="background:#0f172a;border:1px solid #334155;color:#f8fafc;"></td>
+                                    <td><button type="button" class="btn btn-sm btn-danger"
+                                            onclick="this.closest('tr').remove();"><i class="fas fa-times"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-sm btn-secondary mt-2" onclick="agregarFila()"><i
+                                class="fas fa-plus"></i> Agregar Fila</button>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top:1px solid rgba(255,255,255,.05);">
+                    <button type="button" class="btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn-action">Guardar Condición Mixta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function agregarFila() {
+        let tbody = document.querySelector('#tablaDetalles tbody');
+        let fila = tbody.querySelector('.fila-detalle').cloneNode(true);
+        fila.querySelectorAll('input').forEach(inp => { if (inp.name === 'porcentaje[]') inp.value = ''; else inp.value = '0'; });
+        tbody.appendChild(fila);
+    }
+</script>
+{% endblock %}

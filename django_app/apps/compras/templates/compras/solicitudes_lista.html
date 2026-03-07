@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title"><i class="fas fa-clipboard-list"></i> Solicitudes de Reposición (NP)</h1>
+        <p class="text-muted">Notas de pedido internas o generadas por el sistema</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{% url 'compras:dashboard' %}" class="btn-secondary">
+            <i class="fas fa-arrow-left"></i> Dashboard
+        </a>
+    </div>
+</div>
+
+<div class="card" style="padding:0;overflow:hidden;">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>NP #</th>
+                <th>SOLICITANTE</th>
+                <th>FECHA</th>
+                <th style="text-align:center;">ITEMS</th>
+                <th>ESTADO</th>
+                <th>PRIORIDAD</th>
+                <th style="text-align:center;">ACCIONES</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in solicitudes %}
+            <tr>
+                <td><code style="font-weight:700;">#{{ s.id }}</code></td>
+                <td style="font-weight:700;">{{ s.solicitante_nombre }}</td>
+                <td style="color:#94a3b8;font-size:.85rem;">{{ s.fecha|date:"d/m/Y H:i" }}</td>
+                <td style="text-align:center;">
+                    <span class="badge" style="background:rgba(99,102,241,.1);color:var(--primary);font-weight:600;">{{ s.items_cnt }}</span>
+                </td>
+                <td>
+                    {% if s.estado == 'BORRADOR' %}
+                    <span class="badge" style="background:rgba(255,255,255,.1);color:#94a3b8;">Borrador</span>
+                    {% elif s.estado == 'PENDIENTE_APROBACION' or s.estado == 'PENDIENTE_AJUSTE' %}
+                    <span class="badge" style="background:rgba(245,158,11,.1);color:#f59e0b;">Pendiente</span>
+                    {% elif s.estado == 'APROBADA' %}
+                    <span class="badge" style="background:rgba(16,185,129,.1);color:#10b981;">Aprobada</span>
+                    {% elif s.estado == 'EN_COTIZACION' or s.estado == 'COTIZANDO' %}
+                    <span class="badge" style="background:rgba(139,92,246,.1);color:#8b5cf6;">Cotizando</span>
+                    {% elif s.estado == 'RECHAZADA' %}
+                    <span class="badge" style="background:rgba(239,68,68,.1);color:#ef4444;">Rechazada</span>
+                    {% else %}
+                    <span class="badge" style="background:rgba(255,255,255,.05);color:#94a3b8;">{{ s.estado }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if s.prioridad == 'URGENTE' or s.prioridad == 4 %}
+                    <span style="color:#ef4444;font-weight:700;font-size:.75rem;"><i class="fas fa-fire"></i>
+                        URGENTE</span>
+                    {% elif s.prioridad == 'ALTA' or s.prioridad == 3 %}
+                    <span style="color:#f59e0b;font-weight:700;font-size:.75rem;">ALTA</span>
+                    {% elif s.prioridad == 'MEDIA' or s.prioridad == 2 %}
+                    <span style="color:#334155;font-weight:700;font-size:.75rem;">MEDIA</span>
+                    {% else %}
+                    <span style="color:#94a3b8;font-weight:600;font-size:.75rem;">BAJA</span>
+                    {% endif %}
+                </td>
+                <td style="text-align:center;">
+                    <div class="d-flex gap-1 justify-content-center">
+                        <button class="btn-secondary" style="padding:.4rem .7rem;font-size:.75rem;" title="Ver Detalle"
+                            onclick="alert('Detalle de NP #{{ s.id }} en construcción');">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn-action" style="padding:.4rem .7rem;font-size:.75rem;" title="Convertir a RFQ"
+                            onclick="showCotizarModal({{ s.id }})">
+                            <i class="fas fa-file-invoice-dollar"></i> Cotizar
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" style="text-align:center;padding:4rem;color:#64748b;">No hay solicitudes registradas
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal Cotizar NP (Simple prompt for this iteration) -->
+<script>
+    async function showCotizarModal(solicitudId) {
+        const provId = prompt('Ingrese ID del Proveedor a cotizar:');
+        if (!provId) return;
+
+        // Suponemos que la fecha vence en 7 días
+        const fechaVenc = new Date();
+        fechaVenc.setDate(fechaVenc.getDate() + 7);
+        const dateStr = fechaVenc.toISOString().split('T')[0];
+
+        try {
+            const resp = await fetch(`/compras/api/solicitud/${solicitudId}/cotizar/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' },
+                body: JSON.stringify({ proveedor_id: provId, fecha_vencimiento: dateStr })
+            });
+            const data = await resp.json();
+            if (data.success) {
+                alert(data.message);
+                window.location.reload();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        } catch (e) { console.error(e); }
+    }
+</script>
+{% endblock %}

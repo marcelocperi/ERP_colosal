@@ -3,8 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>{{ vals.tipo_comprobante_nombre }} {{ vals.letra }} {{ vals.punto_venta }}-{{
-        vals.numero }}</title>
+    <title>{{ vals.tipo_comprobante_nombre }} {{ vals.letra }} {{ vals.punto_venta }}-{{ vals.numero }}</title>
     <style>
         @page {
             size: A4;
@@ -102,7 +101,11 @@
         <button id="btn-print-manual" onclick="window.print()"
             style="padding: 8px 20px; cursor: pointer; font-weight: bold;">🖨️
             Imprimir (Manual)</button>
-        <button onclick="window.close()" style="padding: 8px 20px; cursor: pointer;">Cerrar</button>
+        <a href="{% url 'ventas:comprobante_pdf' c.id %}" target="_blank"
+            style="padding: 8px 20px; cursor: pointer; font-weight: bold; background:#2563eb; color:#fff; border:none; border-radius:4px; text-decoration:none; display:inline-block; margin-left:6px;">
+            📄 Descargar PDF
+        </a>
+        <button onclick="window.close()" style="padding: 8px 20px; cursor: pointer; margin-left:6px;">Cerrar</button>
     </div>
 
     <script>
@@ -220,7 +223,7 @@
         };
     </script>
 
-    
+
     {% for ejemplar in ejemplares %}
     <div class="invoice-page">
         <!-- MARCA DE AGUA PARA REIMPRESIÓN (COPIA FIEL) -->
@@ -252,14 +255,30 @@
 
         <!-- Cabecera de Items Grisada -->
         <div class="rect shaded" style="left: 15pt; top: 275pt; width: 566pt; height: 18pt;"></div>
-                <div class="field" style="left: 15pt; top: 279pt; width: 40pt; text-align: center; font-weight: bold; font-size: 7.5pt;">Código</div>
-        <div class="field" style="left: 55pt; top: 279pt; width: 141pt; text-align: center; font-weight: bold; font-size: 7.5pt;">Producto / Servicio</div>
-        <div class="field" style="left: 196pt; top: 279pt; width: 65pt; text-align: center; font-weight: bold; font-size: 7.5pt;">Cantidad</div>
-        <div class="field" style="left: 261pt; top: 279pt; width: 43pt; text-align: center; font-weight: bold; font-size: 7.5pt;">U. Medida</div>
-        <div class="field" style="left: 304pt; top: 279pt; width: 80pt; text-align: center; font-weight: bold; font-size: 7.5pt;">Precio Unit.</div>
-        <div class="field" style="left: 384pt; top: 279pt; width: 32pt; text-align: center; font-weight: bold; font-size: 7.5pt;">% Bonif</div>
-        <div class="field" style="left: 416pt; top: 279pt; width: 73pt; text-align: center; font-weight: bold; font-size: 7.5pt;">Imp. Bonif.</div>
-        <div class="field" style="left: 489pt; top: 279pt; width: 92pt; text-align: center; font-weight: bold; font-size: 7.5pt;">Subtotal</div>
+        <div class="field"
+            style="left: 15pt; top: 279pt; width: 40pt; text-align: center; font-weight: bold; font-size: 7.5pt;">Código
+        </div>
+        <div class="field"
+            style="left: 55pt; top: 279pt; width: 141pt; text-align: center; font-weight: bold; font-size: 7.5pt;">
+            Producto / Servicio</div>
+        <div class="field"
+            style="left: 196pt; top: 279pt; width: 65pt; text-align: center; font-weight: bold; font-size: 7.5pt;">
+            Cantidad</div>
+        <div class="field"
+            style="left: 261pt; top: 279pt; width: 43pt; text-align: center; font-weight: bold; font-size: 7.5pt;">U.
+            Medida</div>
+        <div class="field"
+            style="left: 304pt; top: 279pt; width: 80pt; text-align: center; font-weight: bold; font-size: 7.5pt;">
+            Precio Unit.</div>
+        <div class="field"
+            style="left: 384pt; top: 279pt; width: 32pt; text-align: center; font-weight: bold; font-size: 7.5pt;">%
+            Bonif</div>
+        <div class="field"
+            style="left: 416pt; top: 279pt; width: 73pt; text-align: center; font-weight: bold; font-size: 7.5pt;">Imp.
+            Bonif.</div>
+        <div class="field"
+            style="left: 489pt; top: 279pt; width: 92pt; text-align: center; font-weight: bold; font-size: 7.5pt;">
+            Subtotal</div>
 
         <!-- TOTALES Y TRIBUTOS -->
         <div class="rect" style="left: 15pt; top: 610pt; width: 566pt; height: 101pt;"></div>
@@ -311,65 +330,72 @@
         <div class="field" style="left: 15pt; top: {{ d.y }}pt; font-size: 7.5pt; width: 40pt; text-align: center;">
             {{ d.articulo_id|default:forloop.counter }}
         </div>
-        <div class="field" style="left: 57pt; top: {{ d.y }}pt; font-size: 7.5pt; width: 138pt; overflow: hidden; white-space: nowrap;">
+        <div class="field"
+            style="left: 57pt; top: {{ d.y }}pt; font-size: 7.5pt; width: 138pt; overflow: hidden; white-space: nowrap;">
             {{ d.desc_line }}
         </div>
         {% if d.cantidad %}
-        <div class="field" style="left: 196pt; top: {{ d.y }}pt; font-size: 7.5pt; width: 65pt; text-align: right; padding-right: 5pt;">
+        <div class="field"
+            style="left: 196pt; top: {{ d.y }}pt; font-size: 7.5pt; width: 65pt; text-align: right; padding-right: 5pt;">
             {{ d.cantidad|floatformat:2 }}
         </div>
         <div class="field" style="left: 261pt; top: {{ d.y }}pt; font-size: 7pt; width: 43pt; text-align: center;">
             unidades
         </div>
-        <div class="field" style="left: 304pt; top: {{ d.y }}pt; font-size: 7.5pt; width: 80pt; text-align: right; padding-right: 5pt;">
+        <div class="field"
+            style="left: 304pt; top: {{ d.y }}pt; font-size: 7.5pt; width: 80pt; text-align: right; padding-right: 5pt;">
             {{ d.precio_unitario|floatformat:2 }}
         </div>
         <div class="field" style="left: 384pt; top: {{ d.y }}pt; font-size: 7.5pt; width: 32pt; text-align: center;">
             0.00
         </div>
-        <div class="field" style="left: 416pt; top: {{ d.y }}pt; font-size: 7.5pt; width: 73pt; text-align: right; padding-right: 5pt;">
+        <div class="field"
+            style="left: 416pt; top: {{ d.y }}pt; font-size: 7.5pt; width: 73pt; text-align: right; padding-right: 5pt;">
             0.00
         </div>
-        <div class="field" style="left: 489pt; top: {{ d.y }}pt; font-size: 7.5pt; width: 92pt; text-align: right; padding-right: 5pt; font-weight: bold; z-index: 50;">
+        <div class="field"
+            style="left: 489pt; top: {{ d.y }}pt; font-size: 7.5pt; width: 92pt; text-align: right; padding-right: 5pt; font-weight: bold; z-index: 50;">
             {{ d.subtotal_total|floatformat:2 }}
         </div>
         {% endif %}
         {% endfor %}
-<!-- OTROS TRIBUTOS (PERCEPCIONES) - DESGLOSE LEGAL -->
-                {% if impuestos %}
-                <div class="rect shaded" style="left: 15pt; top: 510pt; width: 566pt; height: 15pt;"></div>
-                <div class="field" style="left: 20pt; top: 512pt; font-weight: bold; font-size: 7.5pt;">Otros Tributos
-                </div>
+        <!-- OTROS TRIBUTOS (PERCEPCIONES) - DESGLOSE LEGAL -->
+        {% if impuestos %}
+        <div class="rect shaded" style="left: 15pt; top: 510pt; width: 566pt; height: 15pt;"></div>
+        <div class="field" style="left: 20pt; top: 512pt; font-weight: bold; font-size: 7.5pt;">Otros Tributos
+        </div>
 
-                <div class="rect" style="left: 15pt; top: 525pt; width: 566pt; height: 50pt;"></div>
-                <div class="field" style="left: 20pt; top: 528pt; font-weight: bold; font-size: 7pt; width: 150pt;">
-                    Descripción
-                </div>
-                <div class="field"
-                    style="left: 180pt; top: 528pt; font-weight: bold; font-size: 7pt; width: 100pt; text-align: right;">
-                    Detalle
-                    / Jurisdicción</div>
-                <div class="field"
-                    style="left: 300pt; top: 528pt; font-weight: bold; font-size: 7pt; width: 80pt; text-align: right;">
-                    Base
-                    Imponible</div>
-                <div class="field"
-                    style="left: 390pt; top: 528pt; font-weight: bold; font-size: 7pt; width: 50pt; text-align: right;">
-                    Alícuota
-                </div>
-                <div class="field"
-                    style="left: 480pt; top: 528pt; font-weight: bold; font-size: 7pt; width: 100pt; text-align: right;">
-                    Importe
-                </div>
+        <div class="rect" style="left: 15pt; top: 525pt; width: 566pt; height: 50pt;"></div>
+        <div class="field" style="left: 20pt; top: 528pt; font-weight: bold; font-size: 7pt; width: 150pt;">
+            Descripción
+        </div>
+        <div class="field"
+            style="left: 180pt; top: 528pt; font-weight: bold; font-size: 7pt; width: 100pt; text-align: right;">
+            Detalle
+            / Jurisdicción</div>
+        <div class="field"
+            style="left: 300pt; top: 528pt; font-weight: bold; font-size: 7pt; width: 80pt; text-align: right;">
+            Base
+            Imponible</div>
+        <div class="field"
+            style="left: 390pt; top: 528pt; font-weight: bold; font-size: 7pt; width: 50pt; text-align: right;">
+            Alícuota
+        </div>
+        <div class="field"
+            style="left: 480pt; top: 528pt; font-weight: bold; font-size: 7pt; width: 100pt; text-align: right;">
+            Importe
+        </div>
 
-                {% for imp in impuestos %}
-                <div class="field" style="left: 20pt; top: {{ imp.y }}pt; font-size: 7.5pt;">Percepción de Ingresos Brutos</div>
-                <div class="field" style="left: 180pt; top: {{ imp.y }}pt; font-size: 7.5pt; text-align: right; width: 100pt;">{{ imp.jurisdiccion }}</div>
-                <div class="field" style="left: 300pt; top: {{ imp.y }}pt; font-size: 7.5pt; text-align: right; width: 80pt;">{{ imp.base_imponible|floatformat:2 }}</div>
-                <div class="field" style="left: 390pt; top: {{ imp.y }}pt; font-size: 7.5pt; text-align: right; width: 50pt;">{{ imp.alicuota|floatformat:2 }} %</div>
-                <div class="field" style="left: 480pt; top: {{ imp.y }}pt; font-size: 7.5pt; text-align: right; width: 100pt;">{{ imp.importe|floatformat:2 }}</div>
-                {% endfor %}
-                {% endif %}
+        {% for imp in impuestos %}
+        <div class="field" style="left: 20pt; top: {{ imp.y }}pt; font-size: 7.5pt;">Percepción de Ingresos Brutos</div>
+        <div class="field" style="left: 180pt; top: {{ imp.y }}pt; font-size: 7.5pt; text-align: right; width: 100pt;">
+            {{ imp.jurisdiccion }}</div>
+        <div class="field" style="left: 300pt; top: {{ imp.y }}pt; font-size: 7.5pt; text-align: right; width: 80pt;">{{ imp.base_imponible|floatformat:2 }}</div>
+        <div class="field" style="left: 390pt; top: {{ imp.y }}pt; font-size: 7.5pt; text-align: right; width: 50pt;">{{ imp.alicuota|floatformat:2 }} %</div>
+        <div class="field" style="left: 480pt; top: {{ imp.y }}pt; font-size: 7.5pt; text-align: right; width: 100pt;">
+            {{ imp.importe|floatformat:2 }}</div>
+        {% endfor %}
+        {% endif %}
 
     </div>
     {% endfor %}

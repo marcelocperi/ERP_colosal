@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="header-container mb-4">
+    <h1 class="page-title">
+        <i class="fas fa-truck-pickup me-2 text-primary"></i>
+        {% if logistica %}Editar{% else %}Nueva{% endif %} Empresa Logística
+    </h1>
+    <p class="text-muted">Si esta logística se usa en una transferencia, el COT se generará hasta su dirección.</p>
+</div>
+
+<div class="card bg-dark border-secondary shadow-lg">
+    <div class="card-body p-4">
+        <form
+            action="{% url 'stock:logistica_nueva' if not logistica else 'stock:logistica_editar' logistica.id if logistica else None %}"
+            method="POST">
+            <div class="row">
+                <div class="col-md-8 mb-4">
+                    <label class="form-label-premium"><i class="fas fa-signature me-1"></i> RAZÓN SOCIAL /
+                        NOMBRE</label>
+                    <input type="text" name="nombre" value="{% if logistica %}logistica.nombre{% else %}{% endif %}" required
+                        class="input-premium">
+                </div>
+                <div class="col-md-4 mb-4">
+                    <label class="form-label-premium"><i class="fas fa-id-card me-1"></i> CUIT</label>
+                    <input type="text" name="cuit" value="{% if logistica %}logistica.cuit{% else %}{% endif %}"
+                        placeholder="20-XXXXXXXX-X" class="input-premium">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <label class="form-label-premium"><i class="fas fa-envelope me-1"></i> EMAIL</label>
+                    <input type="email" name="email" value="{% if logistica %}logistica.email{% else %}{% endif %}"
+                        class="input-premium">
+                </div>
+                <div class="col-md-6 mb-4">
+                    <label class="form-label-premium"><i class="fas fa-phone me-1"></i> TELÉFONO</label>
+                    <input type="text" name="telefono" value="{% if logistica %}logistica.telefono{% else %}{% endif %}"
+                        class="input-premium">
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-12">
+                    <hr class="border-secondary opacity-25">
+                </div>
+                <div class="col-md-6 mb-4">
+                    <label class="form-label-premium">CALLE</label>
+                    <input type="text" name="calle" value="{% if logistica %}logistica.calle{% else %}{% endif %}"
+                        class="input-premium">
+                </div>
+                <div class="col-md-2 mb-4">
+                    <label class="form-label-premium">NÚMERO</label>
+                    <input type="text" name="numero" value="{% if logistica %}logistica.numero{% else %}{% endif %}"
+                        class="input-premium">
+                </div>
+                <div class="col-md-4 mb-4">
+                    <label class="form-label-premium">LOCALIDAD</label>
+                    <input type="text" name="localidad" value="{% if logistica %}logistica.localidad{% else %}{% endif %}"
+                        class="input-premium">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <label class="form-label-premium">PROVINCIA</label>
+                    <select name="provincia"
+                        class="form-select bg-dark text-white border-secondary h-100 py-3 rounded-pill px-4">
+                        {% for p in provincias %}
+                        <option value="{{ p.nombre }}" {% if logistica and logistica.provincia == p.nombre %}selected{% else %}{% endif %}>{{ p.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6 mb-4 d-flex align-items-end pb-3">
+                    <div class="form-check custom-check">
+                        <input type="checkbox" name="activo" id="activo" value="1" {% if not logistica or logistica.activo %}checked{% else %}{% endif %} class="form-check-input">
+                        <label for="activo" class="form-check-label text-white">Estado Activo</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 pt-3 border-top border-secondary d-flex justify-content-between">
+                <a href="{% url 'stock:logisticas_lista' %}"
+                    class="btn btn-secondary px-5 rounded-pill">Cancelar</a>
+                <button type="submit" class="btn btn-primary px-5 rounded-pill fw-bold">
+                    <i class="fas fa-save me-2"></i>Guardar Empresa Logística
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

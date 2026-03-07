@@ -56,10 +56,13 @@ INSTALLED_APPS = [
     'apps.stock',
     'apps.contabilidad',
     'apps.fondos',
+    'apps.cobranzas',
     'apps.produccion',
     'apps.pricing',
+    'apps.configuracion',
     'apps.biblioteca',
     'apps.utilitarios',
+    'apps.auditoria',
 ]
 
 MIDDLEWARE = [
@@ -67,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     # Middleware de Colosal para soporte Multi-Pestaña (Fase 1.3)
     'apps.core.middleware.MultiTabSessionMiddleware',
+    'apps.core.middleware.LoginEnforcerMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -76,10 +80,16 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'colosal_django.urls'
 
+# Redireccionamiento de Login
+LOGIN_URL = '/login.html'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR.parent, 'templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR.parent, 'templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

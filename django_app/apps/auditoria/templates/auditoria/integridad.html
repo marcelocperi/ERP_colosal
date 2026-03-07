@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Verificación de Integridad{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="mb-0 text-white"><i class="fas fa-stethoscope text-danger me-2"></i>Verificación de
+                    Integridad</h2>
+                <p class="text-white-50">Ejecución del AI Auditor y Checks manuales de DB.</p>
+            </div>
+            <div>
+                <a href="{% url 'auditoria:dashboard' %}" class="btn btn-outline-light"><i
+                        class="fas fa-arrow-left me-2"></i>Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card bg-dark text-white border-0 shadow-lg">
+        <div class="card-body text-center py-5">
+            <div class="spinner-grow text-danger mb-3" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <h4 class="text-white">AI Auditor</h4>
+            <p class="text-white-50">Esta función interconecta el MCP Engine Server con los tests de diagnósticos Python
+                de DB.</p>
+            <p class="text-muted small">Estará disponible pronto a través del backend.</p>
+            <button class="btn btn-danger mt-3" disabled>Ejecutar AI Auditor Deep Scan</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

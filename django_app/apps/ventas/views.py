@@ -172,8 +172,22 @@ def perfil_cliente(request, id):
             impuestos_lista = dictfetchall(cursor)
 
             # Condiciones Fiscales (AFIP)
-            cursor.execute("SELECT id, nombre FROM sys_condiciones_fiscales WHERE activo = 1 ORDER BY id")
-            condiciones_fiscales = dictfetchall(cursor)
+            condiciones_fiscales = [
+                {'id': 1, 'nombre': 'IVA Responsable Inscripto'},
+                {'id': 2, 'nombre': 'IVA Responsable no Inscripto'},
+                {'id': 3, 'nombre': 'IVA no Responsable'},
+                {'id': 4, 'nombre': 'IVA Sujeto Exento'},
+                {'id': 5, 'nombre': 'Consumidor Final'},
+                {'id': 6, 'nombre': 'Responsable Monotributo'},
+                {'id': 7, 'nombre': 'Sujeto no Categorizado'},
+                {'id': 8, 'nombre': 'Proveedor del Exterior'},
+                {'id': 9, 'nombre': 'Cliente del Exterior'},
+                {'id': 10, 'nombre': 'IVA Liberado - Ley Nº 19.640'},
+                {'id': 11, 'nombre': 'IVA Responsable Inscripto - Agente de Percepción'},
+                {'id': 12, 'nombre': 'Pequeño Contribuyente Eventual'},
+                {'id': 13, 'nombre': 'Monotributo Social'},
+                {'id': 14, 'nombre': 'Pequeño Contribuyente Eventual Social'},
+            ]
             
             # Coeficientes CM05
             cursor.execute("""
@@ -999,6 +1013,122 @@ def ver_comprobante(request, id):
         import traceback
         traceback.print_exc()
         messages.error(request, f"Error al mostrar comprobante: {str(e)}")
+        return redirect('ventas:comprobantes')
+
+
+@login_required
+def descargar_pdf_comprobante(request, id):
+    """
+    Genera y devuelve el comprobante como archivo PDF descargable.
+    Reutiliza toda la lógica de datos de ver_comprobante.
+    """
+    from apps.ventas.billing_service import BillingService
+    from apps.core.pdf_service import render_to_pdf
+
+    enterprise_id = request.user_data['enterprise_id']
+    try:
+        with get_db_cursor(dictionary=True) as cursor:
+            # --- Misma lógica de carga de datos que ver_comprobante ---
+            cursor.execute("""
+                SELECT c.*, t.nombre as cliente_nombre, t.cuit as cliente_cuit,
+                       t.tipo_responsable as cliente_condicion, t.email as cliente_email,
+                       tc.nombre as tipo_comprobante_nombre, tc.letra as letra,
+                       con.id as contacto_id,
+                       casoc.punto_venta as casoc_pv, casoc.numero as casoc_num,
+                       casoc.tipo_comprobante as casoc_tipo
+                FROM erp_comprobantes c
+                JOIN erp_terceros t ON c.tercero_id = t.id
+                JOIN sys_tipos_comprobante tc ON c.tipo_comprobante = tc.codigo
+                LEFT JOIN erp_contactos con ON c.receptor_contacto_id = con.id
+                LEFT JOIN erp_comprobantes casoc ON c.comprobante_asociado_id = casoc.id
+                WHERE c.id = %s AND c.enterprise_id = %s
+            """, (id, enterprise_id))
+            comprobante = dictfetchone(cursor)
+
+            if not comprobante:
+                messages.error(request, "Comprobante no encontrado.")
+                return redirect('ventas:comprobantes')
+
+            cursor.execute("""
+                SELECT * FROM erp_comprobantes_detalle
+                WHERE comprobante_id = %s AND enterprise_id = %s
+            """, (id, enterprise_id))
+            detalles_raw = dictfetchall(cursor)
+
+            cursor.execute("""
+                SELECT * FROM erp_empresas WHERE id = %s LIMIT 1
+            """, (enterprise_id,))
+            empresa = dictfetchone(cursor) or {}
+
+            cursor.execute("""
+                SELECT * FROM sys_tipos_comprobante_layout
+                WHERE tipo_comprobante = %s AND enterprise_id IN (%s, 0)
+                ORDER BY enterprise_id DESC LIMIT 1
+            """, (comprobante['tipo_comprobante'], enterprise_id))
+            layout_row = dictfetchone(cursor)
+
+            import json
+            layout = json.loads(layout_row['layout_json']) if layout_row and layout_row.get('layout_json') else {}
+
+            billing = BillingService(enterprise_id)
+            vals = billing.build_vals(comprobante, layout)
+
+            # Dirección del receptor
+            cursor.execute("""
+                SELECT * FROM erp_terceros_direcciones
+                WHERE tercero_id = %s AND principal = 1 LIMIT 1
+            """, (comprobante['tercero_id'],))
+            direccion = dictfetchone(cursor) or {}
+
+            # Impuestos / Percepciones
+            cursor.execute("""
+                SELECT * FROM erp_comprobantes_percepciones
+                WHERE comprobante_id = %s
+            """, (id,))
+            percepciones = dictfetchall(cursor)
+            impuestos = [dict(p, y=0) for p in percepciones]
+
+        # Simplificar detalles para el template PDF (sin coordenadas Y)
+        detalles = []
+        for d in detalles_raw:
+            detalles.append({
+                'articulo_id': d.get('articulo_id'),
+                'desc_line': d.get('descripcion', ''),
+                'cantidad': d.get('cantidad'),
+                'precio_unitario': d.get('precio_unitario'),
+                'subtotal_total': d.get('subtotal_total') or d.get('subtotal'),
+            })
+
+        # Filas de relleno para mantener tamaño de tabla (mínimo 12 líneas)
+        min_rows = 12
+        filler_count = max(0, min_rows - len(detalles))
+
+        letra = comprobante.get('letra', vals.get('letra', 'B'))
+        tipo_nombre = comprobante.get('tipo_comprobante_nombre', 'Comprobante')
+        punto_venta = comprobante.get('punto_venta', '')
+        numero = comprobante.get('numero', '')
+
+        filename = f"{tipo_nombre}_{letra}_{str(punto_venta).zfill(5)}-{str(numero).zfill(8)}.pdf"
+
+        context = {
+            'c': comprobante,
+            'detalles': detalles,
+            'cliente_dir': direccion,
+            'impuestos': impuestos,
+            'empresa': empresa,
+            'layout': layout,
+            'vals': vals,
+            'es_copia': False,
+            'ejemplares': ['ORIGINAL'],
+            'filler_rows': range(filler_count),
+        }
+
+        return render_to_pdf('ventas/comprobante_pdf.html', context, filename)
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        messages.error(request, f"Error al generar PDF: {str(e)}")
         return redirect('ventas:comprobantes')
 
 @login_required

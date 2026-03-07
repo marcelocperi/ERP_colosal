@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title"><i class="fas fa-shopping-cart"></i> Dashboard de Compras</h1>
+        <p class="text-muted">Panel de control de adquisiciones y cotizaciones</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{% url 'compras:reposicion_dashboard' %}" class="btn-action">
+            <i class="fas fa-battery-half"></i> Tablero Reposición
+        </a>
+        <a href="{% url 'compras:proveedores' %}" class="btn-secondary">
+            <i class="fas fa-industry"></i> Proveedores
+        </a>
+    </div>
+</div>
+
+<!-- KPIs -->
+<div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:1.5rem; margin-bottom:2rem;">
+    <div class="card"
+        style="padding:1.5rem; border-left:4px solid var(--primary); display:flex; gap:1rem; align-items:center;">
+        <div
+            style="background:rgba(99,102,241,.1);color:var(--primary);width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;">
+            <i class="fas fa-paper-plane"></i>
+        </div>
+        <div>
+            <div style="font-size:.75rem;color:#94a3b8;font-weight:600;text-transform:uppercase;">RFQs Enviadas</div>
+            <div style="font-size:2rem;font-weight:800;">{{ kpi.enviadas }}</div>
+        </div>
+    </div>
+    <div class="card"
+        style="padding:1.5rem; border-left:4px solid #10b981; display:flex; gap:1rem; align-items:center;">
+        <div
+            style="background:rgba(16,185,129,.1);color:#10b981;width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;">
+            <i class="fas fa-inbox"></i>
+        </div>
+        <div>
+            <div style="font-size:.75rem;color:#94a3b8;font-weight:600;text-transform:uppercase;">RFQs Recibidas</div>
+            <div style="font-size:2rem;font-weight:800;">{{ kpi.recibidas }}</div>
+        </div>
+    </div>
+    <div class="card"
+        style="padding:1.5rem; border-left:4px solid #8b5cf6; display:flex; gap:1rem; align-items:center;">
+        <div
+            style="background:rgba(139,92,246,.1);color:#8b5cf6;width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;">
+            <i class="fas fa-chart-pie"></i>
+        </div>
+        <div>
+            <div style="font-size:.75rem;color:#94a3b8;font-weight:600;text-transform:uppercase;">Efectividad</div>
+            <div style="font-size:2rem;font-weight:800;">{{ kpi.efectividad }}%</div>
+        </div>
+    </div>
+    <div class="card"
+        style="padding:1.5rem; border-left:4px solid #f59e0b; display:flex; gap:1rem; align-items:center;">
+        <div
+            style="background:rgba(245,158,11,.1);color:#f59e0b;width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div>
+            <div style="font-size:.75rem;color:#94a3b8;font-weight:600;text-transform:uppercase;">Items No Provistos
+            </div>
+            <div style="font-size:2rem;font-weight:800;color:#f59e0b;">{{ kpi.items_no_provistos }}</div>
+            <div style="font-size:.7rem;color:#64748b;">${{ kpi.valor_no_provisto|floatformat:0 }}</div>
+        </div>
+    </div>
+</div>
+
+<div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;">
+    <!-- Últimas Cotizaciones -->
+    <div class="card" style="padding:0;overflow:hidden;">
+        <div
+            style="padding:1rem 1.5rem;border-bottom:1px solid rgba(255,255,255,.05);display:flex;justify-content:space-between;align-items:center;">
+            <h3 style="margin:0;font-size:1rem;"><i class="fas fa-file-invoice-dollar"></i> Últimas Cotizaciones</h3>
+            <a href="{% url 'compras:cotizaciones' %}" class="btn-secondary"
+                style="padding:.4rem .8rem;font-size:.8rem;">Ver todas</a>
+        </div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>PROVEEDOR</th>
+                    <th>FECHA</th>
+                    <th>ITEMS</th>
+                    <th>ESTADO</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in cotizaciones %}
+                <tr>
+                    <td style="font-weight:600;">{{ c.razon_social }}</td>
+                    <td style="font-size:.8rem;color:#94a3b8;">{{ c.fecha|date:"d/m/Y" }}</td>
+                    <td><span class="badge" style="background:rgba(99,102,241,.1);color:var(--primary);">{{ c.items_cnt }}</span></td>
+                    <td>
+                        {% if c.estado == 'ENVIADA' %}
+                        <span class="badge" style="background:rgba(245,158,11,.1);color:#f59e0b;">Enviada</span>
+                        {% elif c.estado == 'RESPONDIDA' %}
+                        <span class="badge"
+                            style="background:rgba(99,102,241,.1);color:var(--primary);">Respondida</span>
+                        {% elif c.estado == 'CONFIRMADA' %}
+                        <span class="badge" style="background:rgba(16,185,129,.1);color:#10b981;">Confirmada</span>
+                        {% else %}
+                        <span class="badge" style="background:rgba(255,255,255,.05);color:#94a3b8;">{{ c.estado }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="text-align:center;padding:2rem;color:#64748b;">Sin cotizaciones recientes
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Alertas de No Provistos -->
+    <div class="card" style="padding:0;overflow:hidden;">
+        <div style="padding:1rem 1.5rem;border-bottom:1px solid rgba(255,255,255,.05);">
+            <h3 style="margin:0;font-size:1rem;color:#f59e0b;"><i class="fas fa-exclamation-circle"></i> Material No
+                Provisto</h3>
+        </div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ARTÍCULO</th>
+                    <th>PROVEEDOR</th>
+                    <th>FECHA</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in alertas %}
+                <tr style="background:rgba(245,158,11,.03);">
+                    <td style="font-size:.85rem;">{{ a.articulo }}</td>
+                    <td style="font-size:.8rem;color:#94a3b8;">{{ a.razon_social }}</td>
+                    <td style="font-size:.75rem;color:#64748b;">{{ a.fecha|date:"d/m/Y" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" style="text-align:center;padding:2rem;color:#10b981;"><i
+                            class="fas fa-check-circle"></i> Sin alertas pendientes</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

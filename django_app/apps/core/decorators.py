@@ -40,9 +40,13 @@ def _unauthorized_response(request, message="Sesión expirada o inválida. Recar
     
     # Inyectar sid en el redirect si existe
     sid = getattr(request, 'sid', None)
+    reason = getattr(request, 'login_reason', 'unauthorized')
     login_url = reverse('core:login')
+    
+    separator = '&' if '?' in login_url else '?'
+    login_url += f"{separator}reason={reason}"
     if sid:
-        login_url += f"?sid={sid}"
+        login_url += f"&sid={sid}"
         
     messages.error(request, message)
     return redirect(login_url)

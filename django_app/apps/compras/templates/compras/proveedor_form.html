@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="page-title"><i class="fas fa-plus-circle"></i> Nuevo Proveedor</h1>
+<div class="card" style="padding:2rem;max-width:600px;">
+    <form method="POST">
+        {% csrf_token %}
+        <div style="display:grid;gap:1rem;">
+            <div>
+                <label
+                    style="display:block;font-size:.8rem;color:#94a3b8;margin-bottom:.5rem;text-transform:uppercase;">Razón
+                    Social *</label>
+                <input type="text" name="nombre" required class="form-control"
+                    style="width:100%;padding:.75rem;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#f8fafc;">
+            </div>
+            <div>
+                <label
+                    style="display:block;font-size:.8rem;color:#94a3b8;margin-bottom:.5rem;text-transform:uppercase;">Origen
+                    *</label>
+                <select name="origen" required
+                    style="width:100%;padding:.75rem;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#f8fafc;">
+                    <option value="LOCAL">Local (Nacional)</option>
+                    <option value="IMPORTADO">Importado (Extranjero)</option>
+                </select>
+            </div>
+            <div>
+                <label
+                    style="display:block;font-size:.8rem;color:#94a3b8;margin-bottom:.5rem;text-transform:uppercase;">Identificación
+                    (CUIT / Pasaporte / ID)
+                    *</label>
+                <input type="text" name="cuit" required placeholder="20-12345678-9" class="form-control"
+                    style="width:100%;padding:.75rem;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#f8fafc;">
+            </div>
+            <div>
+                <label
+                    style="display:block;font-size:.8rem;color:#94a3b8;margin-bottom:.5rem;text-transform:uppercase;">Email</label>
+                <input type="email" name="email" class="form-control"
+                    style="width:100%;padding:.75rem;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#f8fafc;">
+            </div>
+            <div>
+                <label
+                    style="display:block;font-size:.8rem;color:#94a3b8;margin-bottom:.5rem;text-transform:uppercase;">Tipo
+                    Responsable</label>
+                <select name="tipo_responsable"
+                    style="width:100%;padding:.75rem;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#f8fafc;">
+                    <option value="RI">Responsable Inscripto</option>
+                    <option value="MO">Monotributista</option>
+                    <option value="EX">Exento</option>
+                    <option value="NC">No Categorizados</option>
+                    <option value="EXTRANJERO">Sujeto del Exterior</option>
+                </select>
+            </div>
+            <div>
+                <label
+                    style="display:block;font-size:.8rem;color:#94a3b8;margin-bottom:.5rem;text-transform:uppercase;">Observaciones</label>
+                <textarea name="observaciones" rows="3"
+                    style="width:100%;padding:.75rem;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#f8fafc;resize:vertical;"></textarea>
+            </div>
+        </div>
+        <div style="margin-top:2rem;display:flex;gap:1rem;justify-content:flex-end;">
+            <a href="{% url 'compras:proveedores' %}" class="btn-secondary" style="padding:.75rem 1.5rem;">Cancelar</a>
+            <button type="submit" class="btn-action" style="padding:.75rem 2rem;background:#10b981;">Guardar
+                Proveedor</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

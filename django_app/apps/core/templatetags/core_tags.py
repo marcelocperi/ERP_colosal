@@ -37,3 +37,18 @@ def tojson(value):
 @register.filter(name='get_item')
 def get_item(dictionary, key):
     return dictionary.get(key)
+
+@register.filter(name='replace_underscore')
+def replace_underscore(value):
+    if not isinstance(value, str):
+        return value
+    return value.replace('_', ' ')
+
+@register.filter(name='percentage')
+def percentage(value, arg):
+    try:
+        if float(arg) == 0:
+            return 0
+        return ((float(value) - float(arg)) / float(arg)) * 100
+    except (ValueError, TypeError):
+        return 0

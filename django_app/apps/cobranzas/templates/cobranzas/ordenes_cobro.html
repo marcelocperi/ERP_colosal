@@ -1,0 +1,29 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block header_title %}Órdenes de Cobro{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="mb-0 fw-bold text-dark">Órdenes de Cobro</h2>
+        <p class="text-muted mb-0">Gestión de proyecciones y solicitudes de cobranza a clientes.</p>
+    </div>
+    <div>
+        <button class="btn btn-primary shadow-sm" disabled>
+            <i class="fas fa-plus me-2"></i>Nueva Orden
+        </button>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm align-items-center justify-content-center py-5">
+    <div class="card-body text-center">
+        <i class="fas fa-tools fs-1 text-muted mb-3"></i>
+        <h4 class="fw-bold text-dark">Módulo en Desarrollo</h4>
+        <p class="text-muted">Las órdenes de cobro y conciliación bancaria estarán disponibles próximamente.</p>
+        <a href="{% url 'cobranzas:dashboard' %}" class="btn btn-outline-secondary mt-3">
+            Volver al Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

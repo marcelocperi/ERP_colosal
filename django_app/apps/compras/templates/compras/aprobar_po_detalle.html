@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title"><i class="fas fa-check-double"></i> Aprobar Orden de Compra #{{ orden.id }}</h1>
+        <p class="text-muted">Provee el visto bueno final para proceder con el pago o envío.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{% url 'compras:aprobaciones' %}" class="btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver a Bandeja
+        </a>
+    </div>
+</div>
+
+<div style="display:grid; grid-template-columns: 2fr 1fr; gap:1.5rem;">
+    <!-- Items -->
+    <div class="card" style="padding:0;overflow:hidden;">
+        <div style="padding:1rem 1.5rem;border-bottom:1px solid rgba(255,255,255,.05);">
+            <h3 style="margin:0;font-size:1rem;"><i class="fas fa-list"></i> Detalle de la Orden</h3>
+        </div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ARTÍCULO</th>
+                    <th style="text-align:right;">CANTIDAD</th>
+                    <th style="text-align:right;">PRECIO</th>
+                    <th style="text-align:right;">SUBTOTAL</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for it in items %}
+                <tr>
+                    <td>
+                        <div style="font-weight:700;">{{ it.articulo_nombre }}</div>
+                        <code style="font-size:.7rem;opacity:.7;">{{ it.articulo_codigo }}</code>
+                    </td>
+                    <td style="text-align:right;font-weight:700;">{{ it.cantidad|floatformat:2 }}</td>
+                    <td style="text-align:right;">$ {{ it.precio|floatformat:2 }}</td>
+                    <td style="text-align:right;font-weight:700;">$ {{ it.total|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr style="background:rgba(255,255,255,.05);">
+                    <td colspan="3" style="text-align:right;font-weight:700;padding:1rem;">TOTAL ORDEN</td>
+                    <td style="text-align:right;font-weight:800;font-size:1.2rem;padding:1rem;">$ {{ orden.total|floatformat:2 }}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <!-- Actions and Info -->
+    <div style="display:flex;flex-direction:column;gap:1.5rem;">
+        <div class="card" style="padding:1.5rem; border-top: 4px solid #10b981;">
+            <h3 style="margin:0 0 1rem;font-size:1rem;color:#10b981;"><i class="fas fa-thumbs-up"></i> Tareas de
+                Aprobación</h3>
+
+            <div style="margin-bottom:1.5rem; font-size:.9rem; line-height:1.5;">
+                <p>Usted está aprobando la orden #{{ orden.id }} para el proveedor <b>{{ orden.proveedor_nombre }}</b>.
+                </p>
+                <div style="color:#64748b; font-size:.8rem; margin-top:.5rem;">
+                    CUIL/CUIT: {{ orden.proveedor_cuit }}<br>
+                    Fecha de pedido: {{ orden.fecha|date:"d/m/Y" }}
+                </div>
+            </div>
+
+            <div class="d-flex flex-column gap-2">
+                <a href="{% url 'compras:autorizar_orden' orden.id %}" class="btn-action"
+                    style="background:#10b981;text-align:center;padding:1rem;">
+                    <i class="fas fa-check"></i> APROBAR ORDEN
+                </a>
+
+                <button type="button" class="btn-secondary"
+                    style="background:rgba(239, 68, 68, 0.1);color:#ef4444;border-color:transparent;padding:.8rem;"
+                    onclick="document.getElementById('modalRechazo').showModal();">
+                    <i class="fas fa-times"></i> RECHAZAR ORDEN
+                </button>
+            </div>
+        </div>
+
+        <div class="card" style="padding:1.5rem;">
+            <h3 style="margin:0 0 1rem;font-size:1rem;color:#64748b;">Observaciones</h3>
+            <p style="font-size:.85rem;margin:0;color:#94a3b8;font-style:italic;">
+                {{ orden.observaciones|default:"Sin observaciones adicionales." }}
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Rechazo -->
+<dialog id="modalRechazo"
+    style="border:none;border-radius:12px;background:#0f172a;color:white;padding:2rem;width:400px;">
+    <form method="POST" action="{% url 'compras:rechazar_orden' orden.id %}">
+        {% csrf_token %}
+        <h3 style="margin-top:0;">Motivo de Rechazo</h3>
+        <p style="font-size:.8rem;color:#94a3b8;">Por favor, indique por qué está rechazando esta orden para informar al
+            solicitante.</p>
+        <textarea name="motivo" class="form-control" style="width:100%;min-height:100px;margin-bottom:1rem;" required
+            placeholder="Escriba el motivo aquí..."></textarea>
+        <div class="d-flex gap-2 justify-content-end">
+            <button type="button" class="btn-secondary"
+                onclick="document.getElementById('modalRechazo').close();">Cancelar</button>
+            <button type="submit" class="btn-action" style="background:#ef4444;">Proceder con Rechazo</button>
+        </div>
+    </form>
+</dialog>
+
+<style>
+    dialog::backdrop {
+        background: rgba(0, 0, 0, .7);
+        backdrop-filter: blur(4px);
+    }
+</style>
+{% endblock %}

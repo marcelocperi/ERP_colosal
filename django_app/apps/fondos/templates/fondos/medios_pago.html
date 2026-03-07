@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title"><i class="fas fa-credit-card"></i> Medios de Pago</h1>
+        <p class="text-muted">Gestión de formas de pago habilitadas en el sistema</p>
+    </div>
+    <button class="btn-action" data-bs-toggle="modal" data-bs-target="#modalMedioPago">
+        <i class="fas fa-plus"></i> Nuevo Medio
+    </button>
+</div>
+
+{% if messages %}
+{% for msg in messages %}
+<div class="alert alert-{{ msg.tags }} alert-dismissible fade show" role="alert">
+    {{ msg }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+{% endfor %}
+{% endif %}
+
+<div class="card" style="padding:0;overflow:hidden;">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>NOMBRE</th>
+                <th>TIPO</th>
+                <th>CUENTA CONTABLE</th>
+                <th style="text-align:right;">RECARGO %</th>
+                <th>ESTADO</th>
+                <th style="text-align:center;">ACCIONES</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in medios %}
+            <tr>
+                <td style="font-weight:700;">{{ m.nombre }}</td>
+                <td>
+                    <span class="badge" style="background:rgba(99,102,241,.1);color:var(--primary);">{{ m.tipo }}</span>
+                </td>
+                <td style="font-size:.8rem;color:#64748b;">
+                    {% if m.cuenta_contable_id %}<i class="fas fa-link" style="opacity:.4;"></i> {{ m.cuenta_contable_id }}{% else %}-{% endif %}
+                </td>
+                <td style="text-align:right;">{{ m.recargo_pct|default:"0" }}%</td>
+                <td>
+                    {% if m.activo %}
+                    <span class="badge" style="background:rgba(16,185,129,.1);color:#10b981;">Activo</span>
+                    {% else %}
+                    <span class="badge" style="background:rgba(255,255,255,.05);color:#64748b;">Inactivo</span>
+                    {% endif %}
+                </td>
+                <td style="text-align:center;display:flex;gap:.5rem;justify-content:center;">
+                    <form method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="edit">
+                        <input type="hidden" name="id" value="{{ m.id }}">
+                        <button type="button" class="btn-secondary" style="padding:.4rem .8rem;font-size:.8rem;"
+                            onclick="editarMedio({{ m.id }}, '{{ m.nombre|escapejs }}', '{{ m.tipo|escapejs }}', '{{ m.recargo_pct }}', {{ m.activo }})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </form>
+                    <form method="POST" onsubmit="return confirm('¿Eliminar este medio de pago?');">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="id" value="{{ m.id }}">
+                        <button type="submit" class="btn-secondary"
+                            style="padding:.4rem .8rem;font-size:.8rem;background:rgba(239,68,68,.1);color:#ef4444;">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" style="text-align:center;padding:4rem;color:#64748b;">No hay medios de pago configurados
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal Crear/Editar -->
+<div class="modal fade" id="modalMedioPago" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background:#1e293b;border:1px solid rgba(255,255,255,.1);">
+            <div class="modal-header" style="border-bottom:1px solid rgba(255,255,255,.05);">
+                <h5 class="modal-title" id="modalMedioPagoLabel">Nuevo Medio de Pago</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" id="formMedioPago">
+                {% csrf_token %}
+                <input type="hidden" name="action" id="medioPagoAction" value="create">
+                <input type="hidden" name="id" id="medioPagoId" value="">
+                <div class="modal-body" style="display:grid;gap:1rem;">
+                    <div>
+                        <label style="font-size:.8rem;color:#94a3b8;text-transform:uppercase;">Nombre *</label>
+                        <input type="text" name="nombre" id="medioPagoNombre" required class="form-control"
+                            style="background:#0f172a;border:1px solid #334155;color:#f8fafc;border-radius:8px;padding:.75rem;">
+                    </div>
+                    <div>
+                        <label style="font-size:.8rem;color:#94a3b8;text-transform:uppercase;">Tipo *</label>
+                        <select name="tipo" id="medioPagoTipo" class="form-select"
+                            style="background:#0f172a;border:1px solid #334155;color:#f8fafc;border-radius:8px;padding:.75rem;">
+                            <option value="EFECTIVO">Efectivo</option>
+                            <option value="TRANSFERENCIA">Transferencia Bancaria</option>
+                            <option value="CHEQUE">Cheque</option>
+                            <option value="TARJETA">Tarjeta</option>
+                            <option value="CRIPTO">Criptomoneda</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-size:.8rem;color:#94a3b8;text-transform:uppercase;">Recargo %</label>
+                        <input type="number" name="recargo_pct" id="medioPagoRecargo" value="0" step="0.01"
+                            class="form-control"
+                            style="background:#0f172a;border:1px solid #334155;color:#f8fafc;border-radius:8px;padding:.75rem;">
+                    </div>
+                    <div id="editActivoRow" style="display:none;">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="activo" id="medioPagoActivo"
+                                value="1">
+                            <label class="form-check-label" for="medioPagoActivo">Activo</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top:1px solid rgba(255,255,255,.05);">
+                    <button type="button" class="btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn-action">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function editarMedio(id, nombre, tipo, recargo, activo) {
+        document.getElementById('medioPagoAction').value = 'edit';
+        document.getElementById('medioPagoId').value = id;
+        document.getElementById('medioPagoNombre').value = nombre;
+        document.getElementById('medioPagoTipo').value = tipo;
+        document.getElementById('medioPagoRecargo').value = recargo;
+        document.getElementById('medioPagoActivo').checked = activo === 1 || activo === true;
+        document.getElementById('editActivoRow').style.display = 'block';
+        document.getElementById('modalMedioPagoLabel').textContent = 'Editar Medio de Pago';
+        new bootstrap.Modal(document.getElementById('modalMedioPago')).show();
+    }
+</script>
+{% endblock %}

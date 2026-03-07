@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ vals.tipo_comprobante_nombre }} {{ vals.letra }} {{ vals.punto_venta }}-{{ vals.numero }}</title>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 12mm 10mm 10mm 10mm;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 8pt;
+            color: #000;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ========= ESTRUCTURA GENERAL ========= */
+        .page-border {
+            border: 0.8pt solid #000;
+            width: 100%;
+        }
+
+        /* ========= HEADER: 3 columnas ========= */
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .header-left,
+        .header-right {
+            width: 43%;
+            vertical-align: top;
+            padding: 5pt 6pt;
+        }
+
+        .header-center {
+            width: 14%;
+            vertical-align: middle;
+            text-align: center;
+            border-left: 0.8pt solid #000;
+            border-right: 0.8pt solid #000;
+            padding: 4pt;
+        }
+
+        .letter-box {
+            font-size: 32pt;
+            font-weight: bold;
+            line-height: 1.1;
+        }
+
+        .letra-sublabel {
+            font-size: 6.5pt;
+        }
+
+        .empresa-nombre {
+            font-size: 11pt;
+            font-weight: bold;
+        }
+
+        .empresa-detalle {
+            font-size: 7.5pt;
+            margin-top: 2pt;
+        }
+
+        .comp-nombre {
+            font-size: 10pt;
+            font-weight: bold;
+        }
+
+        .comp-numero {
+            font-size: 9pt;
+            margin-top: 3pt;
+        }
+
+        .fecha-label {
+            font-size: 7.5pt;
+            margin-top: 4pt;
+        }
+
+        /* ========= SECCIÓN CLIENTE ========= */
+        .section-header {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            font-size: 7.5pt;
+            padding: 3pt 6pt;
+            border-top: 0.8pt solid #000;
+            border-bottom: 0.8pt solid #000;
+        }
+
+        .cliente-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 8pt;
+        }
+
+        .cliente-table td {
+            padding: 2pt 5pt;
+            vertical-align: top;
+        }
+
+        .label-campo {
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        /* ========= TABLA DE ITEMS ========= */
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 7.5pt;
+            border-top: 0.8pt solid #000;
+        }
+
+        .items-table th {
+            background-color: #f0f0f0;
+            border-bottom: 0.8pt solid #000;
+            padding: 2.5pt 3pt;
+            font-size: 7pt;
+            text-align: center;
+        }
+
+        .items-table td {
+            padding: 2pt 3pt;
+            vertical-align: top;
+            border-bottom: 0.3pt solid #ddd;
+        }
+
+        .items-table .col-codigo {
+            width: 8%;
+            text-align: center;
+        }
+
+        .items-table .col-desc {
+            width: 28%;
+        }
+
+        .items-table .col-cant {
+            width: 8%;
+            text-align: right;
+        }
+
+        .items-table .col-um {
+            width: 7%;
+            text-align: center;
+        }
+
+        .items-table .col-precio {
+            width: 14%;
+            text-align: right;
+        }
+
+        .items-table .col-bonif {
+            width: 6%;
+            text-align: right;
+        }
+
+        .items-table .col-bonif-imp {
+            width: 11%;
+            text-align: right;
+        }
+
+        .items-table .col-subtotal {
+            width: 18%;
+            text-align: right;
+            font-weight: bold;
+        }
+
+        /* Filler rows */
+        .items-table .filler td {
+            height: 10pt;
+            border-bottom: 0.3pt solid #eee;
+        }
+
+        /* ========= TRIBUTOS ========= */
+        .tributos-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 7.5pt;
+            border-top: 0.8pt solid #000;
+        }
+
+        .tributos-table th {
+            background-color: #f0f0f0;
+            border-bottom: 0.6pt solid #000;
+            padding: 2pt 3pt;
+            font-size: 7pt;
+        }
+
+        .tributos-table td {
+            padding: 2pt 3pt;
+        }
+
+        /* ========= TOTALES ========= */
+        .totales-section {
+            border-top: 0.8pt solid #000;
+            margin-top: 0;
+        }
+
+        .totales-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 8pt;
+        }
+
+        .totales-table td {
+            padding: 2.5pt 5pt;
+        }
+
+        .totales-table .lbl {
+            text-align: right;
+            font-weight: bold;
+            width: 70%;
+        }
+
+        .totales-table .val {
+            text-align: right;
+            width: 30%;
+            font-size: 8.5pt;
+        }
+
+        .total-final {
+            font-size: 10pt;
+            font-weight: bold;
+            background-color: #f8f8f8;
+            border-top: 0.8pt solid #000;
+        }
+
+        .total-final .lbl,
+        .total-final .val {
+            padding: 4pt 5pt;
+        }
+
+        /* ========= PIE: QR + CAE ========= */
+        .footer-section {
+            border-top: 0.8pt solid #000;
+            padding: 5pt;
+        }
+
+        .footer-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 7.5pt;
+        }
+
+        .footer-table td {
+            vertical-align: middle;
+            padding: 2pt 4pt;
+        }
+
+        .qr-cell {
+            width: 80pt;
+            text-align: center;
+        }
+
+        .cae-cell {
+            font-size: 7pt;
+            line-height: 1.6;
+        }
+
+        .barcode-cell {
+            text-align: center;
+        }
+
+        /* ========= MARCAS ========= */
+        .watermark {
+            position: fixed;
+            top: 40%;
+            left: 10%;
+            font-size: 60pt;
+            color: rgba(180, 180, 180, 0.20);
+            font-weight: bold;
+            transform: rotate(-40deg);
+            z-index: -1;
+            white-space: nowrap;
+        }
+
+        .ejemplar-tag {
+            font-size: 8.5pt;
+            font-weight: bold;
+            text-align: right;
+            padding-right: 4pt;
+        }
+    </style>
+</head>
+
+<body>
+
+    {% if es_copia %}
+    <div class="watermark">ES COPIA FIEL</div>
+    {% endif %}
+
+    {% for ejemplar in ejemplares %}
+    {% if not forloop.first %}
+    <pdf:nextpage />
+    {% if es_copia %}<div class="watermark">ES COPIA FIEL</div>{% endif %}
+    {% endif %}
+
+    <div class="page-border">
+
+        <!-- ===== HEADER ===== -->
+        <table class="header-table" style="border-bottom: 0.8pt solid #000;">
+            <tr>
+                <!-- Columna Izquierda: Datos de la Empresa -->
+                <td class="header-left">
+                    {% if vals.logo_path %}
+                    <img src="{{ vals.logo_path }}" style="height: 45pt; max-width: 180pt; margin-bottom: 3pt;"><br>
+                    {% endif %}
+                    <div class="empresa-nombre">{{ empresa.razon_social }}</div>
+                    <div class="empresa-detalle">
+                        {{ empresa.domicilio_fiscal }}<br>
+                        {% if empresa.localidad %}{{ empresa.localidad }}{% endif %}{% if empresa.provincia %}, {{ empresa.provincia }}{% endif %}<br>
+                        IVA: {{ empresa.condicion_iva|default:"Responsable Inscripto" }}<br>
+                        CUIT: {{ empresa.cuit }}
+                        {% if empresa.ingresos_brutos %} — IIBB: {{ empresa.ingresos_brutos }}{% endif %}<br>
+                        Inicio Actividades: {{ empresa.inicio_actividades|default:'' }}
+                    </div>
+                </td>
+
+                <!-- Columna Centro: Letra -->
+                <td class="header-center">
+                    <div class="letter-box">{{ vals.letra }}</div>
+                    <div class="letra-sublabel">
+                        {% if vals.letra == 'A' %}Responsable Inscripto
+                        {% elif vals.letra == 'B' %}Consumidor Final / Exento
+                        {% elif vals.letra == 'C' %}Monotributista
+                        {% else %}Comprobante{% endif %}
+                    </div>
+                </td>
+
+                <!-- Columna Derecha: Datos del Comprobante -->
+                <td class="header-right">
+                    <div class="comp-nombre">{{ vals.tipo_comprobante_nombre }}</div>
+                    <div class="comp-numero">Nro: <strong>{{ vals.punto_venta|stringformat:"05d" }}-{{ vals.numero|stringformat:"08d" }}</strong></div>
+                    <div class="fecha-label">Fecha de Emisión: <strong>{{ vals.fecha_emision }}</strong></div>
+                    {% if vals.fecha_vencimiento %}
+                    <div class="fecha-label">Fecha de Vencimiento: {{ vals.fecha_vencimiento }}</div>
+                    {% endif %}
+                    <div class="ejemplar-tag" style="margin-top: 8pt;">{{ ejemplar }}</div>
+                </td>
+            </tr>
+        </table>
+
+        <!-- ===== CLIENTE ===== -->
+        <div class="section-header">DATOS DEL RECEPTOR</div>
+        <table class="cliente-table">
+            <tr>
+                <td style="width:60%">
+                    <span class="label-campo">Razón Social / Nombre:</span> {{ vals.cliente_nombre }}<br>
+                    <span class="label-campo">Domicilio:</span>
+                    {{ cliente_dir.calle|default:'' }}{% if cliente_dir.numero %} {{ cliente_dir.numero }}{% endif %}
+                    {% if cliente_dir.piso %} Piso {{ cliente_dir.piso }}{% endif %}
+                    {% if cliente_dir.depto %} Dto. {{ cliente_dir.depto }}{% endif %}
+                    {% if cliente_dir.localidad %} — {{ cliente_dir.localidad }}{% endif %}
+                </td>
+                <td style="width:40%">
+                    <span class="label-campo">CUIT/CUIL:</span> {{ vals.cliente_cuit|default:'—' }}<br>
+                    <span class="label-campo">Cond. IVA:</span> {{ vals.cliente_condicion_iva|default:'—' }}<br>
+                    <span class="label-campo">Cond. de Pago:</span> {{ vals.condicion_pago|default:'—' }}
+                </td>
+            </tr>
+        </table>
+
+        <!-- ===== REFERENCIA COMERCIAL ===== -->
+        {% if vals.referencia_comercial %}
+        <div class="section-header" style="font-size: 7.5pt; background-color: #f8f8f8;">
+            Referencia: {{ vals.referencia_comercial }}
+            {% if vals.comprobante_asociado %} &nbsp;|&nbsp; {{ vals.comprobante_asociado }}{% endif %}
+        </div>
+        {% endif %}
+
+        <!-- ===== TABLA DE ITEMS ===== -->
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th class="col-codigo">Código</th>
+                    <th class="col-desc" style="text-align:left; padding-left: 4pt;">Producto / Servicio</th>
+                    <th class="col-cant">Cant.</th>
+                    <th class="col-um">U.Med.</th>
+                    <th class="col-precio">Precio Unit.</th>
+                    <th class="col-bonif">%Bon.</th>
+                    <th class="col-bonif-imp">Imp.Bon.</th>
+                    <th class="col-subtotal">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for d in detalles %}
+                <tr>
+                    <td class="col-codigo">{{ d.articulo_id|default:forloop.counter }}</td>
+                    <td class="col-desc">{{ d.desc_line }}</td>
+                    <td class="col-cant">{% if d.cantidad %}{{ d.cantidad|floatformat:2 }}{% endif %}</td>
+                    <td class="col-um">{% if d.cantidad %}unid.{% endif %}</td>
+                    <td class="col-precio">{% if d.precio_unitario %}{{ d.precio_unitario|floatformat:2 }}{% endif %}
+                    </td>
+                    <td class="col-bonif">—</td>
+                    <td class="col-bonif-imp">—</td>
+                    <td class="col-subtotal">{% if d.subtotal_total %}{{ d.subtotal_total|floatformat:2 }}{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                <!-- Filler para mantener altura mínima -->
+                {% for i in filler_rows %}
+                <tr class="filler">
+                    <td colspan="8">&nbsp;</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- ===== TRIBUTOS / PERCEPCIONES ===== -->
+        {% if impuestos %}
+        <div class="section-header">OTROS TRIBUTOS</div>
+        <table class="tributos-table">
+            <thead>
+                <tr>
+                    <th style="text-align:left; width:35%;">Descripción</th>
+                    <th style="text-align:right; width:25%;">Detalle / Jurisdicción</th>
+                    <th style="text-align:right; width:15%;">Base Imponible</th>
+                    <th style="text-align:right; width:10%;">Alícuota</th>
+                    <th style="text-align:right; width:15%;">Importe</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for imp in impuestos %}
+                <tr>
+                    <td>Percepción de Ingresos Brutos</td>
+                    <td style="text-align:right;">{{ imp.jurisdiccion }}</td>
+                    <td style="text-align:right;">{{ imp.base_imponible|floatformat:2 }}</td>
+                    <td style="text-align:right;">{{ imp.alicuota|floatformat:2 }} %</td>
+                    <td style="text-align:right;">{{ imp.importe|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+
+        <!-- ===== TOTALES ===== -->
+        <div class="totales-section">
+            <table class="totales-table">
+                {% for name, config in layout.items %}
+                {% if config.section == 'totals' and config.value %}
+                <tr>
+                    <td class="lbl" style="font-size: 7.5pt;">{{ name|title|replace:"_":" " }}:</td>
+                    <td class="val" style="font-size: 8pt;">$ {{ config.value }}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+                <tr class="total-final">
+                    <td class="lbl">TOTAL A PAGAR:</td>
+                    <td class="val">$ {{ vals.total|floatformat:2 }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- ===== PIE: QR + CAE + CÓDIGO DE BARRAS ===== -->
+        <div class="footer-section">
+            <table class="footer-table">
+                <tr>
+                    {% if vals.qr_code %}
+                    <td class="qr-cell">
+                        <img src="data:image/png;base64,{{ vals.qr_code }}" style="width: 65pt; height: 65pt;">
+                        <div style="font-size: 6pt; margin-top: 2pt;">Verificar en AFIP</div>
+                    </td>
+                    {% endif %}
+                    <td class="cae-cell">
+                        {% if vals.cae %}
+                        <strong>CAE N°:</strong> {{ vals.cae }}<br>
+                        <strong>Vto. CAE:</strong> {{ vals.cae_vencimiento }}<br>
+                        {% endif %}
+                        <strong>Punto de Venta:</strong> {{ vals.punto_venta }}<br>
+                        <strong>N° Comprobante:</strong> {{ vals.numero }}<br>
+                        {% if empresa.telefono %}<strong>Tel:</strong> {{ empresa.telefono }}<br>{% endif %}
+                        {% if empresa.email %}<strong>Email:</strong> {{ empresa.email }}{% endif %}
+                    </td>
+                    {% if vals.barcode %}
+                    <td class="barcode-cell">
+                        <img src="data:image/png;base64,{{ vals.barcode }}" style="width: 180pt; height: 28pt;">
+                    </td>
+                    {% endif %}
+                </tr>
+            </table>
+        </div>
+
+    </div>
+    {% endfor %}
+
+</body>
+
+</html>

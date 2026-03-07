@@ -1,0 +1,107 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block header_title %}Dashboard Cobranzas{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Deuda Total KPI -->
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card bg-danger text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-white-50 text-uppercase fw-bold mb-2">Total Adeudado</h6>
+                        <h3 class="mb-0 fw-bold">$ {{ kpis.adeudado|floatformat:2 }}</h3>
+                    </div>
+                    <div class="rounded-circle bg-white bg-opacity-25 p-3">
+                        <i class="fas fa-exclamation-triangle fs-3"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-0">
+                <a href="{% url 'ventas:cuenta_corriente_global' %}" class="text-white text-decoration-none">
+                    Ver Cuentas Corrientes <i class="fas fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recibos Mes KPI -->
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card bg-success text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-white-50 text-uppercase fw-bold mb-2">Recibos Emitidos</h6>
+                        <h3 class="mb-0 fw-bold">{{ kpis.recibos_mes }}</h3>
+                    </div>
+                    <div class="rounded-circle bg-white bg-opacity-25 p-3">
+                        <i class="fas fa-file-invoice-dollar fs-3"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-0">
+                <a href="{% url 'cobranzas:listar_recibos' %}" class="text-white text-decoration-none">
+                    Ver Recibos <i class="fas fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Emitir Recibo Access -->
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card bg-primary text-white h-100 shadow-sm border-0 bg-gradient text-center"
+            style="cursor: pointer;" onclick="window.location.href='{% url 'cobranzas:emitir_recibo' %}'">
+            <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
+                <div class="rounded-circle bg-white bg-opacity-25 p-3 mb-3">
+                    <i class="fas fa-plus fs-2"></i>
+                </div>
+                <h5 class="mb-0 fw-bold">Emitir Nuevo Recibo</h5>
+                <small class="text-white-50 mt-2">Aplicar cobranza a facturas</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
+                <h6 class="mb-0 fw-bold text-dark"><i class="fas fa-history text-secondary me-2"></i>Últimos Recibos
+                    Emitidos</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>N° Recibo</th>
+                                <th>Fecha</th>
+                                <th>Cliente</th>
+                                <th class="text-end">Monto Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in ultimos_recibos %}
+                            <tr>
+                                <td class="fw-bold">{{ r.punto_venta|stringformat:"04d" }}-{{ r.numero|stringformat:"08d" }}</td>
+                                <td>{{ r.fecha|date:"d/m/Y" }}</td>
+                                <td>{{ r.cliente_nombre }}</td>
+                                <td class="text-end fw-bold text-success">$ {{ r.monto_total|floatformat:2 }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-4">
+                                    No hay recibos recientes.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

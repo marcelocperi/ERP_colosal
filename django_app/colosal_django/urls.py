@@ -19,8 +19,18 @@ from django.urls import path, include
 from apps.core import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls), # No usaremos el admin de Django por ahora
+    path('admin/', admin.site.urls),
     path('', include('apps.core.urls')),
     path('ventas/', include('apps.ventas.urls')),
+    path('configuracion/', include('apps.configuracion.urls')),
+    path('stock/', include('apps.stock.urls')),
+    path('compras/', include('apps.compras.urls')),
+    path('fondos/', include('apps.fondos.urls')),
+    path('contabilidad/', include('apps.contabilidad.urls')),
+    path('cobranzas/', include('apps.cobranzas.urls')),
+    path('produccion/', include('apps.produccion.urls')),
+    path('pricing/', include('apps.pricing.urls')),
+    path('auditoria/', include('apps.auditoria.urls')),
+    path('utilitarios/', include('apps.utilitarios.urls')),
     path('', views.home_redirect, name='home'),
 ]

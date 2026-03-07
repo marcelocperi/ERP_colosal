@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0" style="color:#f8fafc;"><i class="fas fa-calendar-check text-success me-2"></i>Calendario
+                de Desembolsos</h1>
+            <p style="color:#94a3b8;">Proyección de compromisos financieros por fecha de pago estimada.</p>
+        </div>
+        <div class="card" style="padding:1rem 1.5rem; border-left:4px solid #10b981;">
+            <small style="color:#64748b; font-size: 0.65rem; font-weight:700; text-transform:uppercase;">Total
+                Programado</small>
+            <h4 style="margin:0; color:#10b981; font-weight:800;">
+                $ {{ total_programado|floatformat:2 }}
+            </h4>
+        </div>
+    </div>
+
+    <div class="row" style="display:flex; flex-wrap:wrap; gap:1.5rem; margin:0;">
+        {% for dia in calendario %}
+        <div style="flex:1; min-width:250px; padding:0;">
+            <div class="card" style="padding:0; overflow:hidden; transition:transform 0.2s; border-radius:15px;"
+                onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                <div
+                    style="padding:1.5rem; background:rgba(255,255,255,.02); border-bottom:1px solid rgba(255,255,255,.05); display:flex; justify-content:space-between; align-items:center;">
+                    <div style="display:flex; align-items:center; gap:1rem;">
+                        <div
+                            style="background:#10b981; color:white; padding:10px; border-radius:10px; text-align:center; min-width:60px;">
+                            <span
+                                style="display:block; font-size:0.75rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; opacity:0.9;">{{ dia.fecha_pago_estimada|date:"M" }}</span>
+                            <span style="display:block; font-size:1.5rem; font-weight:800; line-height:1;">{{ dia.fecha_pago_estimada|date:"d" }}</span>
+                        </div>
+                        <span style="font-weight:700; color:#f8fafc; font-size:1.1rem;">{{ dia.fecha_pago_estimada|date:"l" }}</span>
+                    </div>
+                    <span class="badge"
+                        style="background:rgba(16,185,129,.1); color:#10b981; font-size:0.8rem; padding:0.4em 0.8em; border-radius:50px;">{{ dia.po_count }} POs</span>
+                </div>
+                <div style="padding:2rem 1.5rem; text-align:right;">
+                    <h3 style="margin:0 0 0.25rem 0; font-weight:800; font-size:1.75rem;">${{ dia.monto_total|floatformat:2 }}</h3>
+                    <small style="color:#64748b; font-weight:600;">Monto total autorizado</small>
+                </div>
+                <div
+                    style="padding:1rem; border-top:1px solid rgba(255,255,255,.05); text-align:center; background:rgba(0,0,0,.1);">
+                    <a href="#" style="color:#10b981; font-weight:700; text-decoration:none; font-size:0.9rem;">Ver
+                        detalles <i class="fas fa-arrow-right ms-1"></i></a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div style="width:100%; padding:0;">
+            <div class="card" style="padding:4rem; text-align:center;">
+                <i class="fas fa-calendar-alt mb-4" style="font-size:4rem; color:#334155; opacity:0.5;"></i>
+                <h5 style="color:#94a3b8; font-weight:600;">No hay desembolsos programados para el futuro.</h5>
+                <p style="color:#64748b; margin:0;">Las órdenes con fondos autorizados por Tesorería aparecerán aquí.
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title"><i class="fas fa-university"></i> Tesorería & Fondos</h1>
+        <p class="text-muted">Panel de control de liquidez y compromisos financieros</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{% url 'fondos:aprobaciones' %}" class="btn-action">
+            <i class="fas fa-check-double"></i> Aprobaciones
+            {% if kpi.aprobaciones_pendientes > 0 %}
+            <span class="badge ms-1" style="background:#ef4444;">{{ kpi.aprobaciones_pendientes }}</span>
+            {% endif %}
+        </a>
+        <a href="{% url 'fondos:configuracion_global' %}" class="btn-secondary">
+            <i class="fas fa-cog"></i> Configuración
+        </a>
+    </div>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;margin-bottom:2rem;">
+    <div class="card" style="padding:1.5rem;border-left:4px solid #10b981;display:flex;gap:1rem;align-items:center;">
+        <div
+            style="background:rgba(16,185,129,.1);color:#10b981;width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;">
+            <i class="fas fa-cash-register"></i></div>
+        <div>
+            <div style="font-size:.75rem;color:#94a3b8;font-weight:600;text-transform:uppercase;">Cajas</div>
+            <a href="{% url 'fondos:cajas' %}" style="text-decoration:none;color:inherit;">
+                <div style="font-size:2rem;font-weight:800;">{{ kpi.cajas }}</div>
+            </a>
+        </div>
+    </div>
+    <div class="card"
+        style="padding:1.5rem;border-left:4px solid var(--primary);display:flex;gap:1rem;align-items:center;">
+        <div
+            style="background:rgba(99,102,241,.1);color:var(--primary);width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;">
+            <i class="fas fa-university"></i></div>
+        <div>
+            <div style="font-size:.75rem;color:#94a3b8;font-weight:600;text-transform:uppercase;">Bancos</div>
+            <a href="{% url 'fondos:bancos' %}" style="text-decoration:none;color:inherit;">
+                <div style="font-size:2rem;font-weight:800;">{{ kpi.bancos }}</div>
+            </a>
+        </div>
+    </div>
+    <div class="card {% if kpi.aprobaciones_pendientes > 0 %}{% endif %}"
+        style="padding:1.5rem;border-left:4px solid #f59e0b;display:flex;gap:1rem;align-items:center;">
+        <div
+            style="background:rgba(245,158,11,.1);color:#f59e0b;width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;">
+            <i class="fas fa-clock"></i></div>
+        <div>
+            <div style="font-size:.75rem;color:#94a3b8;font-weight:600;text-transform:uppercase;">Aprobaciones
+                Pendientes</div>
+            <a href="{% url 'fondos:aprobaciones' %}"
+                style="text-decoration:none;color:{% if kpi.aprobaciones_pendientes > 0 %}#f59e0b{% else %}inherit{% endif %};">
+                <div style="font-size:2rem;font-weight:800;">{{ kpi.aprobaciones_pendientes }}</div>
+            </a>
+        </div>
+    </div>
+    <div class="card" style="padding:1.5rem;border-left:4px solid #8b5cf6;display:flex;gap:1rem;align-items:center;">
+        <div
+            style="background:rgba(139,92,246,.1);color:#8b5cf6;width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;">
+            <i class="fas fa-calendar-check"></i></div>
+        <div>
+            <div style="font-size:.75rem;color:#94a3b8;font-weight:600;text-transform:uppercase;">Desembolsos Próximos
+                (7d)</div>
+            <a href="{% url 'fondos:kpi_desembolsos' %}" style="text-decoration:none;color:inherit;">
+                <div style="font-size:2rem;font-weight:800;">{{ kpi.desembolsos_proximos }}</div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
+    <a href="{% url 'fondos:medios_pago' %}" class="card"
+        style="padding:1.5rem;text-decoration:none;transition:transform .2s;">
+        <i class="fas fa-credit-card" style="font-size:2rem;color:#10b981;margin-bottom:.75rem;display:block;"></i>
+        <div style="font-weight:700;">Medios de Pago</div>
+        <div style="font-size:.8rem;color:#64748b;margin-top:.25rem;">Efectivo, transferencia, cheques</div>
+    </a>
+    <a href="{% url 'fondos:condiciones_pago' %}" class="card"
+        style="padding:1.5rem;text-decoration:none;transition:transform .2s;">
+        <i class="fas fa-handshake" style="font-size:2rem;color:var(--primary);margin-bottom:.75rem;display:block;"></i>
+        <div style="font-weight:700;">Condiciones de Pago</div>
+        <div style="font-size:.8rem;color:#64748b;margin-top:.25rem;">Contado, 30/60/90 días</div>
+    </a>
+    <a href="{% url 'fondos:impuestos' %}" class="card"
+        style="padding:1.5rem;text-decoration:none;transition:transform .2s;">
+        <i class="fas fa-receipt" style="font-size:2rem;color:#f59e0b;margin-bottom:.75rem;display:block;"></i>
+        <div style="font-weight:700;">Impuestos</div>
+        <div style="font-size:.8rem;color:#64748b;margin-top:.25rem;">IVA, IIBB, Retenciones</div>
+    </a>
+</div>
+{% endblock %}

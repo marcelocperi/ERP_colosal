@@ -73,7 +73,8 @@
                                 <select class="form-select bg-dark text-light border-secondary" id="tipo_comprobante"
                                     required>
                                     {% for t in tipos_comprobante %}
-                                    <option value="{{ t.codigo }}">{{ t.descripcion }}{% if t.letra %} ({{ t.letra }}){% endif %}</option>
+                                    <option value="{{ t.codigo }}">{{ t.descripcion }}{% if t.letra %} ({{ t.letra }}){%
+                                        endif %}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -274,9 +275,9 @@
 <script>
     const esNC = {{ es_nota_credito_json| safe }};
     const itemsPrecargados = {{ items_precargados_json| safe }};
-    const tipoSugerido = "{{ tipo_sugerido|default('') }}";
-    const clientePreseleccionado = "{{ cliente_preseleccionado|default('') }}";
-    const condicionIvaEmpresa = "{{ condicion_iva_empresa|default('') }}";
+    const tipoSugerido = "{{ tipo_sugerido|default:'' }}";
+    const clientePreseleccionado = "{{ cliente_preseleccionado|default:'' }}";
+    const condicionIvaEmpresa = "{{ condicion_iva_empresa|default:'' }}";
     const agentePercepciones = {{ agente_percepciones_json| safe }};
 
     let items = [];

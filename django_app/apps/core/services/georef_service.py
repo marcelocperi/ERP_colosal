@@ -1,5 +1,6 @@
+import requests
 import logging
-from apps.core.db import get_db_cursor
+from apps.core.db import get_db_cursor, dictfetchall, dictfetchone
 
 logger = logging.getLogger(__name__)
 
@@ -78,3 +79,126 @@ class GeorefService:
         for k, v in CP_BASE_MAP.items():
             if k.lower() in provincia_nombre.lower(): return [v]
         return []
+
+    # --- MÉTODOS DE SINCRONIZACIÓN (para cron jobs) ---
+
+    API_PROVINCIAS = "https://apis.datos.gob.ar/georef/api/v2.0/provincias"
+    API_LOCALIDADES = "https://apis.datos.gob.ar/georef/api/v2.0/localidades"
+    API_CALLES = "https://apis.datos.gob.ar/georef/api/v2.0/calles"
+
+    @classmethod
+    def initialize_db(cls):
+        """Crea las tablas de geografía local si no existen."""
+        with get_db_cursor() as cursor:
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS sys_provincias (
+                    id VARCHAR(10) PRIMARY KEY,
+                    nombre VARCHAR(100) NOT NULL,
+                    iso_id VARCHAR(10),
+                    centroide_lat DECIMAL(15, 12),
+                    centroide_lon DECIMAL(15, 12)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+            """)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS sys_localidades (
+                    id VARCHAR(20) PRIMARY KEY,
+                    nombre VARCHAR(200) NOT NULL,
+                    provincia_id VARCHAR(10) NOT NULL,
+                    centroide_lat DECIMAL(15, 12),
+                    centroide_lon DECIMAL(15, 12),
+                    FOREIGN KEY (provincia_id) REFERENCES sys_provincias(id)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+            """)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS sys_calles (
+                    id VARCHAR(20) PRIMARY KEY,
+                    nombre VARCHAR(255) NOT NULL,
+                    localidad_id VARCHAR(20),
+                    provincia_id VARCHAR(10),
+                    INDEX idx_localidad (localidad_id),
+                    INDEX idx_provincia (provincia_id),
+                    INDEX idx_nombre (nombre(50))
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+            """)
+        logger.info("Tablas de Georef local verificadas/creadas.")
+
+    @classmethod
+    def load_provincias(cls):
+        try:
+            cls.initialize_db()
+            resp = requests.get(cls.API_PROVINCIAS, timeout=10)
+            resp.raise_for_status()
+            data = resp.json()
+            count = 0
+            with get_db_cursor() as cursor:
+                for p in data.get('provincias', []):
+                    cursor.execute("""
+                        INSERT INTO sys_provincias (id, nombre, iso_id, centroide_lat, centroide_lon)
+                        VALUES (%s, %s, %s, %s, %s)
+                        ON DUPLICATE KEY UPDATE nombre=VALUES(nombre), iso_id=VALUES(iso_id)
+                    """, (p['id'], p['nombre'], p.get('iso_id'), p['centroide']['lat'], p['centroide']['lon']))
+                    count += 1
+            return count
+        except Exception as e:
+            logger.error(f"Sync Provincias Error: {e}")
+            return -1
+
+    @classmethod
+    def load_localidades(cls):
+        try:
+            total = 0
+            resp = requests.get(f"{cls.API_LOCALIDADES}?max=5000", timeout=30)
+            resp.raise_for_status()
+            data = resp.json()
+            with get_db_cursor() as cursor:
+                for loc in data.get('localidades', []):
+                    cursor.execute("""
+                        INSERT INTO sys_localidades (id, nombre, provincia_id, centroide_lat, centroide_lon)
+                        VALUES (%s, %s, %s, %s, %s)
+                        ON DUPLICATE KEY UPDATE nombre=VALUES(nombre), provincia_id=VALUES(provincia_id)
+                    """, (loc['id'], loc['nombre'], loc['provincia']['id'], loc['centroide']['lat'], loc['centroide']['lon']))
+                    total += 1
+            return total
+        except Exception as e:
+            logger.error(f"Sync Localidades Error: {e}")
+            return -1
+
+    @classmethod
+    def load_calles_by_provincia(cls, provincia_id):
+        try:
+            total = 0
+            resp = requests.get(f"{cls.API_CALLES}?provincia={provincia_id}&max=5000", timeout=60)
+            resp.raise_for_status()
+            data = resp.json()
+            with get_db_cursor() as cursor:
+                for c in data.get('calles', []):
+                    cursor.execute("""
+                        INSERT IGNORE INTO sys_calles (id, nombre, localidad_id, provincia_id)
+                        VALUES (%s, %s, %s, %s)
+                    """, (c['id'], c['nombre'], c.get('localidad', {}).get('id'), c['provincia']['id']))
+                    total += 1
+            return total
+        except Exception as e:
+            logger.error(f"Sync Calles Error (Prov {provincia_id}): {e}")
+            return 0
+
+    @classmethod
+    def sync_full(cls):
+        """Orquestador para el cron job."""
+        logger.info("Iniciando Sincronización Completa de Georef...")
+        cls.initialize_db()
+        p_count = cls.load_provincias()
+        l_count = cls.load_localidades()
+        
+        logger.info(f"Provincias: {p_count}, Localidades: {l_count}")
+        
+        total_calles = 0
+        with get_db_cursor(dictionary=True) as cursor:
+            cursor.execute("SELECT id FROM sys_provincias")
+            provincias = dictfetchall(cursor)
+            for p in provincias:
+                logger.info(f"Sincronizando calles para provincia {p['id']}...")
+                total_calles += cls.load_calles_by_provincia(p['id'])
+        
+        logger.info(f"Sincronización finalizada. {total_calles} calles procesadas.")
+        return True

@@ -12,9 +12,9 @@
     <title>{% if enterprise %}{{ enterprise.nombre }}{% else %}Bienvenido{% endif %} | Colosal</title>
 
     <!-- Use original static files -->
-    <link rel="stylesheet" href="/static/css/style.css">
-    <link rel="stylesheet" href="/static/css/utilities.css">
-    <link rel="stylesheet" href="/static/css/premium_ux.css">
+    <link rel="stylesheet" href="{% static \'css/style.css\' %}">
+    <link rel="stylesheet" href="{% static \'css/utilities.css\' %}">
+    <link rel="stylesheet" href="{% static \'css/premium_ux.css\' %}">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -320,7 +320,8 @@
             <div class="d-flex align-items-center gap-3">
                 <div id="afip-status" class="small text-success"><i class="fas fa-check-circle me-1"></i>AFIP</div>
                 <div class="badge bg-light text-dark border">
-                    <i class="fas fa-building text-primary me-1"></i> {% if enterprise %}{{ enterprise.nombre }}{% else %}ERP{% endif %}
+                    <i class="fas fa-building text-primary me-1"></i> {% if enterprise %}{{ enterprise.nombre }}{% else
+                    %}ERP{% endif %}
                 </div>
             </div>
         </header>
@@ -419,6 +420,58 @@
                     f.appendChild(input);
                 }
             });
+
+            // 4. Global CSRF Token Injection for Fetch API & jQuery AJAX
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            const csrfTokenMeta = document.querySelector('meta[name="csrf-token"]');
+            const csrfToken = (csrfTokenMeta && csrfTokenMeta.content && csrfTokenMeta.content !== '{{ csrf_token }}') ? csrfTokenMeta.content : getCookie('csrftoken');
+
+            // For jQuery AJAX
+            if (typeof jQuery !== 'undefined' && csrfToken) {
+                jQuery.ajaxSetup({
+                    beforeSend: function (xhr, settings) {
+                        if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", csrfToken);
+                        }
+                    }
+                });
+            }
+
+            // For Fetch API
+            const originalFetch = window.fetch;
+            window.fetch = async function () {
+                let [resource, config] = arguments;
+                if (config === undefined) {
+                    config = {};
+                }
+                const method = (config.method || '').toUpperCase();
+                if (method && method !== 'GET' && method !== 'HEAD' && method !== 'OPTIONS' && method !== 'TRACE') {
+                    config.headers = config.headers || {};
+                    const isHeadersObj = config.headers instanceof Headers;
+                    if (csrfToken) {
+                        if (isHeadersObj) {
+                            if (!config.headers.has('X-CSRFToken')) config.headers.append('X-CSRFToken', csrfToken);
+                        } else {
+                            if (!config.headers['X-CSRFToken']) config.headers['X-CSRFToken'] = csrfToken;
+                        }
+                    }
+                }
+                return originalFetch(resource, config);
+            };
         });
     </script>
 </body>

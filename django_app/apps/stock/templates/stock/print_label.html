@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 
@@ -243,7 +244,7 @@
         <div class="safety-row">
             <div class="pictograms-box">
                 {% for picto in data.seguridad.pictogramas_json %}
-                <img src="/static/img/ghs/{{ picto }}.png"
+                <img src="{% static \'img/ghs/{{ picto }}.png\' %}"
                     onerror="this.src='https://placehold.co/100x100?text={{ picto }}'" alt="{{ picto }}">
                 {% endfor %}
             </div>

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% load core_tags %}
 
 {% block content %}
@@ -515,7 +516,7 @@
                                             {% if cliente.archivo_cm05_path %}
                                             <div class="mt-2 text-success small">
                                                 <i class="fas fa-check-circle me-1"></i> Archivo actual subido.
-                                                <a href="/static/{{ cliente.archivo_cm05_path }}" target="_blank"
+                                                <a href="{% static \'{{ cliente.archivo_cm05_path }}\' %}" target="_blank"
                                                     class="text-info ms-2">Ver PDF adjunto</a>
                                             </div>
                                             {% endif %}

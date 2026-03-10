@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from . import api_views
 
 app_name = 'ventas'
 
@@ -30,4 +31,13 @@ urlpatterns = [
     path('nota_credito/<int:factura_id>/', views.nota_credito, name='nota_credito'),
     path('devolucion-solicitar/', views.devolucion_solicitar, name='devolucion_solicitar'),
     path('comprobante/<int:id>/reenviar/', views.reenviar_comprobante, name='reenviar_comprobante'),
+    # APIs
+    path('api/ventas/cliente/<int:id>/detalle', api_views.api_cliente_detalle, name='api_cliente_detalle'),
+    path('api/ventas/cliente/<int:id>/logistica', api_views.api_cliente_logistica, name='api_cliente_logistica'),
+    path('api/ventas/cliente/<int:id>/finanzas', api_views.api_cliente_finanzas, name='api_cliente_finanzas'),
+    path('api/ventas/cliente/<int:id>/saldo', api_views.api_cliente_saldo, name='api_cliente_saldo'),
+    path('api/ventas/cliente/<int:id>/condiciones', api_views.api_cliente_condiciones, name='api_cliente_condiciones'),
+    path('api/ventas/articulos/buscar', api_views.api_articulos_buscar, name='api_articulos_buscar'),
+    path('api/ventas/fiscal/allowed-docs', api_views.api_ventas_fiscal_allowed_docs, name='api_ventas_fiscal_allowed_docs'),
+    path('api/ventas/afip/consultar/<str:cuit>', api_views.api_afip_consultar, name='api_afip_consultar'),
 ]

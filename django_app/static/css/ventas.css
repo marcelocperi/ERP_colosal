@@ -1,0 +1,359 @@
+/*
+ * Colosal ERP - Ventas Module Design System
+ * Palette: Slate-Indigo Dark | Inter Font
+ * Version: 2.0 - Unified
+ */
+
+/* ─── TOKENS ───────────────────────────────────────────────── */
+:root {
+  --v-bg:          #0f1117;
+  --v-surface:     #1a1d27;
+  --v-surface-2:   #212436;
+  --v-border:      rgba(255,255,255,0.08);
+  --v-border-2:    rgba(255,255,255,0.14);
+
+  --v-accent:      #6366f1;      /* indigo */
+  --v-accent-h:    #818cf8;
+  --v-accent-soft: rgba(99,102,241,0.12);
+
+  --v-green:       #22c55e;
+  --v-green-soft:  rgba(34,197,94,0.12);
+  --v-red:         #ef4444;
+  --v-red-soft:    rgba(239,68,68,0.12);
+  --v-amber:       #f59e0b;
+  --v-amber-soft:  rgba(245,158,11,0.12);
+  --v-cyan:        #06b6d4;
+  --v-cyan-soft:   rgba(6,182,212,0.12);
+
+  --v-text:        #f1f5f9;
+  --v-text-muted:  #94a3b8;
+  --v-text-faint:  #475569;
+
+  --v-radius:      10px;
+  --v-radius-sm:   6px;
+  --v-shadow:      0 4px 24px rgba(0,0,0,0.4);
+  --v-shadow-sm:   0 2px 8px rgba(0,0,0,0.25);
+}
+
+/* ─── PAGE SCAFFOLD ────────────────────────────────────────── */
+.v-page {
+  background: var(--v-bg);
+  min-height: 100%;
+  color: var(--v-text);
+  font-family: 'Inter', sans-serif;
+  padding: 1.75rem 2rem;
+}
+
+/* PAGE HEADER */
+.v-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--v-border);
+}
+.v-page-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--v-text);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.v-page-title i { color: var(--v-accent-h); font-size: 1.1rem; }
+.v-page-subtitle {
+  font-size: 0.78rem;
+  color: var(--v-text-muted);
+  margin-top: 0.2rem;
+}
+
+/* ─── CARDS / PANELS ───────────────────────────────────────── */
+.v-card {
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: var(--v-radius);
+  overflow: hidden;
+  box-shadow: var(--v-shadow-sm);
+}
+.v-card-header {
+  padding: 0.85rem 1.25rem;
+  background: var(--v-surface-2);
+  border-bottom: 1px solid var(--v-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.v-card-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--v-text-muted);
+}
+.v-card-body { padding: 1.25rem; }
+
+/* ─── STAT TILES ───────────────────────────────────────────── */
+.v-stat {
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: var(--v-radius);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: border-color .2s, box-shadow .2s;
+}
+.v-stat:hover {
+  border-color: var(--v-accent);
+  box-shadow: 0 0 0 1px var(--v-accent), var(--v-shadow-sm);
+}
+.v-stat-icon {
+  width: 46px; height: 46px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.v-stat-icon.indigo { background: var(--v-accent-soft); color: var(--v-accent-h); }
+.v-stat-icon.green  { background: var(--v-green-soft);  color: var(--v-green); }
+.v-stat-icon.red    { background: var(--v-red-soft);    color: var(--v-red); }
+.v-stat-icon.amber  { background: var(--v-amber-soft);  color: var(--v-amber); }
+.v-stat-icon.cyan   { background: var(--v-cyan-soft);   color: var(--v-cyan); }
+.v-stat-label { font-size: 0.72rem; color: var(--v-text-muted); text-transform: uppercase; letter-spacing: .05em; }
+.v-stat-value { font-size: 1.45rem; font-weight: 800; color: var(--v-text); line-height: 1.1; }
+.v-stat-delta { font-size: 0.72rem; }
+.v-stat-delta.up   { color: var(--v-green); }
+.v-stat-delta.down { color: var(--v-red); }
+
+/* ─── TABLES ───────────────────────────────────────────────── */
+.v-table-wrap {
+  overflow-x: auto;
+  border-radius: var(--v-radius);
+  border: 1px solid var(--v-border);
+}
+.v-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+}
+.v-table thead th {
+  background: var(--v-surface-2);
+  color: var(--v-text-muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-weight: 700;
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--v-border);
+  white-space: nowrap;
+}
+.v-table tbody tr {
+  border-bottom: 1px solid var(--v-border);
+  transition: background .12s;
+}
+.v-table tbody tr:last-child { border-bottom: none; }
+.v-table tbody tr:hover { background: rgba(99,102,241,0.05); }
+.v-table td {
+  padding: 0.75rem 1rem;
+  color: var(--v-text);
+  vertical-align: middle;
+}
+.v-table td.muted { color: var(--v-text-muted); }
+.v-table .amount { font-variant-numeric: tabular-nums; font-weight: 600; }
+.v-table .amount.debit  { color: var(--v-red); }
+.v-table .amount.credit { color: var(--v-green); }
+
+/* sticky column filter row */
+.v-table-filter th {
+  background: var(--v-surface);
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--v-border-2);
+}
+.v-filter-select {
+  width: 100%;
+  background: var(--v-surface-2);
+  border: 1px solid var(--v-border);
+  color: var(--v-text-muted);
+  font-size: 0.7rem;
+  padding: 3px 6px;
+  border-radius: var(--v-radius-sm);
+  outline: none;
+}
+.v-filter-select:focus { border-color: var(--v-accent); color: var(--v-text); }
+.v-filter-select option { background: var(--v-surface-2); color: var(--v-text); }
+
+/* ─── BUTTONS ───────────────────────────────────────────────── */
+.v-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: var(--v-radius-sm);
+  border: none;
+  cursor: pointer;
+  transition: opacity .15s, box-shadow .15s, transform .12s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.v-btn:hover { opacity: .88; transform: translateY(-1px); }
+.v-btn:active { transform: translateY(0); }
+.v-btn-primary  { background: var(--v-accent);     color: #fff; }
+.v-btn-success  { background: var(--v-green);      color: #fff; }
+.v-btn-danger   { background: var(--v-red);        color: #fff; }
+.v-btn-ghost    { background: var(--v-accent-soft); color: var(--v-accent-h); border: 1px solid var(--v-accent); }
+.v-btn-ghost-muted { background: transparent; color: var(--v-text-muted); border: 1px solid var(--v-border-2); }
+.v-btn-icon     { padding: 0.4rem; width: 30px; height: 30px; justify-content: center; }
+.v-btn-sm       { padding: 0.3rem 0.7rem; font-size: 0.75rem; }
+
+/* ─── BADGES ───────────────────────────────────────────────── */
+.v-badge {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.68rem; font-weight: 700;
+  border-radius: 20px;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.v-badge-indigo { background: var(--v-accent-soft);  color: var(--v-accent-h);  border: 1px solid rgba(99,102,241,.25); }
+.v-badge-green  { background: var(--v-green-soft);   color: var(--v-green);     border: 1px solid rgba(34,197,94,.25); }
+.v-badge-red    { background: var(--v-red-soft);     color: var(--v-red);       border: 1px solid rgba(239,68,68,.25); }
+.v-badge-amber  { background: var(--v-amber-soft);   color: var(--v-amber);     border: 1px solid rgba(245,158,11,.25); }
+.v-badge-cyan   { background: var(--v-cyan-soft);    color: var(--v-cyan);      border: 1px solid rgba(6,182,212,.25); }
+.v-badge-muted  { background: rgba(148,163,184,.1);  color: var(--v-text-muted); border: 1px solid var(--v-border-2); }
+
+/* ─── FORMS (inside modals and pages) ─────────────────────── */
+.v-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--v-text-muted);
+  margin-bottom: 0.3rem;
+  display: block;
+}
+.v-input, .v-select, .v-textarea {
+  width: 100%;
+  background: var(--v-surface-2);
+  border: 1px solid var(--v-border-2);
+  border-radius: var(--v-radius-sm);
+  color: var(--v-text);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  transition: border-color .15s, box-shadow .15s;
+  outline: none;
+}
+.v-input:focus, .v-select:focus, .v-textarea:focus {
+  border-color: var(--v-accent);
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+}
+.v-input::placeholder { color: var(--v-text-faint); }
+.v-input[readonly] { opacity: .55; cursor: default; }
+.v-select option { background: var(--v-surface-2); color: var(--v-text); }
+
+/* ─── TABS ─────────────────────────────────────────────────── */
+.v-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--v-border);
+  gap: 0;
+  background: var(--v-surface);
+  padding-top: 0.25rem;
+}
+.v-tab {
+  padding: 0.75rem 1.25rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--v-text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color .15s, border-color .15s;
+  white-space: nowrap;
+  background: none;
+  border-top: none; border-left: none; border-right: none;
+  user-select: none;
+}
+.v-tab:hover { color: var(--v-text); }
+.v-tab.active {
+  color: var(--v-accent-h);
+  border-bottom-color: var(--v-accent);
+}
+.v-tab i { margin-right: 0.4rem; font-size: 0.85rem; }
+.v-tab-content { display: none; }
+.v-tab-content.active { display: block; }
+
+/* ─── MODALS ────────────────────────────────────────────────── */
+.v-modal .modal-content {
+  background: var(--v-surface);
+  border: 1px solid var(--v-border-2);
+  border-radius: var(--v-radius);
+  color: var(--v-text);
+}
+.v-modal .modal-header {
+  background: var(--v-surface-2);
+  border-bottom: 1px solid var(--v-border);
+  padding: 1rem 1.25rem;
+}
+.v-modal .modal-title { font-size: 0.95rem; font-weight: 700; color: var(--v-text); }
+.v-modal .btn-close { filter: invert(1); }
+.v-modal .modal-footer {
+  background: var(--v-surface-2);
+  border-top: 1px solid var(--v-border);
+  padding: 0.85rem 1.25rem;
+}
+.v-modal .modal-body { padding: 1.25rem; }
+
+/* ─── AVATAR INITIALS ───────────────────────────────────────── */
+.v-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--v-accent-soft);
+  border: 1px solid var(--v-accent);
+  color: var(--v-accent-h);
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.v-avatar.lg { width: 56px; height: 56px; font-size: 1.3rem; }
+
+/* ─── UTILITY ───────────────────────────────────────────────── */
+.v-divider { border: none; border-top: 1px solid var(--v-border); margin: 1rem 0; }
+.v-text-muted { color: var(--v-text-muted); }
+.v-text-accent { color: var(--v-accent-h); }
+.v-text-green  { color: var(--v-green); }
+.v-text-red    { color: var(--v-red); }
+.v-text-amber  { color: var(--v-amber); }
+
+/* ─── SEARCH BOX ────────────────────────────────────────────── */
+.v-search-wrap { position: relative; }
+.v-search-wrap i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--v-text-faint); font-size: 0.8rem; pointer-events: none; }
+.v-search-input { padding-left: 2rem !important; }
+
+/* ─── EMPTY STATE ───────────────────────────────────────────── */
+.v-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--v-text-faint);
+}
+.v-empty i { font-size: 2rem; margin-bottom: 0.75rem; display: block; }
+.v-empty p { font-size: 0.85rem; }
+
+/* ─── SCROLLABLE TABLE WRAPPER ──────────────────────────────── */
+.v-table-scroll { max-height: 70vh; overflow-y: auto; }
+.v-table-scroll thead th { position: sticky; top: 0; z-index: 10; }
+
+/* ─── GRID HELPERS ───────────────────────────────────────────── */
+.v-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.v-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+.v-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+@media(max-width:768px) {
+  .v-grid-2, .v-grid-3, .v-grid-4 { grid-template-columns: 1fr; }
+}
+
+/* ─── OVERRIDE BOOTSTRAP IN VENTAS CONTEXT ─────────────────── */
+.v-page .btn-close { filter: invert(1); }
+.v-page .form-check-input:checked { background-color: var(--v-accent); border-color: var(--v-accent); }

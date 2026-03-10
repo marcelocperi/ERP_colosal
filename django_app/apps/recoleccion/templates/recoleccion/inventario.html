@@ -1,0 +1,668 @@
+{% extends 'recoleccion/base_mobile.html' %}
+
+{% block header_title %}RECUENTO STOCK{% endblock %}
+
+{% block extra_css %}
+<style>
+    .product-display {
+        background: #000;
+        border: 2px solid #333;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-top: 1rem;
+        display: none;
+        /* Hidden until scan */
+    }
+
+    .stock-badge {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--accent-yellow);
+    }
+
+    .qty-controls {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 1.5rem;
+    }
+
+    .btn-qty {
+        width: 50px;
+        /* Reduced slightly */
+        height: 50px;
+        border-radius: 50%;
+        background: #2d3748;
+        color: #fff;
+        border: none;
+        font-size: 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .btn-qty:active {
+        background: var(--primary-orange);
+    }
+
+    .count-input {
+        flex-grow: 1;
+        max-width: 150px;
+        background: #1a202c;
+        border: 2px solid var(--primary-orange);
+        border-radius: 12px;
+        color: #fff;
+        font-size: 3rem;
+        font-weight: 800;
+        text-align: center;
+        padding: 0.5rem;
+    }
+
+    .item-counted {
+        opacity: 0.4;
+        filter: grayscale(1);
+        pointer-events: none;
+        /* Disable re-clicks once counted */
+        background: #000 !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Campaign Banner with Progress Bar -->
+<div id="campaign-banner" class="mb-3 d-none"
+    style="background:linear-gradient(135deg,#1565c0,#0d47a1);border-radius:12px;padding:14px 16px;box-shadow:0 4px 12px rgba(0,0,0,0.4);">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <div>
+            <div style="font-size:0.6rem;font-weight:800;opacity:0.7;letter-spacing:1px;color:#90caf9;">CAMPAÑA ACTIVA
+            </div>
+            <div class="d-flex align-items-baseline gap-2">
+                <span id="campaign-number" style="font-size:1.1rem;font-weight:900;color:#f39c12;">#?</span>
+                <span id="campaign-name" class="fw-bold" style="font-size:0.9rem;color:#fff;">Nombre Campaña</span>
+            </div>
+            <div id="campaign-date" style="font-size:0.7rem;color:#90caf9;margin-top:2px;"><i
+                    class="fas fa-calendar-alt me-1"></i>--/--/----</div>
+        </div>
+        <button class="btn btn-sm btn-outline-light py-0 fw-bold" onclick="closeCampaign()"
+            style="font-size:0.6rem;">CERRAR</button>
+    </div>
+    <!-- Progress bar -->
+    <div class="d-flex align-items-center gap-2">
+        <div style="flex:1;background:rgba(255,255,255,0.15);border-radius:20px;height:10px;overflow:hidden;">
+            <div id="camp-progress-bar"
+                style="height:100%;background:linear-gradient(90deg,#4caf50,#8bc34a);border-radius:20px;width:0%;transition:width 0.5s ease;">
+            </div>
+        </div>
+        <span id="campaign-progress" style="font-size:0.85rem;font-weight:800;color:#fff;white-space:nowrap;">0/0</span>
+    </div>
+</div>
+
+<!-- Scanner Status Indicator -->
+<div id="scanner-status" class="text-center mb-3 p-1 rounded-pill"
+    style="background: rgba(46, 204, 113, 0.1); border: 1px solid #2ecc71;">
+    <span class="small fw-bold text-success"><i class="fas fa-check-circle me-1"></i> ESCÁNER LISTO</span>
+</div>
+
+<!-- 1. Campaign List (First thing user sees in campaign mode) -->
+<div id="campaign-items-step" class="mb-3 d-none">
+    <div class="mb-2">
+        <label class="small text-muted text-uppercase fw-bold">LISTA DE PRODUCTOS PENDIENTES</label>
+    </div>
+    <div id="items-list" class="list-group list-group-flush rounded-3 border border-secondary shadow-lg"
+        style="max-height: 60vh; overflow-y: auto; background: #1a202c;">
+        <div class="text-center p-4 text-muted border-bottom border-secondary">
+            <i class="fas fa-spinner fa-spin me-2"></i> Cargando productos...
+        </div>
+    </div>
+</div>
+
+<!-- 2. Scanner Interface (Shown when an item is selected or in direct mode) -->
+<div id="scan-step">
+    <!-- Next Item Hint (Only if scan-step is visible) -->
+    <div id="next-item-hint"
+        class="bg-warning text-dark p-2 mb-3 rounded-3 shadow-sm d-none animate__animated animate__pulse animate__infinite">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-search me-2"></i>
+            <div>
+                <div style="font-size: 0.65rem; font-weight: 800; opacity: 0.8;">SIGUIENTE A ESCANEAR:</div>
+                <div id="next-item-name" class="fw-bold small">...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <button class="btn btn-industrial py-4 mb-3 shadow-lg" onclick="startCamera()"
+            style="font-size: 1.2rem; background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);">
+            <i class="fas fa-camera me-2"></i> ESCANEAR CÓDIGO
+        </button>
+
+        <div class="d-flex align-items-center gap-2">
+            <div class="flex-grow-1">
+                <label class="form-label extra-small text-muted text-uppercase fw-bold mb-1">Confirmar por
+                    Código</label>
+                <input type="text" id="barcode-input" class="form-control scanner-input"
+                    placeholder="Pulse aquí para teclado" autofocus autocomplete="off" inputmode="none">
+            </div>
+            <button class="btn btn-outline-info p-3 mt-4" onclick="toggleKeyboard()" style="height: 50px; width: 55px;">
+                <i class="fas fa-keyboard"></i>
+            </button>
+        </div>
+    </div>
+
+    <div id="back-to-list-btn" class="text-center mt-3 d-none">
+        <button class="btn btn-link text-muted" onclick="showCampaignList()">
+            <i class="fas fa-arrow-left me-1"></i> VOLVER A LA LISTA
+        </button>
+    </div>
+</div>
+
+<div id="result-step" class="product-display">
+    <div class="text-center mb-3">
+        <h2 id="prod-name" class="h5 fw-bold mb-1 text-white">NOMBRE DEL PRODUCTO</h2>
+        <p id="prod-code" class="text-muted small">CODE123456</p>
+    </div>
+
+    <!-- Blind inventory: Stock and Diff removed for operators -->
+    <div class="bg-dark p-3 rounded-4 border border-secondary mb-4 text-center">
+        <div class="text-muted small text-uppercase">Ingrese cantidad física contada</div>
+    </div>
+
+    <div class="text-center">
+        <label class="small text-muted text-uppercase fw-bold">NUEVA CANTIDAD FÍSICA</label>
+        <div class="qty-controls">
+            <button class="btn-qty" onclick="changeQty(-1)"><i class="fas fa-minus"></i></button>
+            <input type="number" id="new-qty" class="count-input" value="0">
+            <button class="btn-qty" onclick="changeQty(1)"><i class="fas fa-plus"></i></button>
+        </div>
+    </div>
+
+    <button class="btn-industrial mt-5" onclick="saveCount()">
+        <i class="fas fa-save"></i> GUARDAR RECUENTO
+    </button>
+    <button class="btn btn-link text-muted w-100 mt-2" onclick="resetScanner()">CANCELAR</button>
+</div>
+
+<!-- Modal Cámara -->
+<div id="camera-modal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:2000;">
+    <div id="reader" style="width:100%; height:100%;"></div>
+    <button class="btn btn-danger" style="position:absolute; bottom:20px; left:50%; transform:translateX(-50%);"
+        onclick="stopCamera()">CERRAR</button>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script>
+    let currentArticulo = null;
+    let html5QrCode = null;
+    const invId = new URLSearchParams(window.location.search).get('inv_id');
+    let currentItem = null; // For campaign items
+    let scannedCode = null; // Last scanned code
+    let scanWasForced = false; // Was the last scan forced?
+
+    $(document).ready(function () {
+        if (invId) {
+            setupCampaign();
+            // Start in list view
+            $('#campaign-items-step').removeClass('d-none');
+            $('#scan-step').addClass('d-none');
+        } else {
+            $('#scan-step').removeClass('d-none');
+        }
+
+        // Keep focus on input aggressively
+        const focusInput = () => {
+            // Only focus if scan-step is visible and result/swal/camera are not
+            if ($('#scan-step').is(':visible') && !Swal.isVisible() && !$('#camera-modal').is(':visible')) {
+                const input = $('#barcode-input');
+                if (input.length) {
+                    input.focus();
+                    if (input.attr('inputmode') === 'none') {
+                        $('#scanner-status').html('<span class="small fw-bold text-success"><i class="fas fa-check-circle me-1"></i> ESCÁNER LISTO</span>')
+                            .css({ 'background': 'rgba(46, 204, 113, 0.1)', 'border-color': '#2ecc71' });
+                    }
+                }
+            }
+        };
+
+        $('#barcode-input').on('blur', function () {
+            if ($(this).attr('inputmode') === 'none') {
+                $('#scanner-status').html('<span class="small fw-bold text-danger"><i class="fas fa-times-circle me-1"></i> TOQUE AQUÍ PARA ACTIVAR LÁSER</span>')
+                    .css({ 'background': 'rgba(231, 76, 60, 0.1)', 'border-color': '#e74c3c' });
+                setTimeout(focusInput, 1500);
+            }
+        });
+
+        $('#scanner-status').on('click', focusInput);
+        $(document).on('click', focusInput);
+
+        // Handle Enter key from scanner (Code 13 or 9)
+        $('#barcode-input').on('keydown', function (e) {
+            if (e.which == 13 || e.which == 9) {
+                e.preventDefault();
+                processBarcode($(this).val());
+            }
+        });
+
+        focusInput();
+    });
+
+    function processBarcode(code) {
+        if (!code) return;
+        code = code.trim();
+
+        // Ensure we don't process while already searching
+        if (Swal.isVisible() && Swal.getIcon() === 'info') return;
+
+        // If we have a SELECTED item from the list, we must VERIFY it
+        if (currentItem) {
+            // Simplified check: only against codigo
+            if (code == currentItem.codigo) {
+                scannedCode = code;
+                scanWasForced = false;
+                showProduct({
+                    id: currentItem.articulo_id,
+                    nombre: currentItem.nombre,
+                    codigo: currentItem.codigo,
+                    stock_actual: currentItem.stock_sistema
+                });
+                $('#barcode-input').val('');
+                return;
+            } else {
+                Swal.fire({
+                    title: 'Código Diferente',
+                    html: `Escaneado: <b>${code}</b><br>Esperado: <b>${currentItem.codigo}</b><br><br><small class="text-muted">Si está seguro que es el artículo, puede forzarlo.</small>`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'USAR DE TODAS FORMAS',
+                    cancelButtonText: 'RE-ESCANEAR',
+                    confirmButtonColor: '#2ecc71',
+                    cancelButtonColor: '#95a5a6'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        scannedCode = code;    // Remember the FORCED code
+                        scanWasForced = true;
+                        showProduct({
+                            id: currentItem.articulo_id,
+                            nombre: currentItem.nombre,
+                            codigo: currentItem.codigo,
+                            stock_actual: currentItem.stock_sistema
+                        });
+                        $('#barcode-input').val('');
+                    } else {
+                        $('#barcode-input').val('').focus();
+                        startCamera(); // Restart camera if they want to try again
+                    }
+                });
+                return;
+            }
+        }
+
+        // If in direct mode OR scanning without selection (global search)
+        // If in direct mode OR scanning without selection (global search)
+        Swal.fire({
+            title: 'Buscando Articulo...',
+            html: `Código: <b>${code}</b>`,
+            didOpen: () => { Swal.showLoading() },
+            allowOutsideClick: false
+        });
+
+        $.get('{% url "stock:get_articulo_by_code" %}', { code: code, sid: sid }, function (res) {
+            Swal.close();
+            if (res.success) {
+                if (invId) {
+                    let itemInCampaign = findItemByCode(code);
+                    if (itemInCampaign) {
+                        currentItem = itemInCampaign;
+                        showProduct({
+                            id: res.articulo.id,
+                            nombre: res.articulo.nombre,
+                            codigo: res.articulo.codigo,
+                            stock_actual: res.articulo.stock_actual
+                        });
+                        return;
+                    } else {
+                        Swal.fire('No en Campaña', 'El artículo existe pero no es parte de esta campaña.', 'warning');
+                        $('#barcode-input').val('').focus();
+                        return;
+                    }
+                }
+                showProduct(res.articulo);
+                $('#barcode-input').val('');
+            } else {
+                Swal.fire('No encontrado', `El código <b>${code}</b> no existe en el sistema.`, 'warning');
+                $('#barcode-input').val('').focus();
+            }
+        }).fail(function (xhr) {
+            Swal.close();
+            let msg = 'Error de conexión con el servidor.';
+            if (xhr.status === 404) {
+                Swal.fire('No encontrado', `El código <b>${code}</b> no existe.`, 'warning');
+            } else {
+                Swal.fire('Error', msg + ' (Status: ' + xhr.status + ')', 'error');
+            }
+            $('#barcode-input').val('').focus();
+        });
+    }
+
+    function setupCampaign() {
+        $('#campaign-banner').removeClass('d-none');
+        $('#campaign-items-step').removeClass('d-none');
+        $('#scan-step').addClass('d-none'); // Hide scanner initially
+        $('#result-step').hide();
+
+        const name = new URLSearchParams(window.location.search).get('name') || "Campaña en Proceso";
+        $('#campaign-name').text(name);
+        $('#campaign-number').text('#' + invId);
+
+        loadCampaignItems();
+
+        // Hide scanner status until an item is selected
+        $('#scanner-status').hide();
+    }
+
+    function showCampaignList() {
+        currentItem = null;
+        currentArticulo = null;
+        $('#scan-step').hide();
+        $('#result-step').hide();
+        $('#campaign-items-step').show();
+        $('#scanner-status').hide();
+        $('#barcode-input').val('');
+    }
+
+    let campaignItems = [];
+    function loadCampaignItems() {
+        $('#items-list').html('<div class="text-center p-4 text-muted border-bottom border-secondary"><i class="fas fa-spinner fa-spin me-2"></i> Cargando lista...</div>');
+
+        $.get(`/recoleccion/api/campania/${invId}/items/?sid=${sid}`, function (res) {
+            if (res.success) {
+                campaignItems = res.items;
+                // Show campaign date from metadata
+                if (res.campania && res.campania.fecha_inicio) {
+                    const d = new Date(res.campania.fecha_inicio);
+                    const fmt = d.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                    $('#campaign-date').html(`<i class="fas fa-calendar-alt me-1"></i>${fmt}`);
+                }
+                if (campaignItems.length === 0) {
+                    $('#items-list').html('<div class="text-center p-4 text-warning">Esta campaña no tiene artículos asignados.</div>');
+                } else {
+                    renderItems();
+                }
+            } else {
+                Swal.fire('Error', res.message || 'No se pudo cargar la lista', 'error');
+            }
+        }).fail(function (xhr) {
+            $('#items-list').html(`<div class="text-center p-4 text-danger">Error de conexión (${xhr.status}).</div>`);
+        });
+    }
+
+    function renderItems() {
+        let html = '';
+        let contados = 0;
+        let nextItemSet = false;
+
+        campaignItems.forEach((item, index) => {
+            let isCounted = item.user_id !== null;
+            let statusClass = isCounted ? 'item-counted' : 'border-start border-4 border-warning';
+            if (isCounted) contados++;
+
+            // Forced code display
+            let codeDisplay = item.codigo;
+            let forzadoBadge = '';
+            if (item.es_forzado && item.codigo_escaneado) {
+                codeDisplay = item.codigo_escaneado;
+                forzadoBadge = ' <span class="badge" style="background:#ff9800;font-size:9px;">⚠ FORZADO</span>';
+            }
+
+            html += `
+                <div class="list-group-item bg-dark text-white p-3 mb-1 ${statusClass}" 
+                     onclick="${isCounted ? '' : `showProductFromCampaign(${JSON.stringify(item).replace(/"/g, '&quot;')})`}" 
+                     style="cursor: ${isCounted ? 'default' : 'pointer'};">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3 text-muted fw-bold" style="width: 25px;">#${index + 1}</div>
+                        <div style="flex: 1; min-width: 0;">
+                            <div class="fw-bold text-truncate">${item.nombre}</div>
+                            <div class="extra-small text-info">${codeDisplay}${forzadoBadge}</div>
+                        </div>
+                        <div class="ms-2">
+                             ${isCounted ? '<i class="fas fa-check-circle text-success h4 mb-0"></i>' : '<span class="badge bg-warning text-dark">PEND</span>'}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        if (!nextItemSet) {
+            $('#next-item-hint').addClass('d-none'); // All counted
+        }
+
+        $('#items-list').html(html);
+        const pct = campaignItems.length > 0 ? Math.round((contados / campaignItems.length) * 100) : 0;
+        $('#campaign-progress').text(`${contados}/${campaignItems.length}`);
+        $('#camp-progress-bar').css('width', pct + '%');
+    }
+
+    function findItemByCode(code) {
+        return campaignItems.find(it => it.codigo == code || it.isbn == code);
+    }
+
+    function showProductFromCampaign(item) {
+        currentItem = item;
+        scannedCode = null; // Reset on new selection
+        scanWasForced = false;
+        $('#campaign-items-step').hide();
+        $('#scan-step').show();
+        $('#scanner-status').show();
+        $('#back-to-list-btn').removeClass('d-none');
+
+        const input = $('#barcode-input');
+        input.val('').attr('placeholder', 'Confirme: ' + item.codigo);
+
+        // Since user has NO LASER, auto-start camera immediately
+        startCamera();
+
+        $('#scanner-status').html('<span class="small fw-bold text-warning pulse"><i class="fas fa-camera me-1"></i> APUNTE AL CÓDIGO...</span>')
+            .css({ 'background': 'rgba(243, 156, 18, 0.1)', 'border-color': '#f39c12' });
+    }
+
+    function showProduct(art) {
+        currentArticulo = art;
+        $('#prod-name').text(art.nombre);
+        $('#prod-code').text(art.codigo);
+        $('#new-qty').val('1'); // Default to 1 for blind inventory
+
+        $('#scan-step').fadeOut(200, function () {
+            $('#result-step').fadeIn(200);
+            setTimeout(() => $('#new-qty').focus().select(), 300);
+        });
+    }
+
+    function changeQty(val) {
+        let current = parseInt($('#new-qty').val()) || 0;
+        $('#new-qty').val(Math.max(0, current + val));
+        viber();
+    }
+
+    function resetScanner() {
+        if (invId) {
+            showCampaignList();
+        } else {
+            $('#result-step').fadeOut(200, function () {
+                $('#scan-step').fadeIn(200);
+                $('#barcode-input').val('').focus();
+                currentArticulo = null;
+                currentItem = null;
+            });
+        }
+    }
+
+    function saveCount() {
+        let newQty = $('#new-qty').val();
+
+        Swal.fire({
+            title: '¿Confirmar Recuento?',
+            text: invId ? `Se actualizará la campaña con ${newQty} unidades.` : `Se enviará ajuste por ${newQty} unidades.`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, Confirmar',
+            cancelButtonText: 'Revisar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let payload = {
+                    articulo_id: currentArticulo.id,
+                    cantidad: newQty
+                };
+                if (invId && currentItem) {
+                    payload.campania_id = invId;
+                    payload.item_id = currentItem.id;
+                    payload.codigo_escaneado = scannedCode || currentItem.codigo;
+                    payload.es_forzado = scanWasForced;
+                }
+
+                $.ajax({
+                    url: '{% url "recoleccion:api_save_recuento" %}?sid=' + sid,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+                    data: JSON.stringify(payload),
+                    success: function (data) {
+                        if (data.success) {
+                            Swal.fire({
+                                title: '¡Guardado!',
+                                text: data.message,
+                                icon: 'success',
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                            if (invId) loadCampaignItems();
+                            resetScanner();
+                        } else {
+                            Swal.fire('Error', data.message, 'error');
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error('Error:', xhr);
+                        let msg = 'Fallo al guardar.';
+                        if (xhr.status === 401) msg = "Sesión expirada.";
+                        if (xhr.status === 403) msg = "Sin permisos.";
+                        Swal.fire('Error', msg + ' (Status: ' + xhr.status + ')', 'error');
+                    }
+                });
+            }
+        });
+    }
+
+    function closeCampaign() {
+        Swal.fire({
+            title: '¿Cerrar Campaña?',
+            text: "Se dará por finalizado el relevamiento. Los artículos no contados quedarán pendientes.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, Cerrar',
+            cancelButtonColor: '#d33'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`/recoleccion/api/campania/${invId}/cerrar/?sid=${sid}`, {
+                    method: 'POST',
+                    headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+                }).then(r => r.json()).then(data => {
+                    if (data.success) {
+                        window.location.href = '{% url "recoleccion:campanias" %}?sid=' + sid;
+                    }
+                });
+            }
+        });
+    }
+
+    // Camera Scan Logic - Improved for older Android
+    function startCamera() {
+        $('#camera-modal').show();
+
+        // Ensure library is loaded
+        if (typeof Html5Qrcode === "undefined") {
+            Swal.fire('Error', 'Librería de cámara no cargada', 'error');
+            $('#camera-modal').hide();
+            return;
+        }
+
+        html5QrCode = new Html5Qrcode("reader");
+        const config = {
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+            aspectRatio: 1.0
+        };
+
+        // Attempt environment camera first with a more robust method
+        html5QrCode.start(
+            { facingMode: "environment" },
+            config,
+            (decodedText) => {
+                viber();
+                stopCamera();
+                processBarcode(decodedText);
+            },
+            (errorMessage) => {
+                // Ignore petty scan errors
+            }
+        ).catch(err => {
+            console.error("Camera Error:", err);
+            // If environment fails, try any available camera
+            html5QrCode.start(
+                { facingMode: "user" },
+                config,
+                (decodedText) => {
+                    viber();
+                    stopCamera();
+                    processBarcode(decodedText);
+                }
+            ).catch(err2 => {
+                Swal.fire({
+                    title: 'Error de Cámara',
+                    text: 'No se pudo acceder a la cámara. Verifique los permisos del navegador o use entrada manual.',
+                    icon: 'error'
+                });
+                $('#camera-modal').hide();
+            });
+        });
+    }
+
+    function stopCamera() {
+        if (html5QrCode) {
+            html5QrCode.stop().then(() => {
+                $('#camera-modal').hide();
+                html5QrCode = null;
+            }).catch(() => {
+                $('#camera-modal').hide();
+                html5QrCode = null;
+            });
+        } else {
+            $('#camera-modal').hide();
+        }
+    }
+
+    function toggleKeyboard() {
+        const input = $('#barcode-input');
+        if (input.attr('inputmode') === 'none') {
+            input.attr('inputmode', 'text');
+            input.attr('placeholder', 'Ingrese código manual...');
+            $('#scanner-status').hide();
+            Swal.fire({
+                toast: true,
+                position: 'top',
+                title: 'Teclado Activado',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        } else {
+            input.attr('inputmode', 'none');
+            input.attr('placeholder', 'Escanee ítem...');
+            $('#scanner-status').show();
+        }
+        input.focus();
+    }
+</script>
+{% endblock %}

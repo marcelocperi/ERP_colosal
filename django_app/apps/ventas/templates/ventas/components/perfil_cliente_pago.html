@@ -1,0 +1,123 @@
+<!-- Medios de Pago -->
+<div data-tab-panel id="pago" role="tabpanel" style="display:none;">
+    <div class="p-3">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h5 class="fw-bold mb-1"><i class="fas fa-handshake me-2 text-primary"></i> Condiciones de Pago Habilitadas</h5>
+                <p class="text-muted small mb-0">Gestione qué formas de pago están permitidas para este cliente en el facturador.</p>
+            </div>
+            <div class="bg-light p-2 rounded border">
+                <small class="text-muted text-uppercase fw-bold x-small">Habilitación Vigente</small>
+            </div>
+        </div>
+
+        <form action="{% url 'ventas:habilitar_condiciones_pago' cliente.id %}" method="POST">
+            {% csrf_token %}
+            
+            <!-- BLOQUE 1: INCLUIDAS EN MAESTRA -->
+            <div class="card shadow-sm mb-4 border-0">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <h6 class="text-info fw-bold m-0"><i class="fas fa-star me-2"></i>Incluidas en Condición Maestra</h6>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-hover table-striped mb-0 align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-3">Condición</th>
+                                <th>Detalles Comerciales</th>
+                                <th class="text-center" style="width: 150px;">Habilitada?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cond in condiciones %}
+                            {% if cond.id in incluidas_en_maestra %}
+                            <tr>
+                                <td class="ps-3">
+                                    <div class="fw-bold text-dark">{{ cond.nombre }}</div>
+                                    <small class="text-muted">ID: {{ cond.id }}</small>
+                                </td>
+                                <td>
+                                    <div class="small">
+                                        <i class="fas fa-calendar-alt me-1 opacity-50"></i> {{ cond.dias_vencimiento }} días vencimiento<br>
+                                        <i class="fas fa-tag me-1 opacity-50"></i> {{ cond.descuento_pct }}% Descuento
+                                    </div>
+                                </td>
+                                <td class="text-center px-3">
+                                    {% with h=habilitadas|get_item:cond.id %}
+                                    <select name="habilitado_{{ cond.id }}" class="form-select form-select-sm">
+                                        <option value="1" {% if not h or h.habilitado == 1 %}selected{% endif %}>Si</option>
+                                        <option value="0" {% if h and h.habilitado == 0 %}selected{% endif %}>No</option>
+                                    </select>
+                                    {% endwith %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center py-4 text-muted small italic">
+                                    <i class="fas fa-info-circle me-1"></i> No se encontraron condiciones en la Condición Maestra asignada.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- BLOQUE 2: OTRAS CONDICIONES -->
+            <div class="card shadow-sm mb-4 border-0">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <h6 class="text-secondary fw-bold m-0"><i class="fas fa-plus-circle me-2"></i>Otras Condiciones Disponibles</h6>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-hover table-striped mb-0 align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-3">Condición</th>
+                                <th>Detalles Comerciales</th>
+                                <th class="text-center" style="width: 150px;">Admitir?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cond in condiciones %}
+                            {% if cond.id not in incluidas_en_maestra %}
+                            <tr>
+                                <td class="ps-3">
+                                    <div class="fw-bold text-dark">{{ cond.nombre }}</div>
+                                    <small class="text-muted">ID: {{ cond.id }}</small>
+                                </td>
+                                <td>
+                                    <div class="small">
+                                        <i class="fas fa-calendar-alt me-1 opacity-50"></i> {{ cond.dias_vencimiento }} días vencimiento<br>
+                                        <i class="fas fa-tag me-1 opacity-50"></i> {{ cond.descuento_pct }}% Descuento
+                                    </div>
+                                </td>
+                                <td class="text-center px-3">
+                                    {% with h=habilitadas|get_item:cond.id %}
+                                    <select name="habilitado_{{ cond.id }}" class="form-select form-select-sm">
+                                        <option value="1" {% if h and h.habilitado == 1 %}selected{% endif %}>Si</option>
+                                        <option value="0" {% if not h or h.habilitado == 0 %}selected{% endif %}>No</option>
+                                    </select>
+                                    {% endwith %}
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {% if 'gerente_ventas' in permissions or 'admin' in permissions or 'all' in permissions %}
+            <div class="text-end mt-3">
+                <button type="submit" class="btn btn-primary btn-lg shadow-sm px-5">
+                    <i class="fas fa-save me-2"></i> Actualizar Habilitaciones
+                </button>
+            </div>
+            {% else %}
+            <div class="alert alert-light border small text-center">
+                <i class="fas fa-lock me-1"></i> No tiene permisos suficientes para modificar las habilitaciones comerciales.
+            </div>
+            {% endif %}
+        </form>
+    </div>
+</div>

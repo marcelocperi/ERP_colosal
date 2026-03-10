@@ -111,7 +111,7 @@
                 <td colspan="7" style="text-align:center; padding:4rem;">No hay impresoras configuradas. Agrega la
                     primera con el botón de arriba.</td>
             </tr>
-            {% endfor %}
+            {% endif %}
         </tbody>
     </table>
 </div>
@@ -295,4 +295,5 @@
         toggleModal('modal-printer');
     }
 </script>
+{% endfor %}
 {% endblock %}

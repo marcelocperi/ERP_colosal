@@ -4,7 +4,7 @@ import logging
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, HttpResponse
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required, permission_required
+from apps.core.decorators import login_required, permission_required
 from apps.core.db import get_db_cursor, dictfetchall, dictfetchone
 
 logger = logging.getLogger(__name__)
@@ -256,3 +256,136 @@ def tipos_articulo(request):
 def tipo_articulo_guardar(request): return redirect('stock:tipos_articulo')
 @login_required
 def api_articulo_seguridad(request, articulo_id): return JsonResponse({'success': False, 'message': 'Stub'})
+
+@login_required
+def api_get_articulo_by_code(request):
+    """Fetch article by exact code/ISBN/Barcode"""
+    try:
+        ent_id = getattr(request, 'user_data', {}).get('enterprise_id', 0)
+        code = request.GET.get('code')
+        if not code:
+            return JsonResponse({'success': False, 'message': 'Código no proporcionado'}, status=400)
+        
+        # Protect against INT overflow for barcodes in the 'id' field
+        numeric_id = -1
+        if code.isdigit() and len(code) < 10: # Only try as ID if it's short
+            numeric_id = int(code)
+
+        with get_db_cursor(dictionary=True) as cursor:
+            cursor.execute("""
+                SELECT id, nombre, codigo, precio_venta, costo_reposicion, stock_minimo
+                FROM stk_articulos 
+                WHERE (enterprise_id = %s OR enterprise_id = 0) AND (codigo = %s OR id = %s)
+                LIMIT 1
+            """, (ent_id, code, numeric_id))
+            articulo = dictfetchone(cursor)
+            
+            if articulo:
+                # Get stock levels
+                cursor.execute("SELECT SUM(cantidad) as total FROM stk_existencias WHERE articulo_id = %s AND enterprise_id = %s", (articulo['id'], ent_id))
+                stock = dictfetchone(cursor)
+                articulo['stock_actual'] = float(stock['total'] or 0)
+                return JsonResponse({'success': True, 'articulo': articulo})
+            
+        return JsonResponse({'success': False, 'message': 'Artículo no encontrado'}, status=404)
+    except Exception as e:
+        logger.error(f"Error in api_get_articulo_by_code: {e}", exc_info=True)
+        return JsonResponse({'success': False, 'message': str(e)}, status=500)
+
+@login_required
+@permission_required('approve_inventory_adjustments')
+def ajustes_pendientes(request):
+    """Supervisor view to list and approve inventory adjustments"""
+    ent_id = getattr(request, 'user_data', {}).get('enterprise_id', 0)
+    with get_db_cursor() as cursor:
+        cursor.execute("""
+            SELECT aj.*, a.nombre as articulo_nombre, a.codigo as articulo_codigo, u.username as solicitante
+            FROM stk_ajustes_pendientes aj
+            JOIN stk_articulos a ON aj.articulo_id = a.id
+            JOIN sys_users u ON aj.user_id = u.id
+            WHERE aj.enterprise_id = %s AND aj.estado = 'PENDIENTE'
+            ORDER BY aj.fecha_creacion DESC
+        """, (ent_id,))
+        ajustes = dictfetchall(cursor)
+    return render(request, 'stock/ajustes_pendientes.html', {'ajustes': ajustes})
+
+@login_required
+@permission_required('approve_inventory_adjustments')
+def ajuste_procesar(request):
+    """Approve or reject inventory adjustments in bulk or individually"""
+    if request.method != 'POST':
+        return redirect('stock:ajustes_pendientes')
+    
+    ent_id = getattr(request, 'user_data', {}).get('enterprise_id', 0)
+    user_id = request.user_data['id']
+    ids = request.POST.getlist('ajuste_ids')
+    accion = request.POST.get('accion') # 'APROBAR' or 'RECHAZAR'
+
+    if not ids:
+        messages.warning(request, "No se seleccionaron ajustes.")
+        return redirect('stock:ajustes_pendientes')
+
+    try:
+        with get_db_cursor() as cursor:
+            # Get default depot for this enterprise
+            cursor.execute("SELECT id FROM stk_depositos WHERE enterprise_id = %s LIMIT 1", (ent_id,))
+            depot = dictfetchone(cursor)
+            deposito_id = depot['id'] if depot else 1
+
+            for aj_id in ids:
+                if accion == 'RECHAZAR':
+                    cursor.execute("""
+                        UPDATE stk_ajustes_pendientes 
+                        SET estado='RECHAZADO', supervisor_id=%s, fecha_aprobacion=NOW() 
+                        WHERE id=%s AND enterprise_id=%s
+                    """, (user_id, aj_id, ent_id))
+                elif accion == 'APROBAR':
+                    # 1. Get adjustment details
+                    cursor.execute("SELECT * FROM stk_ajustes_pendientes WHERE id=%s AND enterprise_id=%s", (aj_id, ent_id))
+                    aj = dictfetchone(cursor)
+                    if not aj or aj['estado'] != 'PENDIENTE': continue
+
+                    # 2. Create Movement Header
+                    motivo_id = 47 if aj['diferencia'] > 0 else 40 
+                    cursor.execute("""
+                        INSERT INTO stk_movimientos 
+                        (enterprise_id, fecha, motivo_id, deposito_destino_id, user_id, observaciones, estado)
+                        VALUES (%s, NOW(), %s, %s, %s, %s, 'PROCESADO')
+                    """, (ent_id, motivo_id, deposito_id, user_id, f"Ajuste Recolector #{aj['id']}"))
+                    movimiento_id = cursor.lastrowid
+
+                    # 3. Create Movement Detail
+                    cursor.execute("""
+                        INSERT INTO stk_movimientos_detalle 
+                        (enterprise_id, movimiento_id, articulo_id, cantidad, user_id)
+                        VALUES (%s, %s, %s, %s, %s)
+                    """, (ent_id, movimiento_id, aj['articulo_id'], aj['diferencia'], user_id))
+
+                    # 4. Update Existences
+                    cursor.execute("""
+                        SELECT id FROM stk_existencias 
+                        WHERE articulo_id=%s AND enterprise_id=%s AND deposito_id=%s 
+                        LIMIT 1
+                    """, (aj['articulo_id'], ent_id, deposito_id))
+                    exist = dictfetchone(cursor)
+                    
+                    if exist:
+                        cursor.execute("UPDATE stk_existencias SET cantidad = cantidad + %s WHERE id=%s", (aj['diferencia'], exist['id']))
+                    else:
+                        cursor.execute("""
+                            INSERT INTO stk_existencias (enterprise_id, articulo_id, deposito_id, cantidad) 
+                            VALUES (%s, %s, %s, %s)
+                        """, (ent_id, aj['articulo_id'], deposito_id, aj['cantidad_contada']))
+
+                    # 5. Mark adjustment as Approved
+                    cursor.execute("""
+                        UPDATE stk_ajustes_pendientes 
+                        SET estado='APROBADO', supervisor_id=%s, fecha_aprobacion=NOW() 
+                        WHERE id=%s
+                    """, (user_id, aj_id))
+                    
+        messages.success(request, f"Se han {accion.lower()}do {len(ids)} ajustes correctamente.")
+    except Exception as e:
+        messages.error(request, f"Error al procesar ajustes: {str(e)}")
+
+    return redirect('stock:ajustes_pendientes')

@@ -1,0 +1,91 @@
+<style>
+    .horizontal-tabs {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        white-space: nowrap;
+        margin-bottom: 0px;
+        border-bottom: 1px solid #dee2e6;
+        width: 100%;
+        scrollbar-width: thin;
+    }
+
+    .horizontal-tabs::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .horizontal-tabs::-webkit-scrollbar-thumb {
+        background-color: #4e73df;
+        border-radius: 10px;
+    }
+
+    .horizontal-tabs .nav-link {
+        display: block;
+        color: #5a5c69;
+        font-weight: 600;
+        padding: 0.8rem 1.2rem;
+        font-size: 0.9rem;
+        border-radius: 0;
+        border: none;
+        border-bottom: 3px solid transparent;
+        transition: all 0.2s;
+        cursor: pointer;
+        text-decoration: none;
+        background: none;
+    }
+
+    .horizontal-tabs .nav-link:hover {
+        background-color: rgba(78, 115, 223, 0.05);
+        color: #4e73df;
+    }
+
+    .horizontal-tabs .nav-link.active {
+        color: #4e73df !important;
+        border-bottom: 3px solid #4e73df;
+    }
+
+    .tab-pane {
+        display: none;
+    }
+
+    .tab-pane.active {
+        display: block;
+    }
+</style>
+
+<div class="card shadow-sm border-0 mb-3">
+    <div class="card-header bg-white p-0">
+        <ul class="nav nav-tabs horizontal-tabs" id="clienteTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="ficha-tab" onclick="switchTab('ficha')" role="tab"><i
+                        class="fas fa-id-card me-2"></i>Ficha</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="sedes-tab" onclick="switchTab('sedes')" role="tab"><i
+                        class="fas fa-map-marker-alt me-2"></i>Sedes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="contactos-tab" onclick="switchTab('contactos')" role="tab"><i
+                        class="fas fa-users me-2"></i>Contactos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="fiscal-tab" onclick="switchTab('fiscal')" role="tab"><i
+                        class="fas fa-file-invoice-dollar me-2"></i>Impuestos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="cm05-tab" onclick="switchTab('cm05')" role="tab"><i
+                        class="fas fa-globe-americas me-2"></i>CM05</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="pago-tab" onclick="switchTab('pago')" role="tab"><i
+                        class="fas fa-handshake me-2"></i>Medios de Pago</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="ctacte-tab" onclick="switchTab('ctacte')" role="tab"><i
+                        class="fas fa-money-check-alt me-2"></i>Cta. Cte.</a>
+            </li>
+        </ul>
+    </div>
+</div>

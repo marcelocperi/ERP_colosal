@@ -42,7 +42,7 @@
                             <td class="text-end">${{ n.total_neto }}</td>
                             <td class="text-center">
                                 {% if not n.asiento_id %}
-                                <form action="{{ url 'contabilidad:centralizar_sueldos' n.id }}" method="POST"
+                                <form action="{% url 'contabilidad:centralizar_sueldos' n.id  %}" method="POST"
                                     style="display:inline;">
                                     <input type="hidden" name="sid" value="{{ sid }}">
                                     <button type="submit" class="btn btn-sm btn-info" title="Centralizar Contablemente">
@@ -50,14 +50,14 @@
                                     </button>
                                 </form>
                                 {% else %}
-                                <a href="{{ url 'contabilidad:ver_asiento' n.asiento_id }}"
+                                <a href="{% url 'contabilidad:ver_asiento' n.asiento_id  %}"
                                     class="btn btn-sm btn-secondary">
                                     Ver Asiento #{{ n.asiento_id }}
                                 </a>
                                 {% endif %}
                             </td>
                         </tr>
-                        {% else %}
+                        {% empty %}
                         <tr>
                             <td colspan="6" class="text-center text-muted">No hay nóminas registradas.</td>
                         </tr>

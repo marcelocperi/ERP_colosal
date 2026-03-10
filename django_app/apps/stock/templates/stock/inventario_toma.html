@@ -61,7 +61,7 @@
                     </td>
                     <td
                         class="text-center fw-bold {% if item.stock_fisico != item.stock_sistema %}text-danger{% else %}text-success{% endif %}">
-                        {{ item.stock_fisico - item.stock_sistema }}
+                        {{ item.diferencia }}
                     </td>
                     <td class="text-center">
                         {% if item.stock_fisico != item.stock_sistema %}

@@ -30,12 +30,16 @@ def url_for(endpoint, **kwargs):
     except Exception:
         return ""
 
+from django.utils.safestring import mark_safe
+
 @register.filter(name='tojson')
 def tojson(value):
-    return json.dumps(value, cls=CustomJSONEncoder)
+    return mark_safe(json.dumps(value, cls=CustomJSONEncoder))
 
 @register.filter(name='get_item')
 def get_item(dictionary, key):
+    if dictionary is None:
+        return None
     return dictionary.get(key)
 
 @register.filter(name='replace_underscore')

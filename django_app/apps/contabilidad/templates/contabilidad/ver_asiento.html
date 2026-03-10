@@ -46,22 +46,24 @@
                                 <div class="small text-muted">{{ d.cuenta_nombre }}</div>
                             </td>
                             <td>{{ d.glosa|default:'-' }}</td>
-                            <td class="text-end text-primary">{% if d.debe > 0 %}{{ d.debe | format_currency }}{% else %}-{% endif %}</td>
-                            <td class="text-end text-danger">{% if d.haber > 0 %}{{ d.haber | format_currency }}{% else %}-{% endif %}</td>
+                            <td class="text-end text-primary">{% if d.debe > 0 %}{{ d.debe |floatformat:2 }}{% else
+                                %}-{% endif %}</td>
+                            <td class="text-end text-danger">{% if d.haber > 0 %}{{ d.haber |floatformat:2 }}{% else
+                                %}-{% endif %}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                     <tfoot class="table-dark">
                         <tr>
                             <td colspan="2" class="text-end fw-bold">TOTALES</td>
-                            <td class="text-end fw-bold">${{ detalles | sum(attribute='debe') }}</td>
-                            <td class="text-end fw-bold">${{ detalles | sum(attribute='haber') }}</td>
+                            <td class="text-end fw-bold">${{ total_debe|default:'-' }}</td>
+                            <td class="text-end fw-bold">${{ total_haber|default:'-' }}</td>
                         </tr>
                     </tfoot>
                 </table>
             </div>
 
-            {% if (detalles | sum(attribute='debe')) != (detalles | sum(attribute='haber')) %}
+            {% if total_debe != total_haber %}
             <div class="alert alert-danger mt-3">
                 <i class="fas fa-exclamation-triangle"></i> <strong>ATENCIÓN:</strong> El asiento no está balanceado.
             </div>

@@ -1,73 +1,7 @@
-{% extends "base.html" %}
+                                                                                                                            {% extends "base.html" %}
 
 {% block content %}
-<style>
-    .table-fixed-header {
-        max-height: 75vh;
-        overflow-y: auto;
-        border-radius: 8px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    }
-
-    .table-fixed-header thead th {
-        position: sticky;
-        top: 0;
-        z-index: 20;
-        background: #0f172a !important;
-        border-bottom: 2px solid var(--primary) !important;
-        color: white;
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05rem;
-    }
-
-    .filter-row th {
-        position: sticky;
-        top: 38px;
-        z-index: 19;
-        background: #1e293b !important;
-        padding: 5px !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-    }
-
-    .filter-select {
-        width: 100%;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: #94a3b8;
-        font-size: 0.7rem;
-        padding: 2px 5px;
-        border-radius: 4px;
-        outline: none;
-    }
-
-    .filter-select:focus {
-        border-color: var(--primary);
-        color: white;
-    }
-
-    .filter-select option {
-        background: #0f172a;
-        color: white;
-    }
-
-    .role-row:hover,
-    .customer-row:hover,
-    .provider-row:hover {
-        background: rgba(99, 102, 241, 0.05);
-    }
-
-    .badge-code {
-        background: rgba(99, 102, 241, 0.2);
-        color: #818cf8;
-        border: 1px solid rgba(99, 102, 241, 0.3);
-    }
-
-    .actions-column {
-        position: relative;
-        z-index: 5;
-    }
-</style>
+{% include 'ventas/components/clientes_styles.html' %}
 
 <div class="container-fluid py-4">
     <div class="row mb-4 align-items-center">
@@ -86,16 +20,12 @@
                         class="form-control form-control-sm bg-dark border-secondary text-white pl-4"
                         placeholder="Buscar en todos los campos..." style="width: 250px; font-size: 0.8rem;">
                 </div>
+                <button class="btn btn-primary btn-sm ml-2" onclick="abrirModalAlta()">
+                    <i class="fas fa-plus-circle mr-1"></i> Nuevo Cliente
+                </button>
                 <button class="btn btn-outline-light btn-sm ml-2" onclick="resetFilters()">
                     <i class="fas fa-sync-alt mr-1"></i> Limpiar Filtros
                 </button>
-                <a href="#" class="btn btn-outline-success btn-sm ml-2"> <!-- Pendiente migrar cuenta corriente -->
-                    <i class="fas fa-file-invoice-dollar mr-1"></i> Cuenta Corriente
-                </a>
-                <a href="{% url 'ventas:nuevo_cliente' %}{% if sid %}?sid={{ sid }}{% endif %}"
-                    class="btn btn-primary btn-sm ml-2">
-                    <i class="fas fa-plus mr-1"></i> Nuevo Cliente
-                </a>
             </div>
         </div>
     </div>
@@ -111,7 +41,6 @@
                             <th>CUIT/DNI</th>
                             <th>Provincia</th>
                             <th>Localidad</th>
-
                             <th class="text-center" style="width: 150px;">Acciones</th>
                         </tr>
                         <tr class="filter-row">
@@ -130,7 +59,6 @@
                             <th><select class="filter-select" data-col="4">
                                     <option value="">Todos</option>
                                 </select></th>
-
                             <th></th>
                         </tr>
                     </thead>
@@ -138,8 +66,7 @@
                         {% for c in clientes %}
                         <tr class="customer-row">
                             <td class="text-center">
-                                <a href="#" class="badge badge-code text-decoration-none"
-                                    title="Ver Cuenta Corriente de {{ c.nombre }}">{{ c.codigo|default:"-" }}</a>
+                                <span class="badge badge-code">{{ c.codigo|default:"-" }}</span>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">
@@ -153,17 +80,24 @@
                             <td><code class="text-info">{{ c.cuit }}</code></td>
                             <td><span class="text-muted">{{ c.provincia|default:"-" }}</span></td>
                             <td><span class="text-muted">{{ c.localidad|default:"-" }}</span></td>
-
                             <td class="text-center actions-column">
-                                <a href="{% url 'ventas:perfil_cliente' c.id %}{% if sid %}?sid={{ sid }}{% endif %}"
-                                    class="btn btn-sm btn-primary">
-                                    <i class="fas fa-id-card mr-1"></i> Ver Ficha
-                                </a>
+                                <div class="btn-group btn-group-sm">
+                                    <button type="button" class="btn btn-outline-info" onclick="verVistazoCliente({{ c.id }})" title="Vistazo Rápido">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <a href="{% url 'ventas:perfil_cliente' c.id %}{% if sid %}?sid={{ sid }}{% endif %}"
+                                        class="btn btn-outline-primary" title="Ver Perfil Completo">
+                                        <i class="fas fa-id-card"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-outline-warning" onclick="abrirModalEditar({{ c.id }})" title="Editar Datos Básicos">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="7" class="text-center py-5">
+                            <td colspan="6" class="text-center py-5">
                                 <i class="fas fa-info-circle fa-2x text-muted mb-3 d-block"></i>
                                 <span class="text-muted">No se encontraron clientes.</span>
                             </td>
@@ -174,99 +108,177 @@
             </div>
         </div>
         <div class="card-footer bg-dark border-0 py-2">
-            <div class="row align-items-center">
-                <div class="col">
-                    <span class="text-muted small" id="rowCount">Mostrando {{ clientes|length }} clientes</span>
+            <span class="text-muted small" id="rowCount">Mostrando {{ clientes | length }} clientes</span>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Vistazo Rápido -->
+<div class="modal fade" id="modalVistazo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark text-light border-secondary shadow-lg">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title" id="vistazoNombre">Nombre del Cliente</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="text-muted small uppercase fw-bold d-block">Identificación</label>
+                            <span id="vistazoCuit" class="fs-5 fw-bold"></span>
+                            <span id="vistazoTipoResp" class="badge bg-secondary ms-2"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-muted small uppercase fw-bold d-block">Contacto</label>
+                            <p class="mb-1"><i class="fas fa-envelope me-2 text-info"></i><span id="vistazoEmail"></span></p>
+                            <p class="mb-0"><i class="fas fa-phone me-2 text-info"></i><span id="vistazoTelefono"></span></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card bg-secondary bg-opacity-10 border-0 p-3 h-100">
+                            <label class="text-muted small uppercase fw-bold mb-2">Estado de Cuenta</label>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Cta. Corriente:</span>
+                                <span id="vistazoHabilitaCta" class="badge"></span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <span>Límite de Crédito:</span>
+                                <span id="vistazoMontoCta" class="fw-bold text-success"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12" id="divVistazoObs" style="display:none;">
+                        <label class="text-muted small uppercase fw-bold d-block">Observaciones</label>
+                        <p id="vistazoObs" class="p-3 bg-secondary bg-opacity-10 rounded"></p>
+                    </div>
                 </div>
+            </div>
+            <div class="modal-footer border-secondary">
+                <a href="#" id="btnVistazoPerfil" class="btn btn-primary">
+                    <i class="fas fa-user-edit me-2"></i>Ir al Perfil Completo
+                </a>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        populateFilters();
+<!-- Modal Alta Cliente -->
+<div id="modalAltaCliente" class="modal-premium modal-animate">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Registrar Nuevo Cliente</h5>
+            <button type="button" class="btn-close btn-close-white" onclick="toggleModal('modalAltaCliente')"></button>
+        </div>
+        <form action="{% url 'ventas:nuevo_cliente' %}" method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Código (Opcional)</label>
+                        <input type="text" name="codigo" class="form-control" placeholder="Generación auto">
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <label class="form-label">Razón Social / Nombre *</label>
+                        <input type="text" name="nombre" class="form-control" id="alta_nombre" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">CUIT / DNI *</label>
+                        <div class="input-group">
+                            <input type="text" name="cuit" id="alta_cuit" class="form-control" placeholder="Solo números" required>
+                            <button type="button" class="btn btn-outline-primary" onclick="consultarAFIP('alta')">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                        <div id="status_afip_alta" class="extra-small mt-1"></div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Condición Fiscal</label>
+                        <select name="tipo_responsable" id="alta_tipo" class="form-select">
+                            <option value="Consumidor Final">Consumidor Final</option>
+                            <option value="Responsable Inscripto">Responsable Inscripto</option>
+                            <option value="Monotributo">Monotributo</option>
+                            <option value="Exento">Exento</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email Principal</label>
+                    <input type="email" name="email" class="form-control" placeholder="email@ejemplo.com">
+                </div>
+                <div class="mb-0">
+                    <label class="form-label">Observaciones</label>
+                    <textarea name="observaciones" class="form-control" rows="2"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="toggleModal('modalAltaCliente')">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Crear Cliente</button>
+            </div>
+        </form>
+    </div>
+</div>
 
-        // Add event listeners to selects
-        document.querySelectorAll('.filter-select').forEach(select => {
-            select.addEventListener('change', applyFilters);
-        });
+<!-- Modal Editar Cliente -->
+<div id="modalEditarCliente" class="modal-premium modal-animate">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="edit_title">Editar Cliente</h5>
+            <button type="button" class="btn-close btn-close-white" onclick="toggleModal('modalEditarCliente')"></button>
+        </div>
+        <form id="formEditarCliente" method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Código</label>
+                        <input type="text" name="codigo" id="edit_codigo" class="form-control">
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <label class="form-label">Razón Social / Nombre</label>
+                        <input type="text" name="nombre" id="edit_nombre" class="form-control" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">CUIT / DNI</label>
+                        <input type="text" name="cuit" id="edit_cuit" class="form-control" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Condición Fiscal</label>
+                        <select name="tipo_responsable" id="edit_tipo" class="form-select">
+                            <option value="Consumidor Final">Consumidor Final</option>
+                            <option value="Responsable Inscripto">Responsable Inscripto</option>
+                            <option value="Monotributo">Monotributo</option>
+                            <option value="Exento">Exento</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" id="edit_email" class="form-control">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Teléfono</label>
+                        <input type="text" name="telefono" id="edit_tel" class="form-control">
+                    </div>
+                </div>
+                <div class="mb-0">
+                    <label class="form-label">Observaciones</label>
+                    <textarea name="observaciones" id="edit_obs" class="form-control" rows="2"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="toggleModal('modalEditarCliente')">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
 
-        // Add listener to global search
-        document.getElementById('globalSearch').addEventListener('input', applyFilters);
-    });
-
-    function populateFilters() {
-        const table = document.getElementById('clientesTable');
-        const rows = table.querySelectorAll('tbody tr.customer-row');
-        const filters = table.querySelectorAll('.filter-select');
-
-        filters.forEach(filter => {
-            const colIdx = parseInt(filter.dataset.col);
-            const values = new Set();
-
-            rows.forEach(row => {
-                const cell = row.cells[colIdx];
-                if (cell) {
-                    const text = cell.textContent.trim();
-                    if (text && text !== '-') values.add(text);
-                }
-            });
-
-            // Sort values
-            const sortedValues = Array.from(values).sort((a, b) => a.localeCompare(b));
-
-            // Populate
-            sortedValues.forEach(val => {
-                const opt = document.createElement('option');
-                opt.value = val;
-                opt.textContent = val;
-                filter.appendChild(opt);
-            });
-        });
-    }
-
-    function applyFilters() {
-        const table = document.getElementById('clientesTable');
-        const rows = table.querySelectorAll('tbody tr.customer-row');
-        const filters = Array.from(table.querySelectorAll('.filter-select'));
-        const searchTerm = document.getElementById('globalSearch').value.toLowerCase().trim();
-
-        const activeFilters = filters
-            .filter(f => f.value !== "")
-            .map(f => ({ col: parseInt(f.dataset.col), val: f.value }));
-
-        let visibleCount = 0;
-
-        rows.forEach(row => {
-            let showByDropdown = true;
-            for (const f of activeFilters) {
-                const cellText = row.cells[f.col].textContent.trim();
-                if (cellText !== f.val) {
-                    showByDropdown = false;
-                    break;
-                }
-            }
-
-            let showBySearch = true;
-            if (searchTerm) {
-                const rowText = row.textContent.toLowerCase();
-                showBySearch = rowText.includes(searchTerm);
-            }
-
-            const show = showByDropdown && showBySearch;
-            row.style.display = show ? '' : 'none';
-            if (show) visibleCount++;
-        });
-
-        document.getElementById('rowCount').textContent = `Mostrando ${visibleCount} de ${rows.length} clientes`;
-    }
-
-    function resetFilters() {
-        document.querySelectorAll('.filter-select').forEach(f => f.value = "");
-        document.getElementById('globalSearch').value = "";
-        applyFilters();
-    }
-</script>
-
+{% include 'ventas/components/clientes_js.html' %}
 {% endblock %}

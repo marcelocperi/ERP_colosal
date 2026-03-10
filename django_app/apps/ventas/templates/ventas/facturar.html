@@ -73,8 +73,7 @@
                                 <select class="form-select bg-dark text-light border-secondary" id="tipo_comprobante"
                                     required>
                                     {% for t in tipos_comprobante %}
-                                    <option value="{{ t.codigo }}">{{ t.descripcion }}{% if t.letra %} ({{ t.letra }}){%
-                                        endif %}</option>
+                                    <option value="{{ t.codigo }}">{{ t.descripcion }}{% if t.letra %} ({{ t.letra }}){% endif %}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -172,7 +171,7 @@
                                 <select class="form-select bg-dark text-light border-secondary" id="filtro_naturaleza">
                                     <option value="">Todos</option>
                                     {% for n in naturalezas %}
-                                    <option value="{{ n }}">{{ n|capitalize }}</option>
+                                    <option value="{{ n }}">{{ n | capfirst }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -273,12 +272,12 @@
 </div>
 
 <script>
-    const esNC = {{ es_nota_credito_json| safe }};
-    const itemsPrecargados = {{ items_precargados_json| safe }};
-    const tipoSugerido = "{{ tipo_sugerido|default:'' }}";
-    const clientePreseleccionado = "{{ cliente_preseleccionado|default:'' }}";
-    const condicionIvaEmpresa = "{{ condicion_iva_empresa|default:'' }}";
-    const agentePercepciones = {{ agente_percepciones_json| safe }};
+    const esNC = {{ es_nota_credito_json | safe }};
+    const itemsPrecargados = {{ items_precargados_json | safe }};
+    const tipoSugerido = "{{ tipo_sugerido | default:'' }}";
+    const clientePreseleccionado = "{{ cliente_preseleccionado | default:'' }}";
+    const condicionIvaEmpresa = "{{ condicion_iva_empresa | default:'' }}";
+    const agentePercepciones = {{ agente_percepciones_json | safe }};
 
     let items = [];
     let clientFiscalData = [];
@@ -368,7 +367,7 @@
         divPendiente.style.display = 'none';
 
         try {
-            const urlSaldo = new URL(`/api/ventas/cliente/${clienteId}/saldo`, window.location.origin);
+            const urlSaldo = new URL(`/ventas/api/ventas/cliente/${clienteId}/saldo`, window.location.origin);
             if (window.SID) urlSaldo.searchParams.set('sid', window.SID);
             const rSaldo = await fetch(urlSaldo.toString());
             const dataSaldo = await rSaldo.json();
@@ -439,7 +438,7 @@
         // 1. Tipos de Comprobante (API Fiscal)
         if (tipoResponsable && !esNC) {
             try {
-                const apiDocsUrl = new URL(`/api/ventas/fiscal/allowed-docs`, window.location.origin);
+                const apiDocsUrl = new URL(`/ventas/api/ventas/fiscal/allowed-docs`, window.location.origin);
                 apiDocsUrl.searchParams.set('tipo_responsable', tipoResponsable);
                 if (window.SID) apiDocsUrl.searchParams.set('sid', window.SID);
 
@@ -472,9 +471,9 @@
 
         // 3. Condiciones de Pago y Finanzas
         try {
-            const condUrl = new URL(`/api/ventas/cliente/${clienteId}/condiciones`, window.location.origin);
+            const condUrl = new URL(`/ventas/api/ventas/cliente/${clienteId}/condiciones`, window.location.origin);
             if (window.SID) condUrl.searchParams.set('sid', window.SID);
-            const finUrl = new URL(`/api/ventas/cliente/${clienteId}/finanzas`, window.location.origin);
+            const finUrl = new URL(`/ventas/api/ventas/cliente/${clienteId}/finanzas`, window.location.origin);
             if (window.SID) finUrl.searchParams.set('sid', window.SID);
 
             const [resCond, resFin] = await Promise.all([
@@ -510,7 +509,7 @@
 
         // 4. Logística
         try {
-            const logisticaUrl = new URL(`/api/ventas/cliente/${clienteId}/logistica`, window.location.origin);
+            const logisticaUrl = new URL(`/ventas/api/ventas/cliente/${clienteId}/logistica`, window.location.origin);
             if (window.SID) logisticaUrl.searchParams.set('sid', window.SID);
             const resLog = await fetch(logisticaUrl.toString());
             const logData = await resLog.json();

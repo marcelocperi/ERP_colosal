@@ -1,0 +1,22 @@
+{
+    "name": "Colosal ERP Mobile",
+    "short_name": "Colosal",
+    "description": "Módulo de Recolección y Logística Colosal",
+    "start_url": "/recoleccion/",
+    "display": "standalone",
+    "background_color": "#1a202c",
+    "theme_color": "#f39c12",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "/static/recoleccion/img/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/recoleccion/img/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

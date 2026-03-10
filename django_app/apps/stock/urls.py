@@ -27,4 +27,9 @@ urlpatterns = [
     
     # APIs
     path('api/seguridad/<int:articulo_id>/', views.api_articulo_seguridad, name='api_articulo_seguridad'),
+    path('api/get_by_code/', views.api_get_articulo_by_code, name='get_articulo_by_code'),
+
+    # Ajustes
+    path('ajustes/pendientes/', views.ajustes_pendientes, name='ajustes_pendientes'),
+    path('ajustes/procesar/', views.ajuste_procesar, name='ajuste_procesar'),
 ]

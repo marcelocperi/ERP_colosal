@@ -53,34 +53,29 @@ if os.path.exists(VENV_DIR):
 
 class ColosalService(win32serviceutil.ServiceFramework):
     _svc_name_ = "Colosal_ERP"
-    _svc_display_name_ = "Colosal ERP (Servicio)"
-    _svc_description_ = "Motor de producción para Colosal ERP (Waitress)"
+    _svc_display_name_ = "Colosal ERP Core"
+    _svc_description_ = "Servicio de Producción Base para Colosal ERP"
 
     def __init__(self, args):
         win32serviceutil.ServiceFramework.__init__(self, args)
         self.hWaitStop = win32event.CreateEvent(None, 0, 0, None)
         socket.setdefaulttimeout(60)
-        self.process = None
+        self.processes = []
 
     def SvcStop(self):
         self.ReportServiceStatus(win32service.SERVICE_STOP_PENDING)
-        if self.process:
+        for p in self.processes:
             try:
-                self.process.terminate()
+                p.terminate()
             except:
                 pass
         win32event.SetEvent(self.hWaitStop)
 
     def SvcDoRun(self):
-        # Reportar que el servicio está iniciando
         self.ReportServiceStatus(win32service.SERVICE_START_PENDING)
-        
         servicemanager.LogMsg(servicemanager.EVENTLOG_INFORMATION_TYPE,
                               servicemanager.PYS_SERVICE_STARTED,
                               (self._svc_name_, ''))
-        
-        # Reportar que ya está ejecutándose ANTES de entrar al bucle principal
-        # Esto previene el error 1053 de Windows
         self.ReportServiceStatus(win32service.SERVICE_RUNNING)
         self.main()
 
@@ -97,37 +92,41 @@ class ColosalService(win32serviceutil.ServiceFramework):
                  open(stderr_path, "a", encoding='utf-8') as err:
                 
                 now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                out.write(f"\n--- Iniciando Proceso Colosal ERP a las {now_str} ---\n")
+                out.write(f"\n--- Iniciando Colosal ERP Core ({now_str}) ---\n")
                 out.flush()
                 
-                # Ejecutar waitress
-                # Usamos un conjunto de banderas para asegurar que el proceso sea hijo del servicio
-                self.process = subprocess.Popen([PYTHON_EXE, SCRIPT_PATH], 
-                                             cwd=PROJECT_DIR,
-                                             stdout=out,
-                                             stderr=err,
-                                             creationflags=subprocess.CREATE_NO_WINDOW)
-                
-                out.write(f"Proceso iniciado con PID: {self.process.pid}\n")
+                # 1. Iniciar Instancia Principal (ERP - Port 8000, localhost)
+                env_erp = os.environ.copy()
+                env_erp['PORT'] = '8000'
+                env_erp['HOST'] = '0.0.0.0'
+                p_erp = subprocess.Popen([PYTHON_EXE, SCRIPT_PATH], 
+                                         cwd=PROJECT_DIR, env=env_erp,
+                                         stdout=out, stderr=err,
+                                         creationflags=subprocess.CREATE_NO_WINDOW)
+                self.processes.append(p_erp)
+                out.write(f"[ERP] Iniciado en puerto 8000 (PID: {p_erp.pid})\n")
                 out.flush()
 
-                # Mientras el proceso esté vivo y no pidan parar...
-                while self.process.poll() is None:
-                    # Esperar la señal de stop pero con un pequeño timeout para chequear el proceso
+                # Monitorear proceso principal
+                while all(p.poll() is None for p in self.processes):
                     rc = win32event.WaitForSingleObject(self.hWaitStop, 5000)
                     if rc == win32event.WAIT_OBJECT_0:
                         break
                 
-                if self.process.poll() is not None:
-                    out.write(f"[{datetime.datetime.now()}] El subproceso terminó inesperadamente con código {self.process.returncode}\n")
-                    out.flush()
-                    
+                # Reportar caídas inesperadas
+                for p in self.processes:
+                    if p.poll() is not None:
+                        out.write(f"[{datetime.datetime.now()}] ERROR: Proceso PID {p.pid} terminó con código {p.returncode}\n")
+                
+                out.flush()
+
         except Exception as e:
-            servicemanager.LogErrorMsg(f"Error en el servicio: {str(e)}")
+            servicemanager.LogErrorMsg(f"Error fatal en el servicio Colosal: {str(e)}")
         
-        # Al salir, asegurar que el proceso se detenga
-        if self.process and self.process.poll() is None:
-            self.process.terminate()
+        # Cleanup final
+        for p in self.processes:
+            if p.poll() is None:
+                p.terminate()
 
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1].lower() == 'install':

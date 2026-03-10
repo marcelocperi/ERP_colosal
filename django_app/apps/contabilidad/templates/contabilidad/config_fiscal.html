@@ -47,10 +47,10 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label text-muted small uppercase fw-bold">Entorno de Trabajo</label>
                                 <select name="afip_entorno" class="form-select bg-dark text-light border-secondary">
-                                    <option value="testing" {% if enterprise.afip_entorno=='testing' %}selected{% endif
+                                    <option value="testing" {% if enterprise.afip_entorno == 'testing' %}selected{% endif
                                         %}>
                                         Testing (Homologación)</option>
-                                    <option value="produccion" {% if enterprise.afip_entorno=='produccion' %}selected{%
+                                    <option value="produccion" {% if enterprise.afip_entorno == 'produccion' %}selected{%
                                         endif %}>Producción (Real)</option>
                                 </select>
                             </div>
@@ -95,4 +95,6 @@
         font-size: 0.75rem;
     }
 </style>
+{% endif %}
+{% endif %}
 {% endblock %}

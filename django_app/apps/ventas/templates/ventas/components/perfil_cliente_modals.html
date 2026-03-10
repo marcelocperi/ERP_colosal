@@ -1,0 +1,359 @@
+{% load core_tags %}
+<!-- MODAL EDITAR DATOS BÁSICOS -->
+<div id="modalCliente" class="modal-premium modal-animate" style="display:none;">
+    <div class="modal-dialog">
+        <form class="modal-content" action="{% url 'ventas:editar_cliente' cliente.id %}" method="POST">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-user-edit me-2"></i> Editar Datos Básicos</h5>
+                <button type="button" class="btn-close btn-close-white" onclick="toggleModal('modalCliente')"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label"><i class="fas fa-barcode me-1"></i> Código</label>
+                        <input type="text" name="codigo" class="form-control" value="{{ cliente.codigo|default:'' }}">
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <label class="form-label"><i class="fas fa-building me-1"></i> Razón Social / Nombre</label>
+                        <input type="text" name="nombre" class="form-control" value="{{ cliente.nombre }}" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label"><i class="fas fa-id-card me-1"></i> CUIT / DNI</label>
+                        <input type="text" name="cuit" class="form-control" value="{{ cliente.cuit }}" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="fas fa-envelope me-1"></i> Email Principal</label>
+                        <input type="email" name="email" class="form-control" value="{{ cliente.email|default:'' }}">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="fas fa-phone me-1"></i> Teléfono Principal</label>
+                        <input type="text" name="telefono" class="form-control"
+                            value="{{ cliente.telefono|default:'' }}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="fas fa-file-invoice me-1"></i> Condición Fiscal</label>
+                        <select name="condicion_fiscal_id" class="form-select">
+                            {% for cf in condiciones_fiscales %}
+                            <option value="{{ cf.id }}" {% if cliente.condicion_fiscal_id == cf.id %}selected{% endif %}>
+                                {{ cf.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="fas fa-money-check-alt me-1"></i> Condición de Pago</label>
+                        <select name="condicion_pago_id" class="form-select">
+                            {% for cp in condiciones_pago %}
+                            <option value="{{ cp.id }}" {% if cliente.condicion_pago_id == cp.id %}selected{% endif %}>{{
+                                cp.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-comment-alt me-1"></i> Observaciones</label>
+                    <textarea name="observaciones" class="form-control"
+                        rows="3">{{ cliente.observaciones|default:'' }}</textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary px-4"><i class="fas fa-save me-2"></i> Guardar
+                    Cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Cuenta Corriente -->
+<div id="modalCtaCte" class="modal-premium modal-animate" style="display:none;">
+    <div class="modal-dialog">
+        <form class="modal-content" action="{% url 'ventas:solicitar_cta_cte' cliente.id %}" method="POST">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-credit-card me-2"></i>Cuenta Corriente</h5>
+                <button type="button" class="btn-close btn-close-white" onclick="toggleModal('modalCtaCte')"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info small mb-3">
+                    <i class="fas fa-info-circle me-1"></i> La habilitación o modificación de cuenta corriente requiere
+                    <strong>aprobación de Tesorería</strong>.
+                </div>
+                <div class="mb-3 d-flex align-items-center gap-3">
+                    <div class="form-check form-switch fs-5">
+                        <input class="form-check-input" type="checkbox" name="habilita_cta_cte"
+                            id="chk_habilita_cta_cte" value="1" {% if cliente.habilita_cta_cte %}checked{% endif %}
+                            onchange="toggleMontoCta(this.checked)">
+                        <label class="form-check-label fw-bold" for="chk_habilita_cta_cte">Habilitar Cuenta
+                            Corriente</label>
+                    </div>
+                </div>
+                <div class="mb-3" id="div_monto_cta"
+                    style="display: {% if cliente.habilita_cta_cte %}block{% else %}none{% endif %};">
+                    <label class="form-label fw-bold"><i class="fas fa-dollar-sign me-1"></i>Monto Máximo
+                        Autorizado</label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="number" name="monto_cta_cte" id="inp_monto_cta" class="form-control" step="0.01"
+                            min="0" placeholder="0.00" value="{{ cliente.monto_cta_cte|default:0|floatformat:2 }}">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-comment me-1"></i>Motivo / Observación</label>
+                    <textarea name="motivo" class="form-control" rows="2"
+                        placeholder="Indicar motivo del cambio..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success px-4"><i class="fas fa-paper-plane me-1"></i>Enviar para
+                    aprobación</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Dirección -->
+<div id="modalDireccion" class="modal-premium modal-animate" style="display:none;">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" action="{% url 'ventas:agregar_direccion' cliente.id %}" method="POST"
+            id="formDireccion">
+            {% csrf_token %}
+            <input type="hidden" name="item_id" id="direccion_id">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDireccionTitle"><i class="fas fa-map-marked-alt me-2"></i> Gestión de
+                    Sede / Dirección</h5>
+                <button type="button" class="btn-close btn-close-white"
+                    onclick="toggleModal('modalDireccion')"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-4">
+                    <label class="form-label"><i class="fas fa-tag me-1"></i> Etiqueta Identificadora</label>
+                    <input type="text" name="etiqueta" id="dir_etiqueta" class="form-control"
+                        placeholder="Ej: Casa Central, Depósito Norte..." required>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Provincia</label>
+                        <select name="provincia" id="dir_provincia" class="form-select" required>
+                            <option value="">Seleccionar...</option>
+                            {% for p in provincias %}<option value="{{ p.nombre }}">{{ p.nombre }}</option>{% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Localidad</label>
+                        <input type="text" name="localidad" id="dir_localidad" class="form-control"
+                            list="listaLocalidades" required>
+                        <datalist id="listaLocalidades"></datalist>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">CP</label>
+                        <input type="text" name="cod_postal" id="dir_cp" class="form-control" list="listaCPs" required>
+                        <datalist id="listaCPs"></datalist>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-3"><label class="form-label">Calle</label>
+                        <input type="text" name="calle" id="dir_calle" class="form-control" list="listaCalles" required>
+                        <datalist id="listaCalles"></datalist>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3"><label class="form-label">Número</label><input type="text" name="numero"
+                            id="dir_numero" class="form-control" required></div>
+                    <div class="col-md-4 mb-3"><label class="form-label">Piso</label><input type="text" name="piso"
+                            id="dir_piso" class="form-control"></div>
+                    <div class="col-md-4 mb-3"><label class="form-label">Depto</label><input type="text" name="depto"
+                            id="dir_depto" class="form-control"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Guardar Dirección</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Contacto -->
+<div id="modalContacto" class="modal-premium modal-animate" style="display:none;">
+    <div class="modal-dialog">
+        <form class="modal-content" action="{% url 'ventas:agregar_contacto' cliente.id %}" method="POST"
+            id="formContacto">
+            {% csrf_token %}
+            <input type="hidden" name="item_id" id="contacto_id">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalContactoTitle">Persona de Contacto</h5>
+                <button type="button" class="btn-close" onclick="toggleModal('modalContacto')"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3"><label class="form-label">Nombre</label><input type="text" name="nombre"
+                        id="cont_nombre" class="form-control" required></div>
+                <div class="row">
+                    <div class="col-6 mb-3"><label class="form-label">Área</label>
+                        <select name="tipo_contacto" id="cont_tipo" class="form-select select-area"
+                            onchange="onAreaChange(this.value, 'cont_puesto')"></select>
+                    </div>
+                    <div class="col-6 mb-3"><label class="form-label">Función</label>
+                        <select name="puesto" id="cont_puesto" class="form-select" required></select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 mb-3"><label class="form-label">Teléfono</label><input type="text" name="telefono"
+                            id="cont_tel" class="form-control" required></div>
+                    <div class="col-6 mb-3"><label class="form-label">Email</label><input type="email" name="email"
+                            id="cont_email" class="form-control"></div>
+                </div>
+                <div class="mb-3"><label class="form-label">Dirección / Sede</label>
+                    <select name="direccion_id" id="cont_dir" class="form-select">
+                        <option value="">Global / Todas</option>
+                        {% for d in direcciones %}<option value="{{ d.id }}">{{ d.etiqueta }}</option>{% endfor %}
+                    </select>
+                </div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" name="es_receptor"
+                        id="chk_receptor" value="1"><label class="form-check-label">Es Receptor</label></div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Guardar Contacto</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Fiscal -->
+<div id="modalFiscal" class="modal-premium modal-animate" style="display:none;">
+    <div class="modal-dialog">
+        <form class="modal-content" action="{% url 'ventas:agregar_fiscal' cliente.id %}" method="POST" id="formFiscal">
+            {% csrf_token %}
+            <input type="hidden" name="item_id" id="fiscal_id">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titleFiscal">Dato Fiscal</h5>
+                <button type="button" class="btn-close" onclick="toggleModal('modalFiscal')"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Impuesto</label>
+                    <select name="impuesto" id="fisc_impuesto" class="form-select">
+                        {% for imp in impuestos_lista %}
+                        <option value="{{ imp.nombre }}">{{ imp.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Jurisdicción</label>
+                    <select name="jurisdiccion" id="fisc_jurisdiccion" class="form-select" required>
+                        <option value="NACIONAL">NACIONAL</option>
+                        {% for p in provincias %}
+                        <option value="{{ p.nombre }}">{{ p.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3"><label class="form-label">Condición</label><input type="text" name="condicion"
+                        id="fisc_condicion" class="form-control" required></div>
+                <div class="mb-3"><label class="form-label">Nro. Inscripción</label><input type="text"
+                        name="numero_inscripcion" id="fisc_inscripcion" class="form-control" required></div>
+                <div class="mb-3"><label class="form-label">Alícuota (%)</label><input type="number" step="0.01"
+                        name="alicuota" id="fisc_alicuota" class="form-control"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Guardar Datos Fiscales</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Condicion Pago -->
+<div id="modalCondicionPago" class="modal-premium modal-animate" style="display:none;">
+    <div class="modal-dialog">
+        <form class="modal-content" action="{% url 'ventas:solicitar_condicion_pago' cliente.id %}" method="POST">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h5 class="modal-title">Cambio de Condición de Pago</h5>
+                <button type="button" class="btn-close" onclick="toggleModal('modalCondicionPago')"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Seleccione Nueva Condición</label>
+                    <div class="list-group">
+                        {% for c in condiciones_pago %}
+                        <label class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <div>
+                                <input class="form-check-input me-2" type="radio" name="condicion_id" value="{{ c.id }}" {% if c.id == cliente.condicion_pago_id %}checked{% endif %}>
+                                <strong>{{ c.nombre }}</strong>
+                            </div>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary w-100">Solicitar Cambio</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Coeficiente CM05 -->
+<div id="modalCoeficiente" class="modal-premium modal-animate" style="display:none;">
+    <div class="modal-dialog">
+        <form class="modal-content" action="{% url 'ventas:agregar_cm05' cliente.id %}" method="POST">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h5 class="modal-title">Nuevo Coeficiente CM05</h5>
+                <button type="button" class="btn-close" onclick="toggleModal('modalCoeficiente')"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label class="form-label">Jurisdicción (Código)</label>
+                        <select name="jurisdiccion_code" class="form-select" required>
+                            <option value="">Seleccione...</option>
+                            <option value="901">901 - CABA</option>
+                            <option value="902">902 - Buenos Aires</option>
+                            <option value="903">903 - Catamarca</option>
+                            <option value="904">904 - Córdoba</option>
+                            <option value="905">905 - Corrientes</option>
+                            <option value="906">906 - Chaco</option>
+                            <option value="907">907 - Chubut</option>
+                            <option value="908">908 - Entre Ríos</option>
+                            <option value="909">909 - Formosa</option>
+                            <option value="910">910 - Jujuy</option>
+                            <option value="911">911 - La Pampa</option>
+                            <option value="912">912 - La Rioja</option>
+                            <option value="913">913 - Mendoza</option>
+                            <option value="914">914 - Misiones</option>
+                            <option value="915">915 - Neuquén</option>
+                            <option value="916">916 - Río Negro</option>
+                            <option value="917">917 - Salta</option>
+                            <option value="918">918 - San Juan</option>
+                            <option value="919">919 - San Luis</option>
+                            <option value="920">920 - Santa Cruz</option>
+                            <option value="921">921 - Santa Fe</option>
+                            <option value="922">922 - S. del Estero</option>
+                            <option value="923">923 - Tierra del Fuego</option>
+                            <option value="924">924 - Tucumán</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <label class="form-label">Año Declarado</label>
+                        <input type="number" name="periodo_anio" class="form-control" value="2024" required>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label class="form-label">Coeficiente</label>
+                        <input type="number" step="0.0001" min="0" max="1" name="coeficiente" class="form-control" required>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary px-4">Guardar Jurisdicción</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -37,18 +37,18 @@
                 </div>
                 <div style="display: flex; gap: 0.5rem;">
                     {% if lista.pending_count > 0 %}
-                    <a href="{{ url 'pricing:lista_pendientes' lista.id }}" class="btn btn-sm"
+                    <a href="{% url 'pricing:lista_pendientes' lista.id  %}" class="btn btn-sm"
                         style="background: #10b981; color: white;">
                         <i class="fas fa-check-double"></i> Revisar Costeo
                     </a>
                     {% endif %}
-                    <a href="{{ url 'pricing:lista_detalle' lista.id }}" class="btn btn-sm btn-outline"
+                    <a href="{% url 'pricing:lista_detalle' lista.id  %}" class="btn btn-sm btn-outline"
                         style="border: 1px solid var(--primary); color: var(--primary);">
                         <i class="fas fa-cog"></i> Configurar Reglas
                     </a>
                 </div>
             </div>
-            {% else %}
+            {% empty %}
             <div style="text-align: center; padding: 3rem; color: #64748b;">
                 <i class="fas fa-info-circle" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
                 No hay listas de precios configuradas.
@@ -73,7 +73,7 @@
                     <div style="font-size: 0.7rem; color: #64748b;">{{ p.created_at|date:'%d/%m %H:%M' }}</div>
                 </div>
             </div>
-            {% else %}
+            {% empty %}
             <div style="text-align: center; padding: 2rem; color: #64748b; font-size: 0.85rem;">Esperando
                 actualizaciones de precios...</div>
             {% endfor %}

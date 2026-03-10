@@ -1,9 +1,133 @@
-import os
-from decimal import Decimal
-from django.conf import settings
-from apps.core.db import get_db_cursor, dictfetchall, dictfetchone
+from apps.core.services.numeration_service import NumerationService
+from .afip_service import AfipService
+import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 class BillingService:
+    @staticmethod
+    def process_invoice(user_data, payload):
+        """
+        Procesa una factura completa: numeración, guardado, contabilidad y AFIP.
+        Optimizado para entornos multi-tenant asíncronos.
+        """
+        enterprise_id = user_data['enterprise_id']
+        user_id = user_data['id']
+        
+        try:
+            with get_db_cursor(dictionary=True) as cursor:
+                # 1. Datos básicos y numeración
+                punto_venta = payload.get('punto_venta', 1)
+                tipo_comp = payload['tipo_comprobante']
+                
+                cursor.execute("SELECT letra FROM sys_tipos_comprobante WHERE codigo = %s", (tipo_comp,))
+                tipo_row = dictfetchone(cursor)
+                letra = tipo_row['letra'] if tipo_row else 'X'
+
+                # Obtenemos el próximo número dentro de la transacción
+                numero = NumerationService.get_next_number(enterprise_id, 'COMPROBANTE', tipo_comp, punto_venta, cursor)
+
+                # 2. Cálculos de totales
+                neto = Decimal('0.00')
+                iva = Decimal('0.00')
+                total = Decimal('0.00')
+                
+                for item in payload['items']:
+                    cant = Decimal(str(item['cantidad']))
+                    precio = Decimal(str(item['precio']))
+                    alic = Decimal(str(item['alic_iva']))
+                    
+                    sub_neto = (cant * precio).quantize(Decimal('0.01'))
+                    sub_iva = (sub_neto * (alic / Decimal('100'))).quantize(Decimal('0.01'))
+                    
+                    neto += sub_neto
+                    iva += sub_iva
+                    total += (sub_neto + sub_iva)
+
+                # 3. Guardar Cabecera (Estado inicial PENDING)
+                cursor.execute("""
+                    INSERT INTO erp_comprobantes (
+                        enterprise_id, modulo, tercero_id, tipo_comprobante, letra,
+                        punto_venta, numero, fecha_emision, importe_neto, importe_iva, importe_total,
+                        estado_pago, user_id
+                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, CURRENT_DATE, %s, %s, %s, 'PENDIENTE', %s)
+                """, (enterprise_id, 'VENTAS', payload['cliente_id'], tipo_comp, letra,
+                      punto_venta, numero, neto, iva, total, user_id))
+                
+                cursor.execute("SELECT LAST_INSERT_ID() as last_id")
+                comprobante_id = dictfetchone(cursor)['last_id']
+
+                # 4. Guardar Detalles
+                for item in payload['items']:
+                    cant = Decimal(str(item['cantidad']))
+                    precio = Decimal(str(item['precio']))
+                    alic = Decimal(str(item['alic_iva']))
+                    item_neto = (cant * precio).quantize(Decimal('0.01'))
+                    item_iva = (item_neto * (alic / Decimal('100'))).quantize(Decimal('0.01'))
+                    
+                    cursor.execute("""
+                        INSERT INTO erp_comprobantes_detalle (
+                            comprobante_id, articulo_id, nombre, cantidad, precio_unitario,
+                            alicuota_iva, importe_neto, importe_iva, importe_total, enterprise_id
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    """, (comprobante_id, item['id'], item['nombre'], cant, precio,
+                          alic, item_neto, item_iva, item_neto + item_iva, enterprise_id))
+
+                # 5. Contabilidad (Generar asiento)
+                BillingService._generar_asiento_contable(enterprise_id, comprobante_id, cursor)
+                
+                # Actualizar último número en el maestro para evitar colisiones
+                NumerationService.update_last_number(enterprise_id, 'COMPROBANTE', tipo_comp, punto_venta, numero, cursor)
+
+            # 6. AFIP (Fuera de la transacción principal para evitar bloqueos largos)
+            # El sistema "espera" aquí la respuesta para el modo síncrono del cliente
+            afip_res = AfipService.solicitar_cae(enterprise_id, comprobante_id)
+
+            return {
+                'success': True,
+                'id': comprobante_id,
+                'numero': numero,
+                'afip': afip_res
+            }
+
+        except Exception as e:
+            logger.exception("Error en BillingService.process_invoice")
+            return {'success': False, 'message': str(e)}
+
+    @staticmethod
+    def _generar_asiento_contable(enterprise_id, comprobante_id, cursor):
+        """Mismo método que estaba en views.py, encapsulado en el servicio."""
+        cursor.execute("SELECT * FROM erp_comprobantes WHERE id = %s", (comprobante_id,))
+        comp = dictfetchone(cursor)
+        if not comp: return
+        
+        cursor.execute("""
+            INSERT INTO cont_asientos (enterprise_id, fecha, concepto, modulo_origen, comprobante_id, estado)
+            VALUES (%s, %s, %s, 'VENTAS', %s, 'CONFIRMADO')
+        """, (enterprise_id, comp['fecha_emision'], f"Venta Comp. {comp['tipo_comprobante']} {comp['numero']}", comprobante_id))
+        
+        cursor.execute("SELECT LAST_INSERT_ID() as last_id")
+        asiento_id = dictfetchone(cursor)['last_id']
+
+        # Asientos simplificados (basado en el código original)
+        cursor.execute("""
+            INSERT INTO cont_asientos_detalle (asiento_id, cuenta_id, debe, haber, glosa)
+            SELECT %s, id, %s, 0, 'Deudores por Ventas' FROM cont_plan_cuentas WHERE codigo = '1.3.01' AND (enterprise_id = 0 OR enterprise_id = %s) LIMIT 1
+        """, (asiento_id, comp['importe_total'], enterprise_id))
+
+        cursor.execute("""
+            INSERT INTO cont_asientos_detalle (asiento_id, cuenta_id, debe, haber, glosa)
+            SELECT %s, id, 0, %s, 'Ventas' FROM cont_plan_cuentas WHERE codigo = '4.1' AND (enterprise_id = 0 OR enterprise_id = %s) LIMIT 1
+        """, (asiento_id, comp['importe_neto'], enterprise_id))
+
+        if comp.get('importe_iva') and float(comp['importe_iva']) > 0:
+            cursor.execute("""
+                INSERT INTO cont_asientos_detalle (asiento_id, cuenta_id, debe, haber, glosa)
+                SELECT %s, id, 0, %s, 'IVA Débito Fiscal' FROM cont_plan_cuentas WHERE codigo = '2.2.01' AND (enterprise_id = 0 OR enterprise_id = %s) LIMIT 1
+            """, (asiento_id, comp['importe_iva'], enterprise_id))
+
+        cursor.execute("UPDATE erp_comprobantes SET asiento_id = %s WHERE id = %s", (asiento_id, comprobante_id))
     @staticmethod
     def calculate_item_totals(cantidad, precio_unitario, alicuota_iva):
         """Calcula los totales para un ítem de factura."""

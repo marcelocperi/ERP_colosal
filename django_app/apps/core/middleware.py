@@ -2,7 +2,10 @@ import time
 import secrets
 import logging
 import threading
+import asyncio
 from django.conf import settings
+from django.utils.decorators import sync_and_async_middleware
+from asgiref.sync import sync_to_async
 from .db import get_db_cursor, dictfetchone, dictfetchall
 
 logger = logging.getLogger(__name__)
@@ -13,32 +16,39 @@ PERMISSION_LOCK = threading.Lock()
 CACHE_TTL = 300  # 5 minutos
 
 class MultiTabSessionMiddleware:
+    sync_capable = True
+    async_capable = False
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
-        # 1. Extraer SID de cualquier origen
-        sid = request.GET.get('sid') or request.POST.get('sid') or request.headers.get('X-SID')
+        self._prepare_request(request)
+        self._sync_load_session(request)
         
-        # 2. Inicializar atributos
+        logger.info(f"Path: {request.path} | SID: {request.sid} | Logged: {bool(request.user_data)}")
+        response = self.get_response(request)
+            
+        self._inject_handshake(request, response)
+        return response
+
+    def _prepare_request(self, request):
+        sid = request.GET.get('sid') or request.POST.get('sid') or request.headers.get('X-SID')
         request.sid = sid
         request.user_data = None
         request.enterprise = None
         request.permissions = []
 
-        # 3. Lógica de recuperación de sesión
+    def _sync_load_session(self, request):
         if hasattr(request, 'session'):
             if 's' not in request.session:
                 request.session['s'] = {}
-
-            # Fallback: Si no hay sid pero hay exactamente UNA sesión activa, usar esa
+            sid = request.sid
             if not sid:
                 active_sids = list(request.session['s'].keys())
                 if len(active_sids) == 1:
                     sid = active_sids[0]
                     request.sid = sid
 
-            # Prioridad 1: SID explícito en la URL o Header (o el fallback)
             if sid:
                 if sid in request.session['s']:
                     ctx = request.session['s'][sid]
@@ -46,32 +56,25 @@ class MultiTabSessionMiddleware:
                     eid = ctx.get('enterprise_id')
                     if uid is not None and eid is not None:
                         if self._load_full_context(request, uid, eid):
-                             # Éxito
                              pass
                         else:
-                            request.login_reason = 'db_not_found' # Usuario/Enterprise no existe en BD
+                            request.login_reason = 'db_not_found'
                     else:
-                        request.login_reason = 'invalid_ctx' # Contexto de sesión corrupto
+                        request.login_reason = 'invalid_ctx'
                 else:
-                    request.login_reason = 'sid_expired' # SID no está en la sesión (Timeout)
+                    request.login_reason = 'sid_expired'
             else:
                 if request.session['s']:
-                    request.login_reason = 'missing_sid' # Hay sesiones, pero no se especificó cual (Bug de lógica en link)
+                    request.login_reason = 'missing_sid'
                 else:
-                    request.login_reason = 'no_active_sessions' # No hay ninguna sesión activa (Timeout/First login)
+                    request.login_reason = 'no_active_sessions'
 
-        # 4. Debug provisional (puedes borrarlo luego)
-        logger.info(f"Path: {request.path} | SID: {request.sid} | Logged: {bool(request.user_data)}")
-
-        response = self.get_response(request)
-        
+    def _inject_handshake(self, request, response):
         # 5. Inyectar Cookie de Handshake si se generó un SID nuevo
         handshake = getattr(request, '_new_sid_handshake', None)
         if handshake:
             sid_val, token_val = handshake
             response.set_cookie(f'bind_{sid_val}', token_val, max_age=30, httponly=False, samesite='Lax')
-            
-        return response
 
     def _load_full_context(self, request, user_id, ent_id):
         now_ts = time.time()
@@ -148,21 +151,25 @@ class MultiTabSessionMiddleware:
             return False
 
 class LoginEnforcerMiddleware:
-    """
-    Middleware que asegura que nadie pueda acceder a ninguna URL 
-    sin estar logueado, excepto a la página de login y archivos estáticos.
-    """
+    sync_capable = True
+    async_capable = False
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
+        if self._should_redirect(request):
+            return self._get_redirect(request)
+            
+        return self.get_response(request)
+
+    def _should_redirect(self, request):
         # 1. Permitir archivos estáticos y media
         static_url = getattr(settings, 'STATIC_URL', '/static/')
         if not static_url.startswith('/'):
             static_url = '/' + static_url
             
         if request.path.startswith(static_url) or '/static/' in request.path:
-            return self.get_response(request)
+            return False
 
         # 2. Rutas exentas de login (exactas)
         exempt_paths = [
@@ -174,19 +181,21 @@ class LoginEnforcerMiddleware:
         # 3. Verificar si el usuario está logueado (cargado por MultiTabSessionMiddleware)
         if request.path not in exempt_paths:
             if not getattr(request, 'user_data', None):
-                # Si no está logueado, redirigir a login.html
-                # Intentamos usar reverse para flexibilidad, pero con fallback a string literal
-                try:
-                    from django.urls import reverse
-                    target_url = reverse('core:login')
-                except:
-                    target_url = '/login.html'
-                    
-                reason = getattr(request, 'login_reason', 'unknown')
-                logger.warning(f"Redirecting to login. Path: {request.path} | Reason: {reason} | SID: {request.sid}")
-                
-                from django.shortcuts import redirect
-                # Pasamos la razón como query param para que el usuario pueda verla si quiere debuggear
-                return redirect(f"{target_url}?reason={reason}")
+                return True
+        return False
 
-        return self.get_response(request)
+    def _get_redirect(self, request):
+        # Si no está logueado, redirigir a login.html
+        # Intentamos usar reverse para flexibilidad, pero con fallback a string literal
+        try:
+            from django.urls import reverse
+            target_url = reverse('core:login')
+        except:
+            target_url = '/login.html'
+            
+        reason = getattr(request, 'login_reason', 'unknown')
+        logger.warning(f"Redirecting to login. Path: {request.path} | Reason: {reason} | SID: {request.sid}")
+        
+        from django.shortcuts import redirect
+        # Pasamos la razón como query param para que el usuario pueda verla si quiere debuggear
+        return redirect(f"{target_url}?reason={reason}")

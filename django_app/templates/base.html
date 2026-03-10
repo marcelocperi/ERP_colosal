@@ -12,9 +12,9 @@
     <title>{% if enterprise %}{{ enterprise.nombre }}{% else %}Bienvenido{% endif %} | Colosal</title>
 
     <!-- Use original static files -->
-    <link rel="stylesheet" href="{% static \'css/style.css\' %}">
-    <link rel="stylesheet" href="{% static \'css/utilities.css\' %}">
-    <link rel="stylesheet" href="{% static \'css/premium_ux.css\' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/utilities.css' %}">
+    <link rel="stylesheet" href="{% static 'css/premium_ux.css' %}">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -347,7 +347,95 @@
         </div>
     </main>
 
+    <div id="modalBackdrop" class="premium-backdrop"></div>
+
+    <!-- Modal Error Premium -->
+    <div id="modalErrorPremium" class="modal-premium modal-animate shadow-lg" style="border: 1px solid rgba(239, 68, 68, 0.4) !important;">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(0, 0, 0, 0) 100%);">
+                <h5 class="modal-title font-monospace" style="background: linear-gradient(to right, #ff9999, #ffffff); -webkit-background-clip: text; background-clip: text; color: transparent;">
+                    <i class="fas fa-exclamation-triangle me-2 text-danger"></i> <span id="errorModalTitle">System Error</span>
+                </h5>
+                <button type="button" class="btn-close btn-close-white" onclick="toggleModal('modalErrorPremium')"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex align-items-start gap-3 mb-4">
+                    <div class="bg-danger bg-opacity-10 p-3 rounded-circle border border-danger border-opacity-25">
+                        <i class="fas fa-bug fa-2x text-danger"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-white fw-bold mb-1" id="errorModalSummary">Se ha producido una interrupción inesperada.</h6>
+                        <p class="text-muted small mb-0">Detalles técnicos capturados a continuación para su revisión o reporte.</p>
+                    </div>
+                </div>
+                
+                <div class="position-relative">
+                    <label class="form-label extra-small text-danger opacity-75">Stack Trace / Detalles del Error</label>
+                    <pre id="errorModalDetail" class="p-3 bg-black bg-opacity-40 rounded-3 border border-secondary border-opacity-25 text-danger small font-monospace mb-0" 
+                         style="max-height: 250px; overflow-y: auto; white-space: pre-wrap; word-break: break-all; font-size: 0.8rem;"></pre>
+                    <button class="btn btn-sm btn-outline-light position-absolute" style="top: 30px; right: 10px;" onclick="copyErrorToClipboard()" title="Copiar Error">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger px-4" onclick="toggleModal('modalErrorPremium')">Entendido</button>
+                <button type="button" class="btn btn-danger px-4" onclick="location.reload()" title="Relanzar Aplicación">
+                    <i class="fas fa-sync-alt me-2"></i>Recargar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        function toggleModal(id) {
+            const modal = document.getElementById(id);
+            const backdrop = document.getElementById('modalBackdrop');
+            if (!modal) return;
+
+            const isVisible = modal.style.display === 'block';
+
+            if (isVisible) {
+                modal.style.opacity = '0';
+                modal.style.transform = 'translate(-50%, -48%)';
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                    if (backdrop) {
+                        backdrop.style.opacity = '0';
+                        setTimeout(() => backdrop.style.display = 'none', 300);
+                    }
+                }, 300);
+            } else {
+                if (backdrop) {
+                    backdrop.style.display = 'block';
+                    setTimeout(() => backdrop.style.opacity = '1', 10);
+                }
+                modal.style.display = 'block';
+                setTimeout(() => {
+                    modal.style.opacity = '1';
+                    modal.style.transform = 'translate(-50%, -50%)';
+                }, 10);
+            }
+        }
+
+        // --- Global Error Handler ---
+        function showErrorPremium(title, summary, detail) {
+            document.getElementById('errorModalTitle').innerText = title || "Error del Sistema";
+            document.getElementById('errorModalSummary').innerText = summary || "Ocurrió un error inesperado al procesar la solicitud.";
+            document.getElementById('errorModalDetail').innerText = detail || "No hay detalles adicionales disponibles.";
+            toggleModal('modalErrorPremium');
+        }
+
+        function copyErrorToClipboard() {
+            const detail = document.getElementById('errorModalDetail').innerText;
+            navigator.clipboard.writeText(detail).then(() => {
+                const btn = event.currentTarget;
+                const icon = btn.querySelector('i');
+                icon.className = 'fas fa-check text-success';
+                setTimeout(() => icon.className = 'fas fa-copy', 2000);
+            });
+        }
+
         function toggleNavGroup(id) {
             const group = document.getElementById('group-' + id);
             const sep = document.getElementById('sep-' + id);

@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'apps.biblioteca',
     'apps.utilitarios',
     'apps.auditoria',
+    'apps.recoleccion',
 ]
 
 MIDDLEWARE = [
@@ -119,9 +120,12 @@ DATABASES = {
         'PASSWORD': env('DB_PASSWORD'),
         'HOST': env('DB_HOST', default='127.0.0.1'),
         'PORT': env('DB_PORT', default=3307),
+        'CONN_MAX_AGE': 60,           # Reuse connections for 60s (avoid per-request overhead)
+        'CONN_HEALTH_CHECKS': True,   # Test connection before reuse (avoids stale conn errors)
         'OPTIONS': {
             'charset': 'utf8mb4',
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'connect_timeout': 10,
         },
     }
 }
@@ -201,3 +205,17 @@ LOGGING = {
         'level': 'INFO',
     },
 }
+
+# =============================================================================
+# Email Configuration
+# In DEBUG mode, emails are printed to the console (no SMTP server needed).
+# In production, set EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+# and configure the other EMAIL_* variables in .env
+# =============================================================================
+EMAIL_BACKEND = env('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
+EMAIL_HOST = env('EMAIL_HOST', default='smtp.gmail.com')
+EMAIL_PORT = env.int('EMAIL_PORT', default=587)
+EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS', default=True)
+EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='Colosal ERP <noreply@colosal.app>')

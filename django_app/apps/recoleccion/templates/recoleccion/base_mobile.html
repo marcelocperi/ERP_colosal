@@ -1,0 +1,313 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#1a202c">
+    <link rel="manifest" href="/static/recoleccion/manifest.json">
+    <link rel="icon" type="image/png" href="/static/recoleccion/img/icon-192.png">
+    <title>{% block title %}Colosal Mobile{% endblock %}</title>
+
+    <!-- PWA Meta -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- CSS Dependencies -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #0f1115;
+            --card-bg: #1e2229;
+            --primary-orange: #f39c12;
+            --accent-yellow: #f1c40f;
+            --text-main: #e0e0e0;
+            --text-muted: #94a3b8;
+            --border-color: #2d3748;
+            --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        * {
+            box-sizing: border-box;
+            max-width: 100%;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            padding-bottom: calc(80px + var(--safe-area-inset-bottom));
+            -webkit-tap-highlight-color: transparent;
+            width: 100vw;
+            min-height: 100vh;
+        }
+
+        /* Industrial Header */
+        .mobile-header {
+            background: linear-gradient(135deg, #1e2229 0%, #0f1115 100%);
+            padding: 1.25rem 1rem;
+            border-bottom: 2px solid var(--primary-orange);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+        }
+
+        .header-title {
+            font-weight: 700;
+            font-size: 1rem;
+            /* Slightly smaller for better fit */
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            color: #fff;
+        }
+
+        .header-title i {
+            color: var(--primary-orange);
+            margin-right: 12px;
+        }
+
+        /* Content Container */
+        .main-container {
+            padding: 1rem;
+        }
+
+        /* Industrial Cards */
+        .module-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            width: 100%;
+            min-height: 80px;
+        }
+
+        .module-card:active {
+            transform: scale(0.98);
+            background: #252a33;
+            border-color: var(--primary-orange);
+        }
+
+        .module-icon {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            background: rgba(243, 156, 18, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--primary-orange);
+            margin-right: 1rem;
+        }
+
+        .module-info {
+            flex-grow: 1;
+            min-width: 0;
+            /* Important for text truncation/wrapping */
+        }
+
+        .module-info h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin: 0;
+            color: #fff;
+            /* Remove aggressive truncation for now to see everything */
+            word-break: break-word;
+        }
+
+        .module-info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin: 4px 0 0 0;
+            line-height: 1.3;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(30, 34, 41, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 0.75rem 0.5rem calc(0.75rem + var(--safe-area-inset-bottom));
+            z-index: 1000;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            /* Increased for Android 8 legibility */
+            font-weight: 600;
+            text-transform: uppercase;
+            flex: 1;
+            min-width: 0;
+            padding: 5px 2px;
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+
+        .nav-item.active {
+            color: var(--primary-orange);
+        }
+
+        /* Form Controls for Handhelds */
+        .scanner-input {
+            background: #1a202c !important;
+            border: 2px solid var(--primary-orange) !important;
+            color: var(--primary-orange) !important;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 1.2rem !important;
+            text-align: center;
+            border-radius: 12px !important;
+            padding: 0.75rem !important;
+            text-transform: uppercase;
+        }
+
+        .scanner-input:focus {
+            border-color: var(--primary-orange) !important;
+            box-shadow: 0 0 0 0.25rem rgba(243, 156, 18, 0.25) !important;
+        }
+
+        /* Action Buttons */
+        .btn-industrial {
+            background: var(--primary-orange);
+            color: #000;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 1rem;
+            border-radius: 12px;
+            border: none;
+            width: 100%;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-industrial:active {
+            background: var(--accent-yellow);
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+    <header class="mobile-header">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+            <h1 class="header-title">
+                {% block header_icon %}<i class="fas fa-microchip"></i>{% endblock %}
+                {% block header_title %}COLOSAL MOBILE{% endblock %}
+            </h1>
+            <div class="extra-small text-muted text-end">
+                <i class="fas fa-wifi"></i> <span id="server-ip" class="text-success fw-bold">...</span>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-2">
+            <div class="user-info extra-small text-white opacity-75" style="font-size: 0.75rem;">
+                <i class="fas fa-user-circle me-1 opacity-50"></i> {{ username|default:"Operario" }}
+            </div>
+            <div class="badge"
+                style="font-size: 0.6rem; background: rgba(243,156,18,0.15); border: 1px solid var(--primary-orange); color: var(--primary-orange);">
+                HANDHELD MODE
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="{% url 'recoleccion:index' %}?sid={{ sid }}" class="nav-item active">
+            <i class="fas fa-th-large"></i>
+            <span>Inicio</span>
+        </a>
+        <a href="{% url 'recoleccion:picking' %}?sid={{ sid }}" class="nav-item">
+            <i class="fas fa-box-open"></i>
+            <span>Picking</span>
+        </a>
+        <a href="{% url 'recoleccion:inventario' %}?sid={{ sid }}" class="nav-item">
+            <i class="fas fa-clipboard-list"></i>
+            <span>Stock</span>
+        </a>
+        <a href="{% url 'ventas:dashboard' %}?sid={{ sid }}" class="nav-item">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Salir</span>
+        </a>
+    </nav>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // PWA Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/static/recoleccion/sw.js')
+                    .then(reg => console.log('SW Registered', reg))
+                    .catch(err => console.log('SW Error', err));
+            });
+        }
+        // Common JS for Mobile
+        const sid = "{{ sid }}";
+
+        // Haptic feedback simulation
+        function viber() {
+            if (navigator.vibrate) navigator.vibrate(40);
+        }
+
+        $('a, button').on('click', function () {
+            viber();
+        });
+
+        // SID preservation for dynamic links
+        $(document).ajaxSend(function (event, jqXHR, settings) {
+            if (settings.url.indexOf('sid=') === -1) {
+                settings.url += (settings.url.indexOf('?') === -1 ? '?' : '&') + 'sid=' + sid;
+            }
+        });
+
+        // Set Server IP from current URL
+        document.getElementById('server-ip').textContent = window.location.host;
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

@@ -117,7 +117,8 @@ def perfil_cliente(request, id):
             
             # Contactos joining with Puestos
             cursor.execute("""
-                SELECT erp_contactos.*, erp_puestos.nombre as puesto_nombre, erp_direcciones.etiqueta as direccion_nombre
+                SELECT erp_contactos.*, erp_puestos.nombre as puesto_nombre, erp_puestos.area as area_id, 
+                       erp_direcciones.etiqueta as direccion_nombre
                 FROM erp_contactos
                 LEFT JOIN erp_puestos ON erp_contactos.puesto_id = erp_puestos.id
                 LEFT JOIN erp_direcciones ON erp_contactos.direccion_id = erp_direcciones.id
@@ -345,80 +346,6 @@ def perfil_cliente(request, id):
         messages.error(request, f"Error al cargar perfil de cliente: {str(e)}")
         return redirect('ventas:clientes')
 
-@login_required
-def facturar(request):
-    from apps.core.db import get_db_cursor, dictfetchall, dictfetchone
-    import datetime
-    import json
-    from django.shortcuts import render
-    from django.http import HttpResponse
-    from django.contrib import messages
-    
-    enterprise_id = request.user_data['enterprise_id']
-    
-    try:
-        with get_db_cursor(dictionary=True) as cursor:
-            # Clientes
-            cursor.execute("SELECT id, nombre, cuit, tipo_responsable FROM erp_terceros WHERE (enterprise_id = 0 OR enterprise_id = %s) AND es_cliente = 1 AND activo = 1 ORDER BY nombre", (enterprise_id,))
-            clientes = dictfetchall(cursor)
-            
-            # Tipos de Comprobante
-            cursor.execute("SELECT codigo, descripcion, letra FROM sys_tipos_comprobante WHERE activo = 1 ORDER BY codigo")
-            tipos = dictfetchall(cursor)
-            
-            # Depósitos
-            cursor.execute("SELECT id, nombre FROM stk_depositos WHERE (enterprise_id = 0 OR enterprise_id = %s) AND activo = 1 ORDER BY nombre", (enterprise_id,))
-            depositos = dictfetchall(cursor)
-            
-            # Medios de Pago
-            cursor.execute("SELECT id, nombre, recargo_pct FROM fin_medios_pago WHERE (enterprise_id = 0 OR enterprise_id = %s) AND activo = 1 ORDER BY nombre", (enterprise_id,))
-            medios_pago = dictfetchall(cursor)
-            
-            # Condiciones de Pago
-            cursor.execute("SELECT id, nombre, dias_vencimiento, descuento_pct FROM fin_condiciones_pago WHERE (enterprise_id = 0 OR enterprise_id = %s) AND activo = 1 ORDER BY nombre", (enterprise_id,))
-            condiciones = dictfetchall(cursor)
-            
-            # Naturalezas (Rubros)
-            cursor.execute("SELECT DISTINCT naturaleza FROM stk_articulos WHERE (enterprise_id = 0 OR enterprise_id = %s) AND activo = 1 AND naturaleza IS NOT NULL", (enterprise_id,))
-            naturalezas = [r['naturaleza'] for r in dictfetchall(cursor)]
-            
-            # Condición IVA Empresa
-            cursor.execute("SELECT condicion_iva FROM sys_enterprises WHERE id = %s", (enterprise_id,))
-            empresa = dictfetchone(cursor)
-            condicion_iva_empresa = empresa['condicion_iva'] if empresa else 'Responsable Inscripto'
-            
-            # Jurisdicciones (Percepciones)
-            cursor.execute("""
-                SELECT jurisdiccion FROM sys_enterprises_fiscal 
-                WHERE enterprise_id = %s AND activo = 1 AND tipo IN ('PERCEPCION', 'AMBOS')
-            """, (enterprise_id,))
-            agente_percepciones = [j['jurisdiccion'].upper() for j in dictfetchall(cursor)]
-            
-            # Transportistas
-            cursor.execute("SELECT id, nombre, cuit FROM stk_logisticas WHERE (enterprise_id = 0 OR enterprise_id = %s) AND activo = 1 ORDER BY nombre", (enterprise_id,))
-            transportistas = dictfetchall(cursor)
-
-        context = {
-            'clientes': clientes,
-            'tipos_comprobante': tipos,
-            'depositos': depositos,
-            'medios_pago': medios_pago,
-            'condiciones': condiciones,
-            'naturalezas': naturalezas,
-            'condicion_iva_empresa': condicion_iva_empresa,
-            'agente_percepciones': agente_percepciones,
-            'agente_percepciones_json': json.dumps(agente_percepciones),
-            'transportistas': transportistas,
-            'now': datetime.date.today().isoformat(),
-            'es_nota_credito': False
-        }
-        return render(request, 'ventas/facturar.html', context)
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return HttpResponse(f"Error: {str(e)}", status=500)
-        messages.error(request, f"Error al cargar perfil de cliente: {str(e)}")
-        return redirect('ventas:clientes')
 
 @login_required
 def editar_cliente(request, id):
@@ -823,7 +750,7 @@ def habilitar_condiciones_pago(request, id):
         with get_db_cursor(dictionary=True) as cursor:
             # Obtener todas las condiciones para iterar igual que en el POST
             cursor.execute("SELECT id FROM fin_condiciones_pago WHERE (enterprise_id = 0 OR enterprise_id = %s)", (enterprise_id,))
-            condiciones = cursor.fetchall()
+            condiciones = dictfetchall(cursor)
             
             for cond in condiciones:
                 key = f"habilitado_{cond['id']}"
@@ -1475,68 +1402,12 @@ def procesar_factura(request):
     if request.method != 'POST':
         return JsonResponse({'success': False, 'message': 'Método no permitido'}, status=405)
 
-    enterprise_id = request.user_data['enterprise_id']
-    user_id = request.user_data['id']
-    payload = json.loads(request.body)
-
     try:
-        with get_db_cursor(dictionary=True) as cursor:
-            # 1. Resolver numeración
-            punto_venta = 1 # TO-DO: Obtener de config empresa
-            tipo_comp = payload['tipo_comprobante']
-            
-            # Obtener letra del comprobante
-            cursor.execute("SELECT letra FROM sys_tipos_comprobante WHERE codigo = %s", (tipo_comp,))
-            tipo_row = dictfetchone(cursor)
-            letra = tipo_row['letra'] if tipo_row else 'X'
-
-            numero = NumerationService.get_next_number(enterprise_id, tipo_comp, punto_venta, cursor)
-
-            # 2. Cálculos básicos
-            neto = 0
-            iva = 0
-            total = 0
-            for item in payload['items']:
-                n = float(item['neto'])
-                i = float(item['iva'])
-                neto += n
-                iva += i
-                total += (n + i)
-
-            # 3. Guardar Cabecera
-            cursor.execute("""
-                INSERT INTO erp_comprobantes (
-                    enterprise_id, modulo, tercero_id, tipo_comprobante, letra,
-                    punto_venta, numero, fecha_emision, importe_neto, importe_iva, importe_total,
-                    estado_pago, user_id
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, CURRENT_DATE, %s, %s, %s, 'PENDIENTE', %s)
-            """, (enterprise_id, 'VENTAS', payload['cliente_id'], tipo_comp, letra,
-                  punto_venta, numero, neto, iva, total, user_id))
-            
-            cursor.execute("SELECT LAST_INSERT_ID() as last_id")
-            comprobante_id = dictfetchone(cursor)['last_id']
-
-            # 4. Guardar Detalles
-            for item in payload['items']:
-                cursor.execute("""
-                    INSERT INTO erp_comprobantes_detalle (
-                        comprobante_id, articulo_id, nombre, cantidad, precio_unitario,
-                        alicuota_iva, importe_neto, importe_iva, importe_total, enterprise_id
-                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                """, (comprobante_id, item['id'], item['nombre'], item['cantidad'], item['precio'],
-                      item['alic_iva'], item['neto'], item['iva'], float(item['neto']) + float(item['iva']), enterprise_id))
-
-            # 5. Stock y Contabilidad
-            _generar_asiento_contable(enterprise_id, comprobante_id, cursor)
-
-            # 6. AFIP
-            afip_res = AfipService.solicitar_cae(enterprise_id, comprobante_id, cursor)
-
-        return JsonResponse({
-            'success': True,
-            'id': comprobante_id,
-            'afip': afip_res
-        })
+        payload = json.loads(request.body)
+        result = BillingService.process_invoice(request.user_data, payload)
+        
+        status_code = 200 if result.get('success') else 500
+        return JsonResponse(result, status=status_code)
     except Exception as e:
         import traceback
         traceback.print_exc()
@@ -1558,7 +1429,7 @@ def devolucion_solicitar(request):
             tipo_nc = BillingService.get_nc_type(orig['tipo_comprobante'])
             
             punto_venta = 1
-            numero = NumerationService.get_next_number(enterprise_id, tipo_nc, punto_venta, cursor)
+            numero = NumerationService.get_next_number(enterprise_id, 'COMPROBANTE', tipo_nc, punto_venta, cursor)
 
             total = 0
             for it in payload['items']:
@@ -1575,42 +1446,14 @@ def devolucion_solicitar(request):
             cursor.execute("SELECT LAST_INSERT_ID() as last_id")
             nc_id = dictfetchone(cursor)['last_id']
 
-            _generar_asiento_contable(enterprise_id, nc_id, cursor)
+            BillingService._generar_asiento_contable(enterprise_id, nc_id, cursor)
+            
+            # Actualizar numeración
+            NumerationService.update_last_number(enterprise_id, 'COMPROBANTE', tipo_nc, punto_venta, numero, cursor)
 
         return JsonResponse({'success': True, 'id': nc_id})
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)}, status=500)
-
-def _generar_asiento_contable(enterprise_id, comprobante_id, cursor):
-    cursor.execute("SELECT * FROM erp_comprobantes WHERE id = %s", (comprobante_id,))
-    comp = dictfetchone(cursor)
-    if not comp: return
-    
-    cursor.execute("""
-        INSERT INTO cont_asientos (enterprise_id, fecha, concepto, modulo_origen, comprobante_id, estado)
-        VALUES (%s, %s, %s, 'VENTAS', %s, 'CONFIRMADO')
-    """, (enterprise_id, comp['fecha_emision'], f"Venta Comp. {comp['tipo_comprobante']} {comp['numero']}", comprobante_id))
-    
-    cursor.execute("SELECT LAST_INSERT_ID() as last_id")
-    asiento_id = dictfetchone(cursor)['last_id']
-
-    cursor.execute("""
-        INSERT INTO cont_asientos_detalle (asiento_id, cuenta_id, debe, haber, glosa)
-        SELECT %s, id, %s, 0, 'Deudores por Ventas' FROM cont_plan_cuentas WHERE codigo = '1.3.01' AND (enterprise_id = 0 OR enterprise_id = %s) LIMIT 1
-    """, (asiento_id, comp['importe_total'], enterprise_id))
-
-    cursor.execute("""
-        INSERT INTO cont_asientos_detalle (asiento_id, cuenta_id, debe, haber, glosa)
-        SELECT %s, id, 0, %s, 'Ventas' FROM cont_plan_cuentas WHERE codigo = '4.1' AND (enterprise_id = 0 OR enterprise_id = %s) LIMIT 1
-    """, (asiento_id, comp['importe_neto'], enterprise_id))
-
-    if comp.get('importe_iva') and comp['importe_iva'] > 0:
-        cursor.execute("""
-            INSERT INTO cont_asientos_detalle (asiento_id, cuenta_id, debe, haber, glosa)
-            SELECT %s, id, 0, %s, 'IVA Débito Fiscal' FROM cont_plan_cuentas WHERE codigo = '2.2.01' AND (enterprise_id = 0 OR enterprise_id = %s) LIMIT 1
-        """, (asiento_id, comp['importe_iva'], enterprise_id))
-
-    cursor.execute("UPDATE erp_comprobantes SET asiento_id = %s WHERE id = %s", (asiento_id, comprobante_id))
 
 @login_required
 def reenviar_comprobante(request, id):

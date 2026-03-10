@@ -11,6 +11,7 @@ Se han revisado todas las consultas en `core/routes.py` para cumplir con la dire
 ## 2. Migración a Django (App Ventas - Módulo de Facturación)
 
 ### Perfil de Cliente
+
 - **Template:** Migrado a `django_app/apps/ventas/templates/ventas/perfil_cliente.html`.
   - Implementación de **tabs horizontales** de alto rendimiento.
   - Integración de modales para todas las secciones (Ficha, Sedes, Contactos, Fiscal, CM05, Pago, Cta Cte).
@@ -18,6 +19,7 @@ Se han revisado todas las consultas en `core/routes.py` para cumplir con la dire
   - Soporte completo para persistencia (Edit, Delete, Add, Upload).
 
 ### Facturación y Notas de Crédito
+
 - **Emisión de Comprobantes:** Migradas las vistas `facturar` y `procesar_factura`.
   - Soporte para Facturas A, B, C y Notas de Crédito correspondientes.
   - Resolución automática de tipos de comprobante vía `BillingService.get_nc_type`.
@@ -40,6 +42,7 @@ Se han revisado todas las consultas en `core/routes.py` para cumplir con la dire
 ## 4. Estado de la Migración y Próximos Pasos
 
 ### Finalizado ✅
+
 - [X] Migrar Perfil de Cliente completo.
 - [X] Migrar Listado de Comprobantes de Ventas con filtros avanzados.
 - [X] Implementar Emisión de Facturas y Notas de Crédito (Lógica Billing + AFIP).
@@ -57,6 +60,7 @@ Se han revisado todas las consultas en `core/routes.py` para cumplir con la dire
 - [X] **Módulo de Sistema/Configuración:** Usuarios, roles, permisos, datos fiscales de empresa, áreas y puestos — ya migrado en fases anteriores.
 
 ### Pendiente ⏳  _(Sólo mejoras técnicas — no más módulos de negocio)_
+
 - [ ] **Generación de PDFs en Servidor:** Implementar visualización/descarga de PDF real (.pdf) usando `xhtml2pdf` o `reportlab`.
 - [ ] **Certificados de AFIP Reales:** Configurar conexión zeep para producción/homologación real una vez estabilizada la app.
 - [ ] **Permissions — Sistema Real:** Implementar `has_permission` real en todos los módulos (actualmente dummy en Producción).

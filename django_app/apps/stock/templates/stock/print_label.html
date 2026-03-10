@@ -244,8 +244,10 @@
         <div class="safety-row">
             <div class="pictograms-box">
                 {% for picto in data.seguridad.pictogramas_json %}
-                <img src="{% static \'img/ghs/{{ picto }}.png\' %}"
-                    onerror="this.src='https://placehold.co/100x100?text={{ picto }}'" alt="{{ picto }}">
+                {% with picto_path="img/ghs/"|add:picto|add:".png" %}
+                <img src="{% static picto_path %}" onerror="this.src='https://placehold.co/100x100?text={{ picto }}'"
+                    alt="{{ picto }}">
+                {% endwith %}
                 {% endfor %}
             </div>
             {% if data.seguridad.numero_un %}

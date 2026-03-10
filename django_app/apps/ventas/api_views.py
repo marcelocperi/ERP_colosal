@@ -220,3 +220,26 @@ def api_ventas_fiscal_allowed_docs(request):
             return JsonResponse(docs_data, safe=False)
             
     return JsonResponse([], safe=False)
+@login_required
+def api_cliente_detalle(request, id):
+    enterprise_id = request.user_data['enterprise_id']
+    with get_db_cursor(dictionary=True) as cursor:
+        cursor.execute("""
+            SELECT id, nombre, cuit, email, telefono, codigo, tipo_responsable, observaciones,
+                   habilita_cta_cte, monto_cta_cte
+            FROM erp_terceros
+            WHERE id = %s AND enterprise_id = %s
+        """, (id, enterprise_id))
+        cliente = dictfetchone(cursor)
+    
+    if not cliente:
+        return JsonResponse({'success': False, 'error': 'Cliente no encontrado'}, status=404)
+        
+    return JsonResponse(cliente)
+
+@login_required
+def api_afip_consultar(request, cuit):
+    from .afip_service import AfipService
+    enterprise_id = request.user_data['enterprise_id']
+    res = AfipService.consultar_padron(enterprise_id, cuit)
+    return JsonResponse(res)

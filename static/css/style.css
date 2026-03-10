@@ -489,8 +489,8 @@ textarea:focus {
     animation: slideDownFade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ===== MODAL BACKDROP ===== */
-.modal-backdrop {
+/* ===== MODAL BACKDROP (custom - renamed to avoid Bootstrap conflict) ===== */
+.premium-backdrop {
     position: fixed;
     top: 0;
     left: 0;

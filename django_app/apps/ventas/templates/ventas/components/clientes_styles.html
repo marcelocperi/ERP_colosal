@@ -1,0 +1,60 @@
+<style>
+    .table-fixed-header {
+        max-height: 75vh;
+        overflow-y: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .table-fixed-header thead th {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        background: #0f172a !important;
+        border-bottom: 2px solid var(--primary) !important;
+        color: white;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05rem;
+    }
+
+    .filter-row th {
+        position: sticky;
+        top: 38px;
+        z-index: 19;
+        background: #1e293b !important;
+        padding: 5px !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .filter-select {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #94a3b8;
+        font-size: 0.7rem;
+        padding: 2px 5px;
+        border-radius: 4px;
+        outline: none;
+    }
+
+    .filter-select:focus {
+        border-color: var(--primary);
+        color: white;
+    }
+
+    .filter-select option {
+        background: #0f172a;
+        color: white;
+    }
+
+    .customer-row:hover {
+        background: rgba(99, 102, 241, 0.05);
+    }
+
+    .badge-code {
+        background: rgba(99, 102, 241, 0.2);
+        color: #818cf8;
+        border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+</style>

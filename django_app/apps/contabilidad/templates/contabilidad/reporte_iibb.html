@@ -42,12 +42,12 @@
                                 <tr>
                                     <td class="fw-bold text-info">{{ r.codigo }}</td>
                                     <td>{{ r.nombre }}</td>
-                                    <td class="text-end">$ {{ r.base|format_currency }}</td>
-                                    <td class="text-end text-warning">$ {{ r.percepciones|format_currency }}</td>
-                                    <td class="text-end text-danger">$ {{ r.retenciones|format_currency }}</td>
-                                    <td class="text-end fw-bold">$ {{ (r.percepciones + r.retenciones)|format_currency }}</td>
+                                    <td class="text-end">$ {{ r.base|floatformat:2 }}</td>
+                                    <td class="text-end text-warning">$ {{ r.percepciones|floatformat:2 }}</td>
+                                    <td class="text-end text-danger">$ {{ r.retenciones|floatformat:2 }}</td>
+                                    <td class="text-end fw-bold">$ {{ r.percepciones|floatformat:2 }}</td>
                                 </tr>
-                                {% else %}
+                                {% empty %}
                                 <tr>
                                     <td colspan="6" class="text-center p-5">No hay movimientos impositivos en este
                                         periodo.</td>
@@ -57,10 +57,11 @@
                             <tfoot class="bg-secondary bg-opacity-10">
                                 <tr class="fw-bold">
                                     <td colspan="2">TOTAL GENERAL</td>
-                                    <td class="text-end">$ {{ totales.base|format_currency }}</td>
-                                    <td class="text-end text-warning">$ {{ totales.percepciones|format_currency }}</td>
-                                    <td class="text-end text-danger">$ {{ totales.retenciones|format_currency }}</td>
-                                    <td class="text-end">$ {{ (totales.percepciones + totales.retenciones)|format_currency }}</td>
+                                    <td class="text-end">$ {{ totales.base|floatformat:2 }}</td>
+                                    <td class="text-end text-warning">$ {{ totales.percepciones|floatformat:2 }}</td>
+                                    <td class="text-end text-danger">$ {{ totales.retenciones|floatformat:2 }}</td>
+                                    <td class="text-end">$ {{ (totales.percepciones + totales.retenciones)|floatformat:2
+                                        }}</td>
                                 </tr>
                             </tfoot>
                         </table>

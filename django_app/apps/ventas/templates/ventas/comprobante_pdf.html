@@ -312,7 +312,8 @@
                     <div class="empresa-nombre">{{ empresa.razon_social }}</div>
                     <div class="empresa-detalle">
                         {{ empresa.domicilio_fiscal }}<br>
-                        {% if empresa.localidad %}{{ empresa.localidad }}{% endif %}{% if empresa.provincia %}, {{ empresa.provincia }}{% endif %}<br>
+                        {% if empresa.localidad %}{{ empresa.localidad }}{% endif %}{% if empresa.provincia %}, {{
+                        empresa.provincia }}{% endif %}<br>
                         IVA: {{ empresa.condicion_iva|default:"Responsable Inscripto" }}<br>
                         CUIT: {{ empresa.cuit }}
                         {% if empresa.ingresos_brutos %} — IIBB: {{ empresa.ingresos_brutos }}{% endif %}<br>
@@ -334,7 +335,8 @@
                 <!-- Columna Derecha: Datos del Comprobante -->
                 <td class="header-right">
                     <div class="comp-nombre">{{ vals.tipo_comprobante_nombre }}</div>
-                    <div class="comp-numero">Nro: <strong>{{ vals.punto_venta|stringformat:"05d" }}-{{ vals.numero|stringformat:"08d" }}</strong></div>
+                    <div class="comp-numero">Nro: <strong>{{ vals.punto_venta|stringformat:"05d" }}-{{
+                            vals.numero|stringformat:"08d" }}</strong></div>
                     <div class="fecha-label">Fecha de Emisión: <strong>{{ vals.fecha_emision }}</strong></div>
                     {% if vals.fecha_vencimiento %}
                     <div class="fecha-label">Fecha de Vencimiento: {{ vals.fecha_vencimiento }}</div>
@@ -443,7 +445,7 @@
                 {% for name, config in layout.items %}
                 {% if config.section == 'totals' and config.value %}
                 <tr>
-                    <td class="lbl" style="font-size: 7.5pt;">{{ name|title|replace:"_":" " }}:</td>
+                    <td class="lbl" style="font-size: 7.5pt;">{{ name|title }}:</td>
                     <td class="val" style="font-size: 8pt;">$ {{ config.value }}</td>
                 </tr>
                 {% endif %}

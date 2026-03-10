@@ -32,5 +32,6 @@ urlpatterns = [
     path('pricing/', include('apps.pricing.urls')),
     path('auditoria/', include('apps.auditoria.urls')),
     path('utilitarios/', include('apps.utilitarios.urls')),
+    path('recoleccion/', include('apps.recoleccion.urls')),
     path('', views.home_redirect, name='home'),
 ]

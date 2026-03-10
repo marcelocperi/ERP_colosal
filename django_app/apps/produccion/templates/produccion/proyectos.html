@@ -61,11 +61,8 @@
                         <div class="d-flex justify-content-between mb-1">
                             <span class="text-muted smaller fw-bold">Progreso de Homologación</span>
                             <span class="text-primary smaller fw-bold">
-                                {% if p.estado == 'EVALUACION' %}25%
-                                {% elif p.estado == 'I_D' %}50%
-                                {% elif p.estado == 'HOMOLOGACION_LEGAL' %}75%
-                                {% elif p.estado == 'APROBADO' %}100%
-                                {% else %}0%{% endif %}
+                                {% if p.estado == 'EVALUACION' %}25%{% elif p.estado == 'I_D' %}50%{% elif p.estado ==
+                                'HOMOLOGACION_LEGAL' %}75%{% elif p.estado == 'APROBADO' %}100%{% else %}0%{% endif %}
                             </span>
                         </div>
                         <div class="progress" style="height: 6px;">

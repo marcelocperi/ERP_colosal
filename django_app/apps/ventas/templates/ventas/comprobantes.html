@@ -86,7 +86,7 @@
                                 <span class="badge bg-secondary me-2">{{ c.letra }}</span>
                                 <a href="{% url 'ventas:ver_comprobante' c.id %}" target="_blank"
                                     class="text-info text-decoration-none fw-bold">
-                                    {{ c.punto_venta|stringformat:"05d" }}-{{ c.numero|stringformat:"08d" }}
+                                    {{ c.punto_venta | stringformat:"05d" }}-{{ c.numero | stringformat:"08d" }}
                                 </a>
                                 <div class="small text-muted">{{ c.tipo_nombre }}</div>
                             </td>
@@ -100,9 +100,9 @@
                                 <span class="badge rounded-pill bg-info">{{ c.estado_pago }}</span>
                                 {% endif %}
                             </td>
-                            <td class="text-end text-muted">$ {{ c.importe_neto|floatformat:2 }}</td>
-                            <td class="text-end text-muted">$ {{ c.importe_iva|floatformat:2 }}</td>
-                            <td class="text-end fw-bold text-success">$ {{ c.importe_total|floatformat:2 }}</td>
+                            <td class="text-end text-muted">$ {{ c.importe_neto | floatformat:2 }}</td>
+                            <td class="text-end text-muted">$ {{ c.importe_iva | floatformat:2 }}</td>
+                            <td class="text-end fw-bold text-success">$ {{ c.importe_total | floatformat:2 }}</td>
                             <td class="text-center pe-4">
                                 <a href="{% url 'ventas:ver_comprobante' c.id %}" target="_blank"
                                     class="btn btn-outline-info btn-sm" title="Ver / Imprimir">
@@ -142,7 +142,7 @@
             </div>
         </div>
         <div class="card-footer bg-dark border-0 py-2">
-            <span class="text-muted small" id="rowCount">Mostrando {{ comprobantes|length }} comprobantes</span>
+            <span class="text-muted small" id="rowCount">Mostrando {{ comprobantes | length }} comprobantes</span>
         </div>
     </div>
 </div>

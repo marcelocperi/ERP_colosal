@@ -1,0 +1,10 @@
+{% extends 'recoleccion/base_mobile.html' %}
+{% block header_title %}PICKING / PREPARACIÓN{% endblock %}
+{% block content %}
+<div class="text-center py-5">
+    <i class="fas fa-tools fa-4x text-muted mb-4"></i>
+    <h2 class="h4">Módulo en Construcción</h2>
+    <p class="text-muted">Este módulo permitirá la recolección guiada de pedidos por estantería.</p>
+    <a href="{% url 'recoleccion:index' %}?sid={{ sid }}" class="btn-industrial mt-4">VOLVER AL PANEL</a>
+</div>
+{% endblock %}

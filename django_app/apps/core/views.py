@@ -1,8 +1,10 @@
+import os
 import secrets
 import logging
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.urls import reverse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from werkzeug.security import check_password_hash
 
 from apps.core.db import get_db_cursor, dictfetchone, dictfetchall
@@ -42,7 +44,7 @@ def login_view(request):
                 
                 if not ent_status or ent_status['estado'].lower() != 'activo':
                     messages.error(request, "Esta empresa se encuentra inhabilitada temporalmente.")
-                    return redirect('core:login')
+                    return HttpResponseRedirect('/login.html')
 
                 # 2. Buscar usuario
                 cursor.execute("""
@@ -75,9 +77,10 @@ def login_view(request):
                     request.session['s'][new_sid]['bind_token'] = bind_token
                     request.session.modified = True
 
-                    # Redirigir inyectando el SID en la URL
-                    target_url = f"/ventas/dashboard/?sid={new_sid}"
-                    response = redirect(target_url)
+                    service_name = os.environ.get('SERVICE_NAME', 'ERP')
+                    base_path = '/recoleccion/' if service_name == 'RECOLECCION' else '/ventas/dashboard/'
+                    target_url = f"{base_path}?sid={new_sid}"
+                    response = HttpResponseRedirect(target_url)
                     
                     # Seteamos una cookie temporal de "vínculo" que dura 30 segundos (JS la consumirá)
                     response.set_cookie(f'bind_{new_sid}', bind_token, max_age=30, httponly=False, samesite='Lax')
@@ -154,8 +157,8 @@ def api_get_areas(request):
         return JsonResponse(dictfetchall(cursor), safe=False)
 
 def home_redirect(request):
-    """Redirige "/" al login.html siguiendo el requerimiento del usuario."""
-    return redirect('core:login')
+    """Redirige "/" al login.html (HttpResponse puro)."""
+    return HttpResponseRedirect('/login.html')
 
 from django.http import HttpResponse
 
@@ -170,3 +173,24 @@ def get_logo_raw(request, logo_id):
         response = HttpResponse(row['logo_data'], content_type=row['mime_type'])
         response['Cache-Control'] = 'public, max-age=86400'
         return response
+from django.conf import settings
+from qz_auth import sign_message
+
+def api_qz_cert(request):
+    """Retorna el certificado público para QZ Tray."""
+    cert_path = os.path.join(settings.BASE_DIR.parent, 'qz_cert.pem')
+    if not os.path.exists(cert_path):
+        from qz_auth import generate_qz_keys
+        generate_qz_keys(settings.BASE_DIR.parent)
+    
+    with open(cert_path, 'r') as f:
+        return HttpResponse(f.read(), content_type='text/plain')
+
+def api_qz_sign(request):
+    """Firma un mensaje para QZ Tray usando la clave privada."""
+    to_sign = request.GET.get('request')
+    if not to_sign:
+        return HttpResponse("Missing request parameter", status=400)
+    
+    signature = sign_message(settings.BASE_DIR.parent, to_sign)
+    return HttpResponse(signature, content_type='text/plain')

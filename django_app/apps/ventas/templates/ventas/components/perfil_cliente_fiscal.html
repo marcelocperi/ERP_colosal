@@ -1,0 +1,52 @@
+{% load core_tags %}
+<!-- DATOS FISCALES -->
+<div data-tab-panel id="fiscal" role="tabpanel" style="display:none;">
+    <div class="d-flex justify-content-between mb-3">
+        <h6 class="font-weight-bold">Configuración de Impuestos</h6>
+        <button class="btn btn-sm btn-primary" onclick="nuevoFiscal()">
+            <i class="fas fa-plus"></i> Agregar Impuesto
+        </button>
+    </div>
+    <div class="w-100 overflow-visible">
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th>Impuesto</th>
+                    <th>Jurisdicción</th>
+                    <th>Condición</th>
+                    <th>Nro. Inscripción</th>
+                    <th>Alícuota</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for f in fiscales %}
+                <tr>
+                    <td><strong>{{ f.impuesto }}</strong></td>
+                    <td>{{ f.jurisdiccion }}</td>
+                    <td>{{ f.condicion }}</td>
+                    <td>{{ f.numero_inscripcion }}</td>
+                    <td>{{ f.alicuota }}%</td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-sm text-primary" data-item='{{ f|tojson }}'
+                                onclick='editarFiscal(this)' title="Editar"><i class="fas fa-edit"></i></button>
+                            <form action="{% url 'ventas:eliminar_detalle' 'erp_datos_fiscales' f.id cliente.id %}"
+                                method="POST" style="display:inline;"
+                                onsubmit="return confirm('¿Eliminar dato fiscal?')">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm text-danger"><i
+                                        class="fas fa-trash"></i></button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-3">Sin datos impositivos registrados.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

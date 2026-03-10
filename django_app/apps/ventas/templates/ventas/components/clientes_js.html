@@ -1,0 +1,215 @@
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        populateFilters();
+        document.querySelectorAll('.filter-select').forEach(select => {
+            select.addEventListener('change', applyFilters);
+        });
+        document.getElementById('globalSearch').addEventListener('input', applyFilters);
+    });
+
+    function populateFilters() {
+        const table = document.getElementById('clientesTable');
+        if (!table) return;
+        const rows = table.querySelectorAll('tbody tr.customer-row');
+        const filters = table.querySelectorAll('.filter-select');
+
+        filters.forEach(filter => {
+            const colIdx = parseInt(filter.dataset.col);
+            const values = new Set();
+            rows.forEach(row => {
+                const cell = row.cells[colIdx];
+                if (cell) {
+                    const text = cell.textContent.trim();
+                    if (text && text !== '-') values.add(text);
+                }
+            });
+            const sortedValues = Array.from(values).sort((a, b) => a.localeCompare(b));
+            sortedValues.forEach(val => {
+                const opt = document.createElement('option');
+                opt.value = val;
+                opt.textContent = val;
+                filter.appendChild(opt);
+            });
+        });
+    }
+
+    function applyFilters() {
+        const table = document.getElementById('clientesTable');
+        const rows = table.querySelectorAll('tbody tr.customer-row');
+        const filters = Array.from(table.querySelectorAll('.filter-select'));
+        const searchTerm = document.getElementById('globalSearch').value.toLowerCase().trim();
+
+        const activeFilters = filters
+            .filter(f => f.value !== "")
+            .map(f => ({ col: parseInt(f.dataset.col), val: f.value }));
+
+        let visibleCount = 0;
+        rows.forEach(row => {
+            let showByDropdown = true;
+            for (const f of activeFilters) {
+                const cellText = row.cells[f.col].textContent.trim();
+                if (cellText !== f.val) {
+                    showByDropdown = false;
+                    break;
+                }
+            }
+            let showBySearch = true;
+            if (searchTerm) {
+                const rowText = row.textContent.toLowerCase();
+                showBySearch = rowText.includes(searchTerm);
+            }
+            const show = showByDropdown && showBySearch;
+            row.style.display = show ? '' : 'none';
+            if (show) visibleCount++;
+        });
+        const rowCountElem = document.getElementById('rowCount');
+        if (rowCountElem) rowCountElem.textContent = `Mostrando ${visibleCount} de ${rows.length} clientes`;
+    }
+
+    function resetFilters() {
+        document.querySelectorAll('.filter-select').forEach(f => f.value = "");
+        document.getElementById('globalSearch').value = "";
+        applyFilters();
+    }
+
+    // --- Modal Control ---
+    function abrirModalAlta() {
+        toggleModal('modalAltaCliente');
+    }
+
+    async function abrirModalEditar(id) {
+        try {
+            const sid = "{{ sid|default:'' }}";
+            const response = await fetch(`/api/ventas/cliente/${id}/detalle?sid=${sid}`);
+            if (!response.ok) throw new Error("Error fetching client data");
+            const res = await response.json();
+            
+            // Note: The API returns data directly or in .data depends on implementation.
+            // Based on my previous view, it returns the dict directly.
+            const c = res;
+            document.getElementById('edit_title').innerText = `Editar: ${c.nombre}`;
+            document.getElementById('edit_codigo').value = c.codigo || "";
+            document.getElementById('edit_nombre').value = c.nombre || "";
+            document.getElementById('edit_cuit').value = c.cuit || "";
+            document.getElementById('edit_tipo').value = c.tipo_responsable || "Consumidor Final";
+            document.getElementById('edit_email').value = c.email || "";
+            document.getElementById('edit_tel').value = c.telefono || "";
+            document.getElementById('edit_obs').value = c.observaciones || "";
+            
+            // Set form action dynamically
+            document.getElementById('formEditarCliente').action = `/ventas/clientes/editar/${id}/?sid=${sid}`;
+            
+            toggleModal('modalEditarCliente');
+        } catch (e) {
+            console.error(e);
+            Swal.fire('Error', 'No se pudo cargar la información del cliente.', 'error');
+        }
+    }
+
+    // --- AFIP Logic ---
+    function validarCUIT(cuit) {
+        if (!cuit) return false;
+        cuit = cuit.replace(/\D/g, '');
+        if (cuit.length !== 11) return false;
+        const factors = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
+        let sum = 0;
+        for (let i = 0; i < 10; i++) sum += parseInt(cuit[i]) * factors[i];
+        let control = 11 - (sum % 11);
+        if (control === 11) control = 0;
+        if (control === 10) control = 9;
+        return control === parseInt(cuit[10]);
+    }
+
+    async function consultarAFIP(prefijo) {
+        const input = document.getElementById(`${prefijo}_cuit`);
+        const status = document.getElementById(`status_afip_${prefijo}`);
+        const cuit = input.value.replace(/\D/g, '');
+        
+        if (!validarCUIT(cuit)) {
+            status.innerHTML = '<span class="text-danger">CUIT Inválido</span>';
+            return;
+        }
+
+        status.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Consultando AFIP...';
+        try {
+            const sid = "{{ sid|default:'' }}";
+            const res = await fetch(`/api/ventas/afip/consultar/${cuit}?sid=${sid}`).then(r => r.json());
+            if (res.success) {
+                document.getElementById(`${prefijo}_nombre`).value = res.data.razon_social;
+                document.getElementById(`${prefijo}_tipo`).value = res.data.condicion_iva;
+                status.innerHTML = '<span class="text-success"><i class="fas fa-check"></i> Datos recuperados</span>';
+            } else {
+                status.innerHTML = `<span class="text-warning">${res.error}</span>`;
+            }
+        } catch (e) {
+            status.innerHTML = '<span class="text-danger">Error de conexión</span>';
+        }
+    }
+
+    async function verVistazoCliente(id) {
+        try {
+            const sid = "{{ sid|default:'' }}";
+            const response = await fetch(`/api/ventas/cliente/${id}/detalle?sid=${sid}`);
+            if (!response.ok) throw new Error("Error fetching client data");
+            const data = await response.json();
+
+            document.getElementById('vistazoNombre').textContent = data.nombre;
+            document.getElementById('vistazoCuit').textContent = data.cuit;
+            // Use fallback if ID differs (tipo_responsable vs tipoResp)
+            const tipoElem = document.getElementById('vistazoTipoResp') || document.getElementById('vistazoTipo');
+            if (tipoElem) tipoElem.textContent = data.tipo_responsable;
+            
+            const emailElem = document.getElementById('vistazoEmail');
+            if (emailElem) emailElem.textContent = data.email || "No especificado";
+            
+            const telElem = document.getElementById('vistazoTelefono') || document.getElementById('vistazoTel');
+            if (telElem) telElem.textContent = data.telefono || "No especificado";
+
+            const hCta = document.getElementById('vistazoHabilitaCta');
+            if (hCta) {
+                if (data.habilita_cta_cte) {
+                    hCta.textContent = "Habilitada";
+                    hCta.className = "badge bg-success";
+                } else {
+                    hCta.textContent = "Inhabilitada";
+                    hCta.className = "badge bg-danger";
+                }
+            }
+            
+            const montoCta = document.getElementById('vistazoMontoCta');
+            if (montoCta) {
+                montoCta.textContent = `$ ${parseFloat(data.monto_cta_cte || 0).toLocaleString('es-AR', { minimumFractionDigits: 2 })}`;
+            }
+
+            const divObs = document.getElementById('divVistazoObs');
+            if (data.observaciones) {
+                if (divObs) divObs.style.display = 'block';
+                const obsElem = document.getElementById('vistazoObs');
+                if (obsElem) obsElem.textContent = data.observaciones;
+            } else {
+                if (divObs) divObs.style.display = 'none';
+            }
+
+            const btnPerfil = document.getElementById('btnVistazoPerfil');
+            if (btnPerfil) btnPerfil.href = `/ventas/clientes/perfil/${id}/?sid=${sid}`;
+
+            // Try to open using our Premium Modal logic first
+            const modalVistazo = document.getElementById('modalVistazoCliente') || document.getElementById('modalVistazo');
+            if (modalVistazo) {
+                if (modalVistazo.classList.contains('modal-premium')) {
+                    toggleModal(modalVistazo.id);
+                } else {
+                    const bsModal = new bootstrap.Modal(modalVistazo);
+                    bsModal.show();
+                }
+            }
+        } catch (e) {
+            console.error(e);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo cargar la información del cliente.'
+            });
+        }
+    }
+</script>

@@ -400,6 +400,12 @@
                     "permission": "create_transferencia"
                 },
                 {
+                    "name": "Aprobación de Inventario",
+                    "route": "stock:ajustes_pendientes",
+                    "icon": "fas fa-check-double",
+                    "permission": "approve_inventory_adjustments"
+                },
+                {
                     "name": "Depósitos",
                     "route": "stock:depositos",
                     "icon": "fas fa-warehouse",
@@ -428,6 +434,37 @@
                     "route": "stock.balanzas_lista",
                     "icon": "fas fa-balance-scale",
                     "permission": "system_settings"
+                }
+            ]
+        },
+        "RECOLECCION": {
+            "icon": "fas fa-mobile-alt",
+            "color": "dark",
+            "description": "Terminales móviles para depósito y planta",
+            "modules": [
+                {
+                    "name": "Panel Operativo",
+                    "route": "recoleccion:index",
+                    "icon": "fas fa-th-large",
+                    "permission": "view_recolectores"
+                },
+                {
+                    "name": "Picking / Preparación",
+                    "route": "recoleccion:picking",
+                    "icon": "fas fa-box-open",
+                    "permission": "recolector_picking"
+                },
+                {
+                    "name": "Recuento Inventario",
+                    "route": "recoleccion:inventario",
+                    "icon": "fas fa-clipboard-list",
+                    "permission": "recolector_counting"
+                },
+                {
+                    "name": "Recepción Mercadería",
+                    "route": "recoleccion:recepcion",
+                    "icon": "fas fa-truck-loading",
+                    "permission": "recolector_receiving"
                 }
             ]
         },

@@ -1,0 +1,94 @@
+{% extends 'recoleccion/base_mobile.html' %}
+
+{% block header_title %}MÓDULOS MÓVILES{% endblock %}
+
+{% block content %}
+<div class="welcome-section mb-4">
+    <h2 class="h4 fw-bold mb-1">¡Hola, {{ username }}!</h2>
+    <p class="text-muted small">Seleccione una operación para comenzar.</p>
+</div>
+
+<div class="modules-grid d-flex flex-column gap-3">
+    <!-- Picking -->
+    <a href="{% url 'recoleccion:picking' %}?sid={{ sid }}" class="module-card">
+        <div class="module-icon">
+            <i class="fas fa-box-open"></i>
+        </div>
+        <div class="module-info">
+            <h3>Preparación (Picking)</h3>
+            <p>Recolectar pedidos para despacho.</p>
+        </div>
+    </a>
+
+    <!-- Campañas -->
+    <a href="{% url 'recoleccion:campanias' %}?sid={{ sid }}" class="module-card">
+        <div class="module-icon" style="color: #e67e22; background: rgba(230, 126, 34, 0.1);">
+            <i class="fas fa-list-check"></i>
+        </div>
+        <div class="module-info">
+            <h3>Campañas (Conteo Ordenado)</h3>
+            <p>Seguir una lista de relevamiento.</p>
+        </div>
+    </a>
+
+    <!-- Recuento Directo -->
+    <a href="{% url 'recoleccion:inventario' %}?sid={{ sid }}" class="module-card">
+        <div class="module-icon" style="color: #2ecc71; background: rgba(46, 204, 113, 0.1);">
+            <i class="fas fa-barcode"></i>
+        </div>
+        <div class="module-info">
+            <h3>Ajuste Rápido</h3>
+            <p>Escaneo libre y auditoría.</p>
+        </div>
+    </a>
+
+    <!-- Recepción -->
+    <a href="{% url 'recoleccion:recepcion' %}?sid={{ sid }}" class="module-card">
+        <div class="module-icon" style="color: #3498db; background: rgba(52, 152, 219, 0.1);">
+            <i class="fas fa-truck-loading"></i>
+        </div>
+        <div class="module-info">
+            <h3>Recepción de Mercadería</h3>
+            <p>Ingreso de compras y proveedores.</p>
+        </div>
+    </a>
+
+    <!-- Despacho -->
+    <a href="#" class="module-card opacity-50">
+        <div class="module-icon" style="color: #9b59b6; background: rgba(155, 89, 182, 0.1);">
+            <i class="fas fa-dolly-flatbed"></i>
+        </div>
+        <div class="module-info">
+            <h3>Control de Despacho</h3>
+            <p>Verificación final de carga.</p>
+        </div>
+    </a>
+</div>
+
+<div class="card bg-dark border-secondary mt-4 p-3">
+    <div class="d-flex align-items-center mb-2">
+        <i class="fas fa-info-circle text-info me-2"></i>
+        <span class="small fw-bold">ESTADO DEL DISPOSITIVO</span>
+    </div>
+    <div class="row g-2 text-center">
+        <div class="col-4">
+            <div class="p-2 bg-black rounded">
+                <div class="text-success small fw-bold">Online</div>
+                <div style="font-size: 0.6rem; color: #666;">RED</div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="p-2 bg-black rounded">
+                <div class="text-warning small fw-bold">{{ enterprise_id }}</div>
+                <div style="font-size: 0.6rem; color: #666;">ENT</div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="p-2 bg-black rounded">
+                <div class="text-info small fw-bold">v1.2</div>
+                <div style="font-size: 0.6rem; color: #666;">VER</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

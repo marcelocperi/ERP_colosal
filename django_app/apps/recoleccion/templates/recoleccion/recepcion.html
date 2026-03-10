@@ -1,0 +1,10 @@
+{% extends 'recoleccion/base_mobile.html' %}
+{% block header_title %}RECEPCIÓN MERCADERÍA{% endblock %}
+{% block content %}
+<div class="text-center py-5">
+    <i class="fas fa-truck-loading fa-4x text-muted mb-4"></i>
+    <h2 class="h4">Módulo en Construcción</h2>
+    <p class="text-muted">Este módulo permitirá el ingreso de mercadería escaneando facturas o remitos.</p>
+    <a href="{% url 'recoleccion:index' %}?sid={{ sid }}" class="btn-industrial mt-4">VOLVER AL PANEL</a>
+</div>
+{% endblock %}

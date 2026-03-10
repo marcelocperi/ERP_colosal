@@ -16,4 +16,7 @@ urlpatterns = [
     path('api/erp/areas/', views.api_get_areas, name='api_get_areas'),
     # Assets / Logos
     path('sysadmin/enterprises/logo/raw/<int:logo_id>', views.get_logo_raw, name='get_logo_raw'),
+    # QZ Tray Auth
+    path('api/qz/cert', views.api_qz_cert, name='api_qz_cert'),
+    path('api/qz/sign', views.api_qz_sign, name='api_qz_sign'),
 ]

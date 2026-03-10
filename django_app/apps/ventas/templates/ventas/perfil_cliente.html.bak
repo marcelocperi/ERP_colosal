@@ -1,0 +1,1009 @@
+{% extends "base.html" %}
+{% load static %}
+{% load core_tags %}
+
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'ventas:clientes' %}">Clientes</a></li>
+                <li class="breadcrumb-item active">Ficha Cliente</li>
+            </ol>
+        </nav>
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="h3 text-gray-800 mb-0">{{ cliente.nombre }}</h1>
+                <small class="text-muted">Código: <strong>{{ cliente.codigo | default:"-" }}</strong></small>
+            </div>
+            <button class="btn btn-sm btn-outline-primary" onclick="toggleModal('modalCliente')">
+                <i class="fas fa-edit"></i> Editar Datos Básicos
+            </button>
+        </div>
+    </div>
+    <div class="col-auto">
+        <span class="badge bg-primary fs-6">{{ cliente.tipo_responsable }}</span>
+    </div>
+</div>
+
+<!-- ESTILOS HORIZONTALES PARA TABS -->
+<style>
+    .horizontal-tabs {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        white-space: nowrap;
+        margin-bottom: 0px;
+        border-bottom: 1px solid #dee2e6;
+        width: 100%;
+        scrollbar-width: thin;
+    }
+
+    .horizontal-tabs::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .horizontal-tabs::-webkit-scrollbar-thumb {
+        background-color: #4e73df;
+        border-radius: 10px;
+    }
+
+    .horizontal-tabs .nav-item {
+        flex: 0 0 auto;
+    }
+
+    .horizontal-tabs .nav-link {
+        display: block;
+        color: #5a5c69;
+        font-weight: 600;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+        border-radius: 0;
+        border: none;
+        border-bottom: 3px solid transparent;
+        transition: all 0.2s;
+        cursor: pointer;
+        text-decoration: none;
+        background: none;
+    }
+
+    .horizontal-tabs .nav-link:hover {
+        background-color: rgba(78, 115, 223, 0.05);
+        color: #4e73df;
+    }
+
+    .horizontal-tabs .nav-link.active {
+        color: #4e73df !important;
+        border-bottom: 3px solid #4e73df;
+        background-color: transparent !important;
+    }
+
+    /* Paneles de tabs */
+    .tab-pane {
+        display: none;
+    }
+
+    .tab-pane.active {
+        display: block;
+    }
+</style>
+<script>
+    function switchTab(tabId) {
+        document.querySelectorAll('#clienteTab .nav-link').forEach(function (link) {
+            link.classList.remove('active');
+        });
+        document.querySelectorAll('#clienteTabContent > [data-tab-panel]').forEach(function (pane) {
+            pane.style.display = 'none';
+        });
+        var activeLink = document.getElementById(tabId + '-tab');
+        if (activeLink) activeLink.classList.add('active');
+        var activePane = document.getElementById(tabId);
+        if (activePane) activePane.style.display = 'block';
+    }
+</script>
+
+<div class="row w-100 mx-0">
+    <div class="col-12 px-0">
+        <div class="card shadow-lg mb-4 border-0">
+            <div class="card-header bg-white p-0 border-bottom-0">
+                <ul class="nav nav-tabs horizontal-tabs" id="clienteTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="ficha-tab" onclick="switchTab('ficha')" role="tab"><i
+                                class="fas fa-id-card me-2"></i>Ficha Cliente</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="sedes-tab" onclick="switchTab('sedes')" role="tab"><i
+                                class="fas fa-map-marker-alt me-2"></i>Sedes/Depósitos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="contactos-tab" onclick="switchTab('contactos')" role="tab"><i
+                                class="fas fa-users me-2"></i>Contactos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="fiscal-tab" onclick="switchTab('fiscal')" role="tab"><i
+                                class="fas fa-file-invoice-dollar me-2"></i>Impuestos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="cm05-tab" onclick="switchTab('cm05')" role="tab"
+                            title="Convenio Multilateral"><i class="fas fa-globe-americas me-2"></i>CM05 / Conv.
+                            Multi.</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pago-tab" onclick="switchTab('pago')" role="tab"><i
+                                class="fas fa-handshake me-2"></i>Medios de Pago</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="ctacte-tab" onclick="switchTab('ctacte')" role="tab"><i
+                                class="fas fa-money-check-alt me-2"></i>Cta. Cte.</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card-body bg-light p-3 p-md-4 rounded-bottom">
+                <div class="tab-content" id="clienteTabContent">
+                    <!-- FICHA DE CLIENTE -->
+                    <div data-tab-panel id="ficha" role="tabpanel" style="display:block;">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card shadow-sm mb-4 border-left-primary h-100">
+                                    <div class="card-header py-3 bg-white border-bottom-0">
+                                        <h6 class="m-0 font-weight-bold text-primary"><i
+                                                class="fas fa-info-circle me-2"></i>Datos Básicos</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>CUIT/DNI:</strong> {{ cliente.cuit }}</p>
+                                        <p><strong>Email Principal:</strong> {{ cliente.email | default:"N/D" }}</p>
+                                        <p><strong>Teléfono Principal:</strong> {{ cliente.telefono | default:"N/D" }}</p>
+                                        <hr>
+                                        <p class="mb-0"><strong>Observaciones:</strong><br>
+                                            <span class="text-muted small">{{ cliente.observaciones | default:"Sin observaciones" }}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card shadow-sm mb-4 border-left-info h-100">
+                                    <div
+                                        class="card-header py-3 bg-white border-bottom-0 d-flex justify-content-between align-items-center">
+                                        <h6 class="m-0 font-weight-bold text-info"><i
+                                                class="fas fa-file-contract me-2"></i>Finanzas</h6>
+                                        <button class="btn btn-sm btn-circle btn-outline-info"
+                                            onclick="toggleModal('modalCondicionPago')" title="Solicitar Cambio">
+                                            <i class="fas fa-sync-alt"></i>
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label class="small text-muted mb-1 fw-bold">Condición de Pago
+                                                (Simple)</label>
+                                            <div class="p-2 rounded bg-light border d-flex align-items-center">
+                                                <i class="fas fa-check-circle text-success me-2"></i>
+                                                <span class="fw-bold">{{ pago_info.condicion_nombre | default:"SIN ASIGNAR" }}</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="small text-muted mb-1 fw-bold">Estructura Mixta
+                                                (Maestra)</label>
+                                            {% if pago_info.condicion_mixta_id %}
+                                            <div
+                                                class="p-2 rounded bg-info text-white border d-flex align-items-center">
+                                                <i class="fas fa-layer-group me-2"></i>
+                                                <span class="fw-bold">{{ pago_info.mixta_nombre }}</span>
+                                            </div>
+                                            {% else %}
+                                            <div class="p-2 rounded bg-light border text-muted small italic">
+                                                Sin estructura mixta asignada
+                                            </div>
+                                            {% endif %}
+                                        </div>
+
+                                        {% if pago_info.estado_aprobacion_pago == 'PENDIENTE' %}
+                                        <div class="alert alert-warning p-2 mb-2">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <small><i class="fas fa-clock me-1"></i> <strong>Pendiente de
+                                                        Aprobación</strong></small>
+                                                <span class="badge bg-warning text-dark">PENDIENTE</span>
+                                            </div>
+                                            <div class="mt-1 small">
+                                                Solicitado: <span class="fw-bold">{{ pago_info.condicion_pendiente_nombre }}</span>
+                                            </div>
+
+                                            {% if 'gerente_ventas' in permissions or 'admin' in permissions or 'all' in permissions %}
+                                            <div class="mt-2 d-grid gap-2">
+                                                <form action="{% url 'ventas:aprobar_condicion_pago' cliente.id %}"
+                                                    method="POST">
+                                                    {% csrf_token %}
+                                                    <div class="btn-group w-100">
+                                                        <button type="submit" name="action" value="approve"
+                                                            class="btn btn-sm btn-success">Aprobar</button>
+                                                        <button type="submit" name="action" value="reject"
+                                                            class="btn btn-sm btn-danger">Rechazar</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                        {% elif pago_info.estado_aprobacion_pago == 'RECHAZADO' %}
+                                        <div class="alert alert-danger p-2 mb-0 small">
+                                            <i class="fas fa-times-circle me-1"></i> El último cambio fue
+                                            <strong>RECHAZADO</strong>.
+                                        </div>
+                                        {% endif %}
+
+                                        {% if pago_info.aprobador_nombre %}
+                                        <div class="mt-3 extra-small text-muted">
+                                            <i class="fas fa-user-shield me-1"></i> Aprobado por: {{ pago_info.aprobador_nombre }}<br>
+                                            <i class="fas fa-calendar-alt me-1"></i> Fecha: {{ pago_info.fecha_aprobacion_pago }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <!-- Cuenta Corriente Habilitada -->
+                                <div class="card shadow-sm border-left-success mt-4">
+                                    <div
+                                        class="card-header py-2 bg-white d-flex justify-content-between align-items-center">
+                                        <h6 class="m-0 font-weight-bold text-success">
+                                            <i class="fas fa-credit-card me-2"></i>Estado de Cuenta Corriente
+                                        </h6>
+                                        <button class="btn btn-sm btn-outline-success"
+                                            onclick="toggleModal('modalCtaCte')" title="Gestionar Cuenta Corriente">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </div>
+                                    <div class="card-body py-3">
+                                        {% if cliente.habilita_cta_cte %}
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="badge bg-success fs-6 px-3 py-2"><i
+                                                    class="fas fa-check-circle me-1"></i>HABILITADA</span>
+                                            <div class="text-end">
+                                                <div class="small text-muted text-uppercase fw-bold">Monto autorizado
+                                                </div>
+                                                <div class="fw-bold text-success fs-5">${{ cliente.monto_cta_cte | default:0 | floatformat:2 }}</div>
+                                            </div>
+                                        </div>
+                                        {% else %}
+                                        <div class="d-flex justify-content-between align-items-center text-muted">
+                                            <span class="badge bg-secondary px-3 py-2"><i
+                                                    class="fas fa-times-circle me-1"></i>NO HABILITADA</span>
+                                            <small>Crédito no activado.</small>
+                                        </div>
+                                        {% endif %}
+
+                                        {% if cliente.estado_cta_cte_aprobacion == 'PENDIENTE' %}
+                                        <div
+                                            class="alert alert-warning p-2 mt-3 mb-0 small border-0 shadow-sm animate__animated animate__pulse animate__infinite">
+                                            <div class="d-flex justify-content-between">
+                                                <strong><i class="fas fa-clock me-1"></i> Pendiente Tesorería</strong>
+                                                <span class="badge bg-warning text-dark">PENDIENTE</span>
+                                            </div>
+                                            {% if 'tesoreria' in permissions or 'admin' in permissions or 'all' in permissions %}
+                                            <form action="{% url 'ventas:aprobar_cta_cte' cliente.id %}" method="POST"
+                                                class="mt-2">
+                                                {% csrf_token %}
+                                                <div class="btn-group w-100">
+                                                    <button type="submit" name="action" value="approve"
+                                                        class="btn btn-sm btn-success shadow-sm">Aprobar</button>
+                                                    <button type="submit" name="action" value="reject"
+                                                        class="btn btn-sm btn-danger shadow-sm">Rechazar</button>
+                                                </div>
+                                            </form>
+                                            {% endif %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- FIN FICHA -->
+
+                    <!-- SEDES / DIRECCIONES -->
+                    <div data-tab-panel id="sedes" role="tabpanel" style="display:none;">
+                        <div class="d-flex justify-content-between mb-3">
+                            <h6 class="font-weight-bold">Direcciones Registradas</h6>
+                            <button class="btn btn-sm btn-primary" onclick="nuevaDireccion()">
+                                <i class="fas fa-plus"></i> Agregar Sede
+                            </button>
+                        </div>
+                        <div class="w-100 overflow-visible">
+                            <table class="table table-sm table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Etiqueta</th>
+                                        <th>Dirección (Calle y Altura)</th>
+                                        <th>Localidad (Ciudad)</th>
+                                        <th>Tipo</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for d in direcciones %}
+                                    <tr id="dir-{{ d.id }}">
+                                        <td><strong>{{ d.etiqueta }}</strong></td>
+                                        <td>{{ d.calle }} {{ d.numero }} {{ d.piso | default:"" }} {{ d.depto | default:"" }}</td>
+                                        <td>{{ d.localidad }} ({{ d.provincia }})</td>
+                                        <td>
+                                            {% if d.es_fiscal %}<span class="badge bg-warning text-dark">Fiscal</span>{% endif %}
+                                            {% if d.es_entrega %}<span class="badge bg-info text-dark">Entrega</span>{% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm text-primary" data-item='{{ d | tojson }}'
+                                                    onclick='editarDireccion(this)' title="Editar"><i
+                                                        class="fas fa-edit"></i></button>
+                                                <form
+                                                    action="{% url 'ventas:eliminar_detalle' 'erp_direcciones' d.id cliente.id %}"
+                                                    method="POST" style="display:inline;"
+                                                    onsubmit="return confirm('¿Eliminar esta dirección?')">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-sm text-danger"
+                                                        title="Eliminar"><i class="fas fa-trash"></i></button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted py-3">No hay direcciones
+                                            registradas.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- CONTACTOS -->
+                    <div data-tab-panel id="contactos" role="tabpanel" style="display:none;">
+                        <div class="d-flex justify-content-between mb-3">
+                            <h6 class="font-weight-bold">Personas de Contacto</h6>
+                            <button class="btn btn-sm btn-primary" onclick="nuevoContacto()">
+                                <i class="fas fa-plus"></i> Agregar Contacto
+                            </button>
+                        </div>
+                        <div class="w-100 overflow-visible">
+                            <table class="table table-sm table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Área / Función</th>
+                                        <th>Teléfono</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for c in contactos %}
+                                    <tr>
+                                        <td><strong>{{ c.nombre }}</strong></td>
+                                        <td><span class="badge bg-light text-dark border">{{ c.tipo_contacto }}</span>
+                                            {% if c.direccion_nombre %}<span class="badge bg-secondary"><i
+                                                    class="fas fa-map-marker-alt me-1"></i>{{ c.direccion_nombre }}</span>{% endif %}
+                                            {% if c.es_receptor %}<span class="badge bg-info text-dark"><i
+                                                    class="fas fa-truck-loading me-1"></i>Receptor</span>{% endif %}
+                                            <br><small>{{ c.puesto_nombre | default:c.puesto }}</small>
+                                        </td>
+                                        <td>{{ c.telefono }}</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm text-primary" data-item='{{ c | tojson }}'
+                                                    onclick='editarContacto(this)' title="Editar"><i
+                                                        class="fas fa-edit"></i></button>
+                                                <form
+                                                    action="{% url 'ventas:eliminar_detalle' 'erp_contactos' c.id cliente.id %}"
+                                                    method="POST" style="display:inline;"
+                                                    onsubmit="return confirm('¿Eliminar este contacto?')">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-sm text-danger"><i
+                                                            class="fas fa-trash"></i></button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted py-3">No hay contactos
+                                            registrados.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- FISCAL -->
+                    <div data-tab-panel id="fiscal" role="tabpanel" style="display:none;">
+                        <div class="d-flex justify-content-between mb-3">
+                            <h6 class="font-weight-bold">Configuración de Impuestos</h6>
+                            <button class="btn btn-sm btn-primary" onclick="nuevoFiscal()">
+                                <i class="fas fa-plus"></i> Agregar Impuesto
+                            </button>
+                        </div>
+                        <div class="w-100 overflow-visible">
+                            <table class="table table-sm table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Impuesto</th>
+                                        <th>Jurisdicción</th>
+                                        <th>Condición</th>
+                                        <th>Nro. Inscripción</th>
+                                        <th>Alícuota</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for f in fiscales %}
+                                    <tr>
+                                        <td><strong>{{ f.impuesto }}</strong></td>
+                                        <td>{{ f.jurisdiccion }}</td>
+                                        <td>{{ f.condicion }}</td>
+                                        <td>{{ f.numero_inscripcion }}</td>
+                                        <td>{{ f.alicuota }}%</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm text-primary" data-item='{{ f | tojson }}'
+                                                    onclick='editarFiscal(this)' title="Editar"><i
+                                                        class="fas fa-edit"></i></button>
+                                                <form
+                                                    action="{% url 'ventas:eliminar_detalle' 'erp_datos_fiscales' f.id cliente.id %}"
+                                                    method="POST" style="display:inline;"
+                                                    onsubmit="return confirm('¿Eliminar dato fiscal?')">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-sm text-danger"><i
+                                                            class="fas fa-trash"></i></button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted py-3">Sin datos impositivos
+                                            registrados.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- CM05 / CONVENIO MULTILATERAL -->
+                    <div data-tab-panel id="cm05" role="tabpanel" style="display:none;">
+                        <div class="p-3">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div>
+                                    <h6 class="font-weight-bold mb-1">Liquidación Convenio Multilateral</h6>
+                                    <p class="text-muted small mb-0">Gestión de coeficientes de CM05 para cálculo base
+                                        en Impuestos.</p>
+                                </div>
+                                <div>
+                                    <form action="{% url 'ventas:toggle_convenio' cliente.id %}" method="POST"
+                                        class="d-inline">
+                                        {% csrf_token %}
+                                        <div class="form-check form-switch form-switch-lg d-inline-block">
+                                            <input class="form-check-input" type="checkbox" id="flexSwitchConvenio"
+                                                name="es_convenio" onchange="this.form.submit()" {% if cliente.es_convenio_multilateral %}checked{% endif %}>
+                                            <label class="form-check-label fw-bold mx-2" for="flexSwitchConvenio">Es
+                                                Convenio Multilateral</label>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            {% if cliente.es_convenio_multilateral %}
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="card shadow-sm border-left-info h-100">
+                                        <div class="card-body">
+                                            <h6 class="fw-bold text-info"><i class="fas fa-file-pdf me-2"></i> Subir
+                                                Archivo CM05</h6>
+                                            <form action="{% url 'ventas:upload_cm05' cliente.id %}" method="POST"
+                                                enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                                <div class="input-group mb-2">
+                                                    <input type="file" class="form-control form-control-sm"
+                                                        name="archivo_cm05" accept=".pdf">
+                                                    <button class="btn btn-sm btn-outline-info"
+                                                        type="submit">Subir</button>
+                                                </div>
+                                            </form>
+                                            {% if cliente.archivo_cm05_path %}
+                                            <div class="mt-2 text-success small">
+                                                <i class="fas fa-check-circle me-1"></i> Archivo actual subido.
+                                                <a href="{% static cliente.archivo_cm05_path %}" target="_blank"
+                                                    class="text-info ms-2">Ver PDF adjunto</a>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="card shadow-sm h-100 border-0">
+                                        <div
+                                            class="card-header bg-white d-flex justify-content-between py-2 align-items-center">
+                                            <h6 class="fw-bold m-0"><i class="fas fa-percentage me-2 text-warning"></i>
+                                                Coeficientes Asignados</h6>
+                                            <button class="btn btn-sm btn-outline-primary"
+                                                onclick="document.getElementById('formCm05Nuevo').reset(); toggleModal('modalCoeficiente');">
+                                                Agregar Coeficiente
+                                            </button>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <table class="table table-sm table-hover mb-0">
+                                                <thead class="bg-light text-muted">
+                                                    <tr>
+                                                        <th>Provincia / Jurisdicción</th>
+                                                        <th>Año</th>
+                                                        <th>Coeficiente</th>
+                                                        <th class="text-end">Acciones</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for coef in coeficientes_cm %}
+                                                    <tr>
+                                                        <td class="align-middle fw-bold">{{ coef.jurisdiccion_code }} -
+                                                            {{ coef.provincia_nombre }}</td>
+                                                        <td class="align-middle">{{ coef.periodo_anio }}</td>
+                                                        <td class="align-middle text-primary fw-bold">{{ coef.coeficiente | floatformat:4 }}</td>
+                                                        <td class="text-end">
+                                                            <form
+                                                                action="{% url 'ventas:eliminar_detalle' 'erp_terceros_cm05' coef.id cliente.id %}"
+                                                                method="POST" style="display:inline;"
+                                                                onsubmit="return confirm('¿Eliminar coeficiente?')">
+                                                                {% csrf_token %}
+                                                                <button type="submit" class="btn btn-sm text-danger"><i
+                                                                        class="fas fa-trash"></i></button>
+                                                            </form>
+                                                        </td>
+                                                    </tr>
+                                                    {% empty %}
+                                                    <tr>
+                                                        <td colspan="4" class="text-center py-4 text-muted">Aún no
+                                                            asignaste coeficientes.</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Medios de Pago -->
+                    <div data-tab-panel id="pago" role="tabpanel" style="display:none;">
+                        <div class="p-3">
+                            <form action="{% url 'ventas:habilitar_condiciones_pago' cliente.id %}" method="POST">
+                                {% csrf_token %}
+                                <!-- BLOQUE 1: INCLUIDAS EN MAESTRA -->
+                                <div class="mb-4">
+                                    <h6 class="text-info fw-bold mb-3">Incluidas en Condición Maestra</h6>
+                                    <table class="table table-bordered table-sm table-hover">
+                                        <thead class="bg-light">
+                                            <tr>
+                                                <th>Condición</th>
+                                                <th class="text-center">Habilitada?</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for cond in condiciones %}
+                                            {% if cond.id in incluidas_en_maestra %}
+                                            <tr>
+                                                <td class="fw-bold">{{ cond.nombre }}</td>
+                                                <td class="text-center">
+                                                    <select name="habilitado_{{ cond.id }}"
+                                                        class="form-select form-select-sm">
+                                                        <option value="1">Si</option>
+                                                        <option value="0">No</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Actualizar</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- CUENTA CORRIENTE TAB -->
+                    <div data-tab-panel id="ctacte" role="tabpanel" style="display:none;">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h6 class="font-weight-bold mb-0">Historial de Movimientos</h6>
+                            {% if cuenta_corriente %}
+                            <div class="bg-light border rounded py-2 px-3 shadow-sm">
+                                <span class="text-muted small me-2">Saldo Actual:</span>
+                                <strong class="fs-5">${{ cuenta_corriente | last | get_item:"saldo" | default:0 | floatformat:2 }}</strong>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <table class="table table-sm table-hover" id="tablaCtaCte">
+                            <thead class="table-dark">
+                                <tr class="small">
+                                    <th>Fecha</th>
+                                    <th>Tipo</th>
+                                    <th>Documento</th>
+                                    <th class="text-end">Debe</th>
+                                    <th class="text-end">Haber</th>
+                                    <th class="text-end">Saldo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for mov in cuenta_corriente %}
+                                <tr class="small">
+                                    <td>{{ mov.fecha | date:"d/m/Y" }}</td>
+                                    <td>{{ mov.tipo_doc }}</td>
+                                    <td>{{ mov.nro_documento }}</td>
+                                    <td class="text-end">${{ mov.debe | floatformat:2 }}</td>
+                                    <td class="text-end">${{ mov.haber | floatformat:2 }}</td>
+                                    <td class="text-end fw-bold">${{ mov.saldo | floatformat:2 }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODALES (Omitiendo redundancia por brevedad, adaptados igual que los anteriores) -->
+
+<!-- MODAL EDITAR DATOS BÁSICOS -->
+<div id="modalCliente" class="modal-premium modal-animate" style="display:none;">
+    <div class="modal-dialog">
+        <form class="modal-content" action="{% url 'ventas:editar_cliente' cliente.id %}" method="POST">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-user-edit me-2"></i> Editar Datos Básicos</h5>
+                <button type="button" class="btn-close btn-close-white" onclick="toggleModal('modalCliente')"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label"><i class="fas fa-barcode me-1"></i> Código</label>
+                        <input type="text" name="codigo" class="form-control" value="{{ cliente.codigo | default:'' }}">
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <label class="form-label"><i class="fas fa-building me-1"></i> Razón Social / Nombre</label>
+                        <input type="text" name="nombre" class="form-control" value="{{ cliente.nombre }}" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label"><i class="fas fa-id-card me-1"></i> CUIT / DNI</label>
+                        <input type="text" name="cuit" class="form-control" value="{{ cliente.cuit }}" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="fas fa-envelope me-1"></i> Email Principal</label>
+                        <input type="email" name="email" class="form-control" value="{{ cliente.email | default:'' }}">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="fas fa-phone me-1"></i> Teléfono Principal</label>
+                        <input type="text" name="telefono" class="form-control"
+                            value="{{ cliente.telefono | default:'' }}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="fas fa-file-invoice me-1"></i> Condición Fiscal</label>
+                        <select name="tipo_responsable" class="form-select">
+                            {% for cf in condiciones_fiscales %}
+                            <option value="{{ cf.nombre }}" {% if cliente.tipo_responsable == cf.nombre %}selected{% endif %}>
+                                {{ cf.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="fas fa-money-check-alt me-1"></i> Condición de Pago</label>
+                        <select name="condicion_pago_id" class="form-select">
+                            {% for cp in condiciones_pago %}
+                            <option value="{{ cp.id }}" {% if cliente.condicion_pago_id == cp.id %}selected{% endif %}>{{ cp.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-comment-alt me-1"></i> Observaciones</label>
+                    <textarea name="observaciones" class="form-control"
+                        rows="3">{{ cliente.observaciones | default:'' }}</textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary px-4"><i class="fas fa-save me-2"></i> Guardar
+                    Cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Cuenta Corriente -->
+<div id="modalCtaCte" class="modal-premium modal-animate" style="display:none;">
+    <div class="modal-dialog">
+        <form class="modal-content" action="{% url 'ventas:solicitar_cta_cte' cliente.id %}" method="POST">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-credit-card me-2"></i>Cuenta Corriente</h5>
+                <button type="button" class="btn-close btn-close-white" onclick="toggleModal('modalCtaCte')"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info small mb-3">
+                    <i class="fas fa-info-circle me-1"></i> La habilitación o modificación de cuenta corriente requiere
+                    <strong>aprobación de Tesorería</strong>.
+                </div>
+                <div class="mb-3 d-flex align-items-center gap-3">
+                    <div class="form-check form-switch fs-5">
+                        <input class="form-check-input" type="checkbox" name="habilita_cta_cte"
+                            id="chk_habilita_cta_cte" value="1" {% if cliente.habilita_cta_cte %}checked{% endif %}
+                            onchange="toggleMontoCta(this.checked)">
+                        <label class="form-check-label fw-bold" for="chk_habilita_cta_cte">Habilitar Cuenta
+                            Corriente</label>
+                    </div>
+                </div>
+                <div class="mb-3" id="div_monto_cta">
+                    <label class="form-label fw-bold"><i class="fas fa-dollar-sign me-1"></i>Monto Máximo
+                        Autorizado</label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="number" name="monto_cta_cte" id="inp_monto_cta" class="form-control" step="0.01"
+                            min="0" placeholder="0.00" value="{{ cliente.monto_cta_cte | default:0 | floatformat:2 }}">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-comment me-1"></i>Motivo / Observación</label>
+                    <textarea name="motivo" class="form-control" rows="2"
+                        placeholder="Indicar motivo del cambio..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success px-4"><i class="fas fa-paper-plane me-1"></i>Enviar para
+                    aprobación</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Dirección -->
+<div id="modalDireccion" class="modal-premium modal-animate" style="display:none;">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" action="{% url 'ventas:agregar_direccion' cliente.id %}" method="POST"
+            id="formDireccion">
+            {% csrf_token %}
+            <input type="hidden" name="item_id" id="direccion_id">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDireccionTitle"><i class="fas fa-map-marked-alt me-2"></i> Gestión de
+                    Sede / Dirección</h5>
+                <button type="button" class="btn-close btn-close-white"
+                    onclick="toggleModal('modalDireccion')"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-4">
+                    <label class="form-label"><i class="fas fa-tag me-1"></i> Etiqueta Identificadora</label>
+                    <input type="text" name="etiqueta" id="dir_etiqueta" class="form-control"
+                        placeholder="Ej: Casa Central, Depósito Norte..." required>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label"><i class="fas fa-map me-1"></i> Provincia</label>
+                        <select name="provincia" id="dir_provincia" class="form-select" required>
+                            <option value="">Seleccionar...</option>
+                            {% for p in provincias %}
+                            <option value="{{ p.nombre }}">{{ p.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="fas fa-city me-1"></i> Localidad</label>
+                        <input type="text" name="localidad" id="dir_localidad" class="form-control"
+                            list="listaLocalidades" required>
+                        <datalist id="listaLocalidades"></datalist>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="fas fa-mail-bulk me-1"></i> CP</label>
+                        <input type="text" name="cod_postal" id="dir_cp" class="form-control" list="listaCPs" required>
+                        <datalist id="listaCPs"></datalist>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label"><i class="fas fa-road me-1"></i> Calle</label>
+                        <input type="text" name="calle" id="dir_calle" class="form-control" list="listaCalles" required>
+                        <datalist id="listaCalles"></datalist>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3"><label class="form-label">Número</label><input type="text" name="numero"
+                            id="dir_numero" class="form-control" required></div>
+                    <div class="col-md-4 mb-3"><label class="form-label">Piso</label><input type="text" name="piso"
+                            id="dir_piso" class="form-control"></div>
+                    <div class="col-md-4 mb-3"><label class="form-label">Depto</label><input type="text" name="depto"
+                            id="dir_depto" class="form-control"></div>
+                </div>
+                <div class="mt-3 p-3 rounded" style="background: rgba(0,0,0,0.1);">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="es_fiscal" id="chk_fiscal" value="1">
+                        <label class="form-check-label">Fiscal</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="es_entrega" id="chk_entrega" value="1">
+                        <label class="form-check-label">Entrega</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save me-2"></i> Guardar
+                    Dirección</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Contacto -->
+<div id="modalContacto" class="modal-premium modal-animate" style="display:none;">
+    <div class="modal-dialog">
+        <form class="modal-content" action="{% url 'ventas:agregar_contacto' cliente.id %}" method="POST"
+            id="formContacto">
+            {% csrf_token %}
+            <input type="hidden" name="item_id" id="contacto_id">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalContactoTitle">Persona de Contacto</h5>
+                <button type="button" class="btn-close" onclick="toggleModal('modalContacto')"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3"><label class="form-label">Nombre</label><input type="text" name="nombre"
+                        id="cont_nombre" class="form-control" required></div>
+                <div class="row">
+                    <div class="col-6 mb-3"><label class="form-label">Área</label>
+                        <select name="area_id" id="cont_area" class="form-select select-area"
+                            onchange="onAreaChange(this.value, 'cont_puesto')"></select>
+                    </div>
+                    <div class="col-6 mb-3"><label class="form-label">Función</label>
+                        <select name="puesto" id="cont_puesto" class="form-select" required></select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 mb-3"><label class="form-label">Teléfono</label><input type="text" name="telefono"
+                            id="cont_tel" class="form-control" required></div>
+                    <div class="col-6 mb-3"><label class="form-label">Email</label><input type="email" name="email"
+                            id="cont_email" class="form-control"></div>
+                </div>
+                <div class="mb-3"><label class="form-label">Sede</label>
+                    <select name="direccion_id" id="cont_dir" class="form-select">
+                        <option value="">Global</option>
+                        {% for d in direcciones %}<option value="{{ d.id }}">{{ d.etiqueta }}</option>{% endfor %}
+                    </select>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="es_receptor" id="chk_receptor" value="1">
+                    <label class="form-check-label">Es Receptor de Mercadería</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Guardar Contacto</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Fiscal -->
+<div id="modalFiscal" class="modal-premium modal-animate" style="display:none;">
+    <div class="modal-dialog">
+        <form class="modal-content" action="{% url 'ventas:agregar_fiscal' cliente.id %}" method="POST" id="formFiscal">
+            {% csrf_token %}
+            <input type="hidden" name="item_id" id="fiscal_id">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalFiscalTitle">Dato Fiscal</h5>
+                <button type="button" class="btn-close" onclick="toggleModal('modalFiscal')"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Impuesto</label>
+                    <select name="impuesto" id="fisc_impuesto" class="form-select">
+                        {% for imp in impuestos_lista %}<option value="{{ imp.id }}">{{ imp.nombre }}</option>{% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Jurisdicción</label>
+                    <select name="jurisdiccion" id="fisc_jurisdiccion" class="form-select">
+                        <option value="">Nacional</option>
+                        {% for p in provincias %}<option value="{{ p.id }}">{{ p.nombre }}</option>{% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3"><label class="form-label">Condición</label>
+                    <select name="condicion_id" id="fisc_condicion" class="form-select">
+                        <option value="1">Inscripto</option>
+                        <option value="2">Exento</option>
+                        <option value="3">No Alcanzado</option>
+                    </select>
+                </div>
+                <div class="mb-3"><label class="form-label">Nro. Inscripción</label><input type="text"
+                        name="numero_inscripcion" id="fisc_nro" class="form-control"></div>
+                <div class="mb-3"><label class="form-label">Alícuota (%)</label><input type="number" step="0.01"
+                        name="alicuota" id="fisc_ali" class="form-control"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Guardar Impuesto</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal CM05 Coeficiente -->
+<div id="modalCoeficiente" class="modal-premium modal-animate" style="display:none;">
+    <div class="modal-dialog">
+        <form class="modal-content" action="{% url 'ventas:agregar_cm05' cliente.id %}" method="POST"
+            id="formCm05Nuevo">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h5 class="modal-title">Nuevo Coeficiente CM05</h5>
+                <button type="button" class="btn-close" onclick="toggleModal('modalCoeficiente')"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Jurisdicción</label>
+                    <select name="jurisdiccion_code" class="form-select" required>
+                        <option value="">Seleccione...</option>
+                        <option value="901">901 - CABA</option>
+                        <option value="902">902 - Buenos Aires</option>
+                        <!-- etc... I should probably pass a list from view, but for now I'll use common ones -->
+                        <option value="903">903 - Catamarca</option>
+                        <option value="904">904 - Córdoba</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <div class="col-6 mb-3"><label class="form-label">Año</label><input type="number"
+                            name="periodo_anio" id="coef_anio" class="form-control" required></div>
+                    <div class="col-6 mb-3"><label class="form-label">Coeficiente</label><input type="number"
+                            step="0.0001" name="coeficiente" class="form-control" required></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Agregar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Condición de Pago Solicitar -->
+<div id="modalCondicionPago" class="modal-premium modal-animate" style="display:none;">
+    <div class="modal-dialog">
+        <form class="modal-content" action="{% url 'ventas:solicitar_condicion_pago' cliente.id %}" method="POST">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h5 class="modal-title">Cambio de Condición de Pago</h5>
+                <button type="button" class="btn-close" onclick="toggleModal('modalCondicionPago')"></button>
+            </div>
+            <div class="modal-body">
+                <div class="list-group">
+                    {% for c in condiciones %}
+                    <label class="list-group-item list-group-item-action">
+                        <input class="form-check-input me-1" type="radio" name="condicion_id" value="{{ c.id }}" {% if c.id == pago_info.condicion_pago_id %}checked{% endif %}>
+                        {{ c.nombre }} ({{ c.dias_vencimiento }} días)
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary w-100">Solicitar Cambio</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Scripts de Apoyo -->
+<script>
+    {% include 'ventas/perfil_cliente_js.html' %}
+</script>
+{% endblock %}

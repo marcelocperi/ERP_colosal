@@ -11360,3 +11360,149 @@ INFO 2026-03-09 23:55:11,189 middleware 9020 13900 Path: /login.html | SID: None
 INFO 2026-03-09 23:55:13,232 middleware 9020 14468 Path: /api/ventas/cliente/3/detalle | SID: 601cc6e3 | Logged: True
 Not Found: /api/ventas/cliente/3/detalle
 WARNING 2026-03-09 23:55:13,241 log 9020 14468 Not Found: /api/ventas/cliente/3/detalle
+INFO 2026-03-10 08:39:28,876 middleware 9020 5296 Path: /ventas/clientes/ | SID: 601cc6e3 | Logged: False
+WARNING 2026-03-10 08:39:28,884 middleware 9020 5296 Redirecting to login. Path: /ventas/clientes/ | Reason: sid_expired | SID: 601cc6e3
+INFO 2026-03-10 08:39:28,984 middleware 9020 12988 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-10 08:39:29,086 middleware 9020 18292 Path: /static/css/style.css | SID: None | Logged: False
+Not Found: /static/css/style.css
+WARNING 2026-03-10 08:39:29,100 log 9020 18292 Not Found: /static/css/style.css
+INFO 2026-03-10 08:39:33,835 middleware 9020 13456 Path: /login.html | SID: None | Logged: False
+INFO 2026-03-10 08:39:34,155 middleware 9020 2236 SuperAdmin Bypass for superadmin
+INFO 2026-03-10 08:39:34,156 middleware 9020 2236 Permissions for superadmin: ['dashboard_view', 'books_view', 'books_add', 'books_edit', 'books_import', 'patrons_view', 'patrons_manage', 'loans_view', 'loans_manage', 'stock_view', 'stock_manage_motives', 'stock_adjust', 'admin_users', 'admin_roles', 'erp_ventas_view', 'erp_compras_view', 'erp_fondos_view', 'erp_contabilidad_view', 'sysadmin', 'compras.dashboard', 'compras.ver_reportes', 'compras.gestionar_oc', 'compras.proveedores', 'fondos.dashboard', 'fondos.autorizar_pagos', 'fondos.gestionar_cajas', 'fondos.reportes', 'admin_comprobantes', 'admin_cuentas', 'admin_depositos', 'admin_empresa', 'admin_logistica', 'admin_medios_pago', 'admin_plan_cuentas', 'admin_tipos_articulo', 'auditar_inventario', 'conciliar_banco', 'create_orden_compra', 'create_pago', 'create_presupuesto', 'create_recibo', 'create_remito', 'create_transferencia', 'facturar_compras', 'facturar_ventas', 'receive_stock', 'view_articulos', 'view_balance', 'view_clientes', 'view_cobranzas', 'view_compras', 'view_estados_cuenta', 'view_movimientos', 'view_pagos', 'view_pedidos', 'view_proveedores', 'view_reportes', 'view_trazabilidad', 'admin.roles', 'admin.users', 'books.add', 'books.import', 'compras.aprobar_solicitud', 'compras.gestion_proveedores', 'loans.manage', 'stock.view', 'stock.edit', 'reports.view', 'admin_contabilidad', 'all', 'view_contabilidad', 'view_prestamos', 'view_risk_dashboard', 'view_error_log', 'manage_mitigation_rules', 'view_mitigation_history', 'view_ventas', 'admin_impuestos', 'gestionar_cm05', 'view_permission_audit', 'cost_accounting', 'view_precios', 'industrial_safety', 'safety_bypass', 'ventas', 'produccion.dashboard', 'compras.gestionar_reposicion', 'compras.facturar_compras', 'system_settings', 'view_stock', 'compras.solicitar_cotizacion', 'produccion.view', 'admin_compras', 'produccion.admin', 'compras.aprobar_po', 'tesoreria', 'aprobar_cta_cte', 'view_recolectores', 'recolector_picking', 'recolector_counting', 'recolector_receiving', 'approve_inventory_adjustments', 'view_inventory_adjustments']
+INFO 2026-03-10 08:39:34,156 middleware 9020 2236 Path: /ventas/dashboard/ | SID: 0b8d3045 | Logged: True
+INFO 2026-03-10 08:39:34,207 middleware 9020 2704 Path: /static/css/style.css | SID: 0b8d3045 | Logged: True
+Not Found: /static/css/style.css
+WARNING 2026-03-10 08:39:34,221 log 9020 2704 Not Found: /static/css/style.css
+INFO 2026-03-10 08:39:34,229 middleware 9020 2828 Path: /static/css/premium_ux.css | SID: 0b8d3045 | Logged: True
+INFO 2026-03-10 08:39:34,229 middleware 9020 6944 Path: /static/css/utilities.css | SID: 0b8d3045 | Logged: True
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-10 08:39:34,235 log 9020 2828 Not Found: /static/css/premium_ux.css
+Not Found: /static/css/utilities.css
+WARNING 2026-03-10 08:39:34,241 log 9020 6944 Not Found: /static/css/utilities.css
+INFO 2026-03-10 08:39:34,242 middleware 9020 3824 Path: /sysadmin/enterprises/logo/raw/4 | SID: 0b8d3045 | Logged: True
+INFO 2026-03-10 08:39:39,593 middleware 9020 6560 Path: /ventas/clientes/ | SID: 0b8d3045 | Logged: True
+INFO 2026-03-10 08:39:39,688 middleware 9020 5296 Path: /static/css/premium_ux.css | SID: 0b8d3045 | Logged: True
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-10 08:39:39,696 log 9020 5296 Not Found: /static/css/premium_ux.css
+INFO 2026-03-10 08:39:39,698 middleware 9020 13900 Path: /static/css/style.css | SID: 0b8d3045 | Logged: True
+INFO 2026-03-10 08:39:39,701 middleware 9020 14468 Path: /static/css/utilities.css | SID: 0b8d3045 | Logged: True
+Not Found: /static/css/style.css
+WARNING 2026-03-10 08:39:39,707 log 9020 13900 Not Found: /static/css/style.css
+Not Found: /static/css/utilities.css
+WARNING 2026-03-10 08:39:39,714 log 9020 14468 Not Found: /static/css/utilities.css
+INFO 2026-03-10 08:39:42,701 middleware 9020 12988 Path: /api/ventas/cliente/3/detalle | SID: 0b8d3045 | Logged: True
+Not Found: /api/ventas/cliente/3/detalle
+WARNING 2026-03-10 08:39:42,713 log 9020 12988 Not Found: /api/ventas/cliente/3/detalle
+INFO 2026-03-10 08:39:45,857 middleware 9020 18292 Path: /ventas/clientes/perfil/3/ | SID: 0b8d3045 | Logged: True
+Traceback (most recent call last):
+  File "C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\ventas\views.py", line 324, in perfil_cliente
+    return render(request, 'ventas/perfil_cliente.html', {
+        'cliente': cliente,
+    ...<14 lines>...
+        'cta_cte_track': cta_cte_track
+    })
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loader_tags.py", line 200, in render
+    template = context.template.engine.select_template(template_name)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\engine.py", line 228, in select_template
+    return self.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\defaulttags.py", line 894, in do_for
+    nodelist_loop = parser.parse(
+        (
+    ...<2 lines>...
+        )
+    )
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\defaulttags.py", line 994, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\defaulttags.py", line 1676, in do_with
+    extra_context = token_kwargs(remaining_bits, parser, support_legacy=True)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 1202, in token_kwargs
+    kwargs[key] = parser.compile_filter(value)
+                  ~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 676, in compile_filter
+    return FilterExpression(token, self)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 771, in __init__
+    filter_func = parser.find_filter(filter_name)
+  File "C:\Users\marce\Documents\GitHub\Colosal\venv\Lib\site-packages\django\template\base.py", line 682, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\marce\Documents\GitHub\Colosal\django_app\apps\ventas\templates\ventas\components\perfil_cliente_pago.html, Invalid filter: 'get_item'
+INFO 2026-03-10 08:39:46,365 middleware 9020 13456 Path: /ventas/clientes/ | SID: 0b8d3045 | Logged: True
+INFO 2026-03-10 08:39:46,500 middleware 9020 2236 Path: /static/css/style.css | SID: 0b8d3045 | Logged: True
+INFO 2026-03-10 08:39:46,502 middleware 9020 2704 Path: /static/css/utilities.css | SID: 0b8d3045 | Logged: True
+INFO 2026-03-10 08:39:46,503 middleware 9020 2828 Path: /static/css/premium_ux.css | SID: 0b8d3045 | Logged: True
+Not Found: /static/css/style.css
+WARNING 2026-03-10 08:39:46,509 log 9020 2236 Not Found: /static/css/style.css
+Not Found: /static/css/utilities.css
+WARNING 2026-03-10 08:39:46,515 log 9020 2704 Not Found: /static/css/utilities.css
+Not Found: /static/css/premium_ux.css
+WARNING 2026-03-10 08:39:46,520 log 9020 2828 Not Found: /static/css/premium_ux.css

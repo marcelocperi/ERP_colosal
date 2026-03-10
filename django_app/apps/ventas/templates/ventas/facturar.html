@@ -72,8 +72,8 @@
                                 <label class="form-label text-muted small uppercase fw-bold">Tipo de Comprobante</label>
                                 <select class="form-select bg-dark text-light border-secondary" id="tipo_comprobante"
                                     required>
-                                    {% for t in tipos_comprobante %}
-                                    <option value="{{ t.codigo }}">{{ t.descripcion }}{% if t.letra %} ({{ t.letra }}){% endif %}</option>
+                                    {% for t in tipos_comprobante %}
+                                    <option value="{{ t.codigo }}">{{ t.descripcion }}{% if t.letra %} ({{ t.letra }}){% endif %}</option>
                                     {% endfor %}
                                 </select>
                             </div>
